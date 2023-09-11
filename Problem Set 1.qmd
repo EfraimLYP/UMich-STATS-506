@@ -50,7 +50,7 @@ typeContainsMostAlcohol
 # Type of wine contains the lowest alcohol content
 typeContainsLowestAlcohol <- 
   wineDf$Type[which(wineDf$Alcohol == min(wineDf$Alcohol))]
-typeContainsMostAlcohol
+typeContainsLowestAlcohol
 ```
 
 It follows that the wine with the highest alcohol content belongs to class 1, and that the wine with the lowest alcohol content also belongs to class 1.
