@@ -1,0 +1,338 @@
+---
+title: "Problem Set 1"
+author: "Yipeng Liu"
+format: html
+editor: visual
+---
+
+# Homework 1
+
+github page: https://github.com/EfraimLYP/stats506
+
+## Problem 1
+
+### Step 1
+
+First, convert the .data file into the data frame form and give appropriate column names.
+
+```{r}
+# Import the data from the .data file
+wineDf <- read.table("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 1/wine/wine.data", sep = ",")
+colnames(wineDf) <- c("Type", 
+                      "Alcohol", 
+                      "MalicAcid", 
+                      "Ash",
+                      "AlcalinityOfAsh",
+                      "Magnesium",
+                      "TotalPhenols",
+                      "Flavanoids",
+                      "NonflavanoidPhenols",
+                      "Proanthocyanins",
+                      "ColorIntensity",
+                      "Hue",
+                      "OD280OD315OfDilutedWines",
+                      "Proline")
+
+# Display the first 5 rows of the data frame
+head(wineDf, 5)
+```
+
+### Step 2
+
+Check the wine with the highest and lowest alcohol content belongs.
+
+```{r}
+# Type of wine contains the highest alcohol content
+typeContainsMostAlcohol <- 
+  wineDf$Type[which(wineDf$Alcohol == max(wineDf$Alcohol))]
+typeContainsMostAlcohol
+
+# Type of wine contains the lowest alcohol content
+typeContainsLowestAlcohol <- 
+  wineDf$Type[which(wineDf$Alcohol == min(wineDf$Alcohol))]
+typeContainsMostAlcohol
+```
+
+It follows that the wine with the highest alcohol content belongs to class 1, and that the wine with the lowest alcohol content also belongs to class 1.
+
+Then, explore how many wines in our example have higher levels of magnesium than average German beers.
+
+```{r}
+quantityHigherThanGerman <- sum(wineDf$Magnesium > 114)
+quantityHigherThanGerman
+```
+
+It follows that there are 26 wines have higher levels of magnesium than German beers.
+
+Finally, find out within each class, how many wines have higher levels of magnesium than average German beers.
+
+```{r}
+# Create a new column for the categorial variable "whether of not it has higher levels of magnesium than German beers"
+wineDf$HigherThanGermanBeers <- 
+  as.numeric(wineDf$Magnesium > 114)
+
+# Calculate within each class, how many wines have higher levels of magnesium than average German beers
+sumHigherThanGermanBeers <- 
+  tapply(wineDf$HigherThanGermanBeers, 
+         INDEX = wineDf$Type, 
+         FUN = sum)
+sumHigherThanGermanBeers
+```
+
+It can be seen that 15, 6, and 5 wines in categories 1, 2, and 3, respectively, have higher magnesium contents than average German beers.
+
+### Step 3
+
+Here creates a table identifying the average value of each variable, providing one row for the overall average, and one row per class with class averages.
+
+```{r}
+# Get the average of each column
+colMeansWine <- colMeans(wineDf)
+
+# Get the average of each column per class
+colMeansWineByClass <- aggregate(wineDf, by = list(wineDf$Type), FUN = mean)
+colMeansWineByClass <- colMeansWineByClass[, -1]
+
+# Bind these results into a single data frame
+aveWineDf1 <- data.frame(t(colMeansWine))
+aveWineDf <- rbind(colMeansWineByClass, aveWineDf1)
+
+# Show the data frame
+head(aveWineDf)
+```
+
+In this data frame we can see that rows 1, 2, and 3 represent the average of each variable for beers of type 1, 2, and 3, respectively, and the last row represents the average of each variable for all wines.
+
+### Step 4
+
+Now carry out a series of t-tests to examine whether the level of Ash differs across the three classes.
+
+```{r}
+# First, get 3 lists that represents the level of Ash of the 3 different kinds of wine
+ash1 <- subset(wineDf$Ash, wineDf$Type == 1)
+ash2 <- subset(wineDf$Ash, wineDf$Type == 2)
+ash3 <- subset(wineDf$Ash, wineDf$Type == 3)
+
+# Then, carry out the t-tests for 1~2, 2~3, 1~3
+t.test(ash1, ash2)
+t.test(ash2, ash3)
+t.test(ash1, ash3)
+```
+
+In the t-test of these 3 pairs of independent samples, we can observe that the p-value of the t-test results of the 2 pairs of samples, 1\~2 and 2\~3, is much less than 0.05, so the null hypothesis can be rejected and it is considered that there is a significant difference between each of the 2 pairs of samples.
+
+On the contrary, the t-test for the pair of samples 1～3 showed a p-value greater than 0.05, so the null hypothesis could not be rejected and the pair of samples could not be considered significantly different from each other.
+
+## Problem 2
+
+### Step 1
+
+First, write the function.
+
+```{r}
+#' This function identifies whether a given integer is a "perfect power'
+#' 
+#' @param number the number to check
+#' @param power the specified power
+#' 
+#' @return the list that shows the result
+isPerfectPower <- function(number, power) {
+  
+  if (abs(round(number)-number != 0) >= .Machine$double.eps^0.5) {
+    stop("The number must be an integer.")
+  }
+  if (abs(round(power)-power != 0) >= .Machine$double.eps^0.5) {
+    stop("The power must be an integer.")
+  }
+  
+  isPerfect = abs(round(number^(1/power))-number^(1/power)) < .Machine$double.eps^0.5
+  root = number^(1/power)
+  
+  return(list(isPerfect, root))
+}
+```
+
+### Step 2
+
+Next, demonstrate our function works.
+
+```{r}
+#' This function which calls the function above, using a loop to identify both the root and power
+#' 
+#' @param number the input number
+#' 
+#' @return the root and the power as a valid string equation with an appropriate message if the input is not a perfect power
+findRootPower <- function(number) {
+  
+  myVar <- FALSE
+  powers <- c()
+  
+  for (i in 2:round(sqrt(number))) {
+    if (isPerfectPower(number, i)[[1]] == TRUE) {
+      myVar <- TRUE
+      powers <- append(powers, i)
+    }
+  }
+  
+  if (myVar == TRUE) {
+    selectedPower = min(powers)
+    myString = paste(as.character(number), 
+                     " = ",
+                     as.character(number^(1/selectedPower)),
+                     "^", 
+                     as.character(selectedPower))
+    return(myString)
+  }
+  else {
+    return("The number entered is not a perfect power.")
+  }
+}
+```
+
+### Step 3
+
+Finally, use this function to test on some examples.
+
+```{r}
+findRootPower(27)
+findRootPower(13060694016)
+findRootPower(7776)
+findRootPower(170859375)
+findRootPower(58247422)
+findRootPower(94143178827)
+```
+
+## Problem 3
+
+### Step 1
+
+Here is the answer from GPT-4:
+
+*Here are two R functions that accomplish the tasks you described:*
+
+```{r}
+# Function to determine the name of a poker hand
+determine_poker_hand <- function(suits, ranks) {
+  # Count the occurrences of each rank
+  rank_counts <- table(ranks)
+  
+  # Check for a flush (all cards have the same suit)
+  is_flush <- length(unique(suits)) == 1
+  
+  # Check for a straight (consecutive ranks)
+  is_straight <- max(ranks) - min(ranks) == 4 && length(unique(ranks)) == 5
+  
+  # Determine the hand name
+  if (is_flush && is_straight) {
+    return("Straight Flush")  # Both straight and flush
+  } else if (any(rank_counts == 4)) {
+    return("Four of a Kind")  # Have 4 cards with the same kind
+  } else if (all(rank_counts == c(2, 3))) {
+    return("Full House")  # Have 3 cards with identical rank and 2 cards with another identical rank
+  } else if (is_flush) {
+    return("Flush")
+  } else if (is_straight) {
+    return("Straight")  
+  } else if (any(rank_counts == 3)) {
+    return("Three of a Kind")  # Have 3 cards with identical kind
+  } else if (sum(rank_counts == 2) == 4) {
+    return("Two Pair")  # Have 2 cards with identical rank and 2 cards with another identical rank
+  } else if (sum(rank_counts == 2) == 2) {
+    return("One Pair")  # Have only 1 pair of cards with identical rank
+  } else {
+    return("High Card")
+  }
+}
+
+# Function to simulate dealing a round of poker
+deal_poker_round <- function(num_players) {
+  # Define the deck of cards
+  ranks <- rep(2:14, 4) # 2 through Ace (14), each repeated 4 times
+  suits <- rep(c("Hearts", "Diamonds", "Clubs", "Spades"), each = 13)
+  deck <- data.frame(Rank = ranks, Suit = suits)  # Combine the suits and ranks within a single data frame
+  # Shuffle the deck
+  set.seed(506)  # This line is added by myself to make the results deterministic
+  shuffled_deck <- deck[sample(nrow(deck)), ]
+  
+  # Deal cards to each player
+  player_hands <- list()  # Initialize a empty list to store the cards of each player
+  for (i in 1:num_players) {
+    player_hand <- shuffled_deck[((i - 1) * 5 + 1):(i * 5), ]  # The numbers are taken sequentially from the data frame, and the process is treated as dealing cards to each players
+    player_hands[[i]] <- player_hand  # append each player's cards to the list
+    cat("Player", i, "hand:", "\n")  # Output the player's cards
+    print(player_hand)
+    hand_name <- determine_poker_hand(player_hand$Suit, player_hand$Rank)
+    cat("Hand Name:", hand_name, "\n\n")  # Output the player's name of the kind
+  }
+}
+
+# Example usage:
+deal_poker_round(4)  # Simulate a round of poker with 4 players
+```
+
+*These functions allow you to determine the name of a poker hand based on a given set of suits and ranks, as well as simulate dealing a round of poker with a specified number of players, displaying each player's hand and its corresponding name.*
+
+### Step 2
+
+Test the code with a range of inputs.
+
+```{r}
+deal_poker_round(2)
+deal_poker_round(3)
+deal_poker_round(5)
+deal_poker_round(6)
+deal_poker_round(7)
+```
+
+### Step 3
+
+I have already explained the code line by line in Step 1.
+
+### Step 4
+
+The function "determine_poker_hand" that ChatGPT generated above have 2 problems: a. it allows more than 10 hands to be dealt; b. it will generate the warning: "Warning: longer object length is not a multiple of shorter object length".
+
+Fore example:
+
+```{r}
+deal_poker_round(12)
+```
+
+It shows that the 11th player is only assigned 2 cards, and that the 12th player is not assigned any cards.
+
+To revise the function and fix the problems, I made following attempts:
+
+```{r}
+deal_poker_round_revised <- function(num_players) {
+  if (num_players <= 10) {
+    ranks <- rep(2:14, 4) 
+    suits <- rep(c("Hearts", "Diamonds", "Clubs", "Spades"), each = 13)
+    deck <- data.frame(Rank = ranks, Suit = suits)  
+  
+    set.seed(506)  
+    shuffled_deck <- deck[sample(nrow(deck)), ]
+  
+    player_hands <- list() 
+  
+    for (i in 1:num_players) {
+      player_hand <- shuffled_deck[((i - 1) * 5 + 1):(i * 5), ]  
+      player_hands[[i]] <- player_hand 
+      cat("Player", i, "hand:", "\n") 
+      print(player_hand)
+      hand_name <- determine_poker_hand(player_hand$Suit, player_hand$Rank)
+      cat("Hand Name:", hand_name, "\n\n") 
+    }
+  }
+  else {
+    print("The number of players exceeds the limit.")
+  }
+}
+```
+
+Then we can check what will it happen if the number of players exceeds the limit.
+
+```{r}
+deal_poker_round_revised(11)
+```
+
+As for the warning "Warning: longer object length is not a multiple of shorter object length", I'm still working on it.
