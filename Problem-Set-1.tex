@@ -1,0 +1,1291 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[many]{tcolorbox}}
+\makeatother
+\makeatletter
+\@ifundefined{shadecolor}{\definecolor{shadecolor}{rgb}{.97, .97, .97}}
+\makeatother
+\makeatletter
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Problem Set 1},
+  pdfauthor={Yipeng Liu},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Problem Set 1}
+\author{Yipeng Liu}
+\date{}
+
+\begin{document}
+\maketitle
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[sharp corners, interior hidden, frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, boxrule=0pt, breakable]}{\end{tcolorbox}}\fi
+
+\hypertarget{homework-1}{%
+\section{Homework 1}\label{homework-1}}
+
+\hypertarget{problem-1}{%
+\subsection{Problem 1}\label{problem-1}}
+
+\hypertarget{step-1}{%
+\subsubsection{Step 1}\label{step-1}}
+
+First, convert the .data file into the data frame form and give
+appropriate column names.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Import the data from the .data file}
+\NormalTok{wineDf }\OtherTok{\textless{}{-}} \FunctionTok{read.table}\NormalTok{(}\StringTok{"/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 1/wine/wine.data"}\NormalTok{, }\AttributeTok{sep =} \StringTok{","}\NormalTok{)}
+\FunctionTok{colnames}\NormalTok{(wineDf) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Type"}\NormalTok{, }
+                      \StringTok{"Alcohol"}\NormalTok{, }
+                      \StringTok{"MalicAcid"}\NormalTok{, }
+                      \StringTok{"Ash"}\NormalTok{,}
+                      \StringTok{"AlcalinityOfAsh"}\NormalTok{,}
+                      \StringTok{"Magnesium"}\NormalTok{,}
+                      \StringTok{"TotalPhenols"}\NormalTok{,}
+                      \StringTok{"Flavanoids"}\NormalTok{,}
+                      \StringTok{"NonflavanoidPhenols"}\NormalTok{,}
+                      \StringTok{"Proanthocyanins"}\NormalTok{,}
+                      \StringTok{"ColorIntensity"}\NormalTok{,}
+                      \StringTok{"Hue"}\NormalTok{,}
+                      \StringTok{"OD280OD315OfDilutedWines"}\NormalTok{,}
+                      \StringTok{"Proline"}\NormalTok{)}
+
+\CommentTok{\# Display the first 5 rows of the data frame}
+\FunctionTok{head}\NormalTok{(wineDf, }\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  Type Alcohol MalicAcid  Ash AlcalinityOfAsh Magnesium TotalPhenols Flavanoids
+1    1   14.23      1.71 2.43            15.6       127         2.80       3.06
+2    1   13.20      1.78 2.14            11.2       100         2.65       2.76
+3    1   13.16      2.36 2.67            18.6       101         2.80       3.24
+4    1   14.37      1.95 2.50            16.8       113         3.85       3.49
+5    1   13.24      2.59 2.87            21.0       118         2.80       2.69
+  NonflavanoidPhenols Proanthocyanins ColorIntensity  Hue
+1                0.28            2.29           5.64 1.04
+2                0.26            1.28           4.38 1.05
+3                0.30            2.81           5.68 1.03
+4                0.24            2.18           7.80 0.86
+5                0.39            1.82           4.32 1.04
+  OD280OD315OfDilutedWines Proline
+1                     3.92    1065
+2                     3.40    1050
+3                     3.17    1185
+4                     3.45    1480
+5                     2.93     735
+\end{verbatim}
+
+\hypertarget{step-2}{%
+\subsubsection{Step 2}\label{step-2}}
+
+Check the wine with the highest and lowest alcohol content belongs.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Type of wine contains the highest alcohol content}
+\NormalTok{typeContainsMostAlcohol }\OtherTok{\textless{}{-}} 
+\NormalTok{  wineDf}\SpecialCharTok{$}\NormalTok{Type[}\FunctionTok{which}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Alcohol }\SpecialCharTok{==} \FunctionTok{max}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Alcohol))]}
+\NormalTok{typeContainsMostAlcohol}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Type of wine contains the lowest alcohol content}
+\NormalTok{typeContainsLowestAlcohol }\OtherTok{\textless{}{-}} 
+\NormalTok{  wineDf}\SpecialCharTok{$}\NormalTok{Type[}\FunctionTok{which}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Alcohol }\SpecialCharTok{==} \FunctionTok{min}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Alcohol))]}
+\NormalTok{typeContainsMostAlcohol}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+It follows that the wine with the highest alcohol content belongs to
+class 1, and that the wine with the lowest alcohol content also belongs
+to class 1.
+
+Then, explore how many wines in our example have higher levels of
+magnesium than average German beers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{quantityHigherThanGerman }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Magnesium }\SpecialCharTok{\textgreater{}} \DecValTok{114}\NormalTok{)}
+\NormalTok{quantityHigherThanGerman}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 26
+\end{verbatim}
+
+It follows that there are 26 wines have higher levels of magnesium than
+German beers.
+
+Finally, find out within each class, how many wines have higher levels
+of magnesium than average German beers.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create a new column for the categorial variable "whether of not it has higher levels of magnesium than German beers"}
+\NormalTok{wineDf}\SpecialCharTok{$}\NormalTok{HigherThanGermanBeers }\OtherTok{\textless{}{-}} 
+  \FunctionTok{as.numeric}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Magnesium }\SpecialCharTok{\textgreater{}} \DecValTok{114}\NormalTok{)}
+
+\CommentTok{\# Calculate within each class, how many wines have higher levels of magnesium than average German beers}
+\NormalTok{sumHigherThanGermanBeers }\OtherTok{\textless{}{-}} 
+  \FunctionTok{tapply}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{HigherThanGermanBeers, }
+         \AttributeTok{INDEX =}\NormalTok{ wineDf}\SpecialCharTok{$}\NormalTok{Type, }
+         \AttributeTok{FUN =}\NormalTok{ sum)}
+\NormalTok{sumHigherThanGermanBeers}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+ 1  2  3 
+15  6  5 
+\end{verbatim}
+
+It can be seen that 15, 6, and 5 wines in categories 1, 2, and 3,
+respectively, have higher magnesium contents than average German beers.
+
+\hypertarget{step-3}{%
+\subsubsection{Step 3}\label{step-3}}
+
+Here creates a table identifying the average value of each variable,
+providing one row for the overall average, and one row per class with
+class averages.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Get the average of each column}
+\NormalTok{colMeansWine }\OtherTok{\textless{}{-}} \FunctionTok{colMeans}\NormalTok{(wineDf)}
+
+\CommentTok{\# Get the average of each column per class}
+\NormalTok{colMeansWineByClass }\OtherTok{\textless{}{-}} \FunctionTok{aggregate}\NormalTok{(wineDf, }\AttributeTok{by =} \FunctionTok{list}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Type), }\AttributeTok{FUN =}\NormalTok{ mean)}
+\NormalTok{colMeansWineByClass }\OtherTok{\textless{}{-}}\NormalTok{ colMeansWineByClass[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+
+\CommentTok{\# Bind these results into a single data frame}
+\NormalTok{aveWineDf1 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{t}\NormalTok{(colMeansWine))}
+\NormalTok{aveWineDf }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(colMeansWineByClass, aveWineDf1)}
+
+\CommentTok{\# Show the data frame}
+\FunctionTok{head}\NormalTok{(aveWineDf)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+      Type  Alcohol MalicAcid      Ash AlcalinityOfAsh Magnesium TotalPhenols
+1 1.000000 13.74475  2.010678 2.455593        17.03729 106.33898     2.840169
+2 2.000000 12.27873  1.932676 2.244789        20.23803  94.54930     2.258873
+3 3.000000 13.15375  3.333750 2.437083        21.41667  99.31250     1.678750
+4 1.938202 13.00062  2.336348 2.366517        19.49494  99.74157     2.295112
+  Flavanoids NonflavanoidPhenols Proanthocyanins ColorIntensity       Hue
+1  2.9823729           0.2900000        1.899322       5.528305 1.0620339
+2  2.0808451           0.3636620        1.630282       3.086620 1.0562817
+3  0.7814583           0.4475000        1.153542       7.396250 0.6827083
+4  2.0292697           0.3618539        1.590899       5.058090 0.9574494
+  OD280OD315OfDilutedWines   Proline HigherThanGermanBeers
+1                 3.157797 1115.7119            0.25423729
+2                 2.785352  519.5070            0.08450704
+3                 1.683542  629.8958            0.10416667
+4                 2.611685  746.8933            0.14606742
+\end{verbatim}
+
+In this data frame we can see that rows 1, 2, and 3 represent the
+average of each variable for beers of type 1, 2, and 3, respectively,
+and the last row represents the average of each variable for all wines.
+
+\hypertarget{step-4}{%
+\subsubsection{Step 4}\label{step-4}}
+
+Now carry out a series of t-tests to examine whether the level of Ash
+differs across the three classes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# First, get 3 lists that represents the level of Ash of the 3 different kinds of wine}
+\NormalTok{ash1 }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Ash, wineDf}\SpecialCharTok{$}\NormalTok{Type }\SpecialCharTok{==} \DecValTok{1}\NormalTok{)}
+\NormalTok{ash2 }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Ash, wineDf}\SpecialCharTok{$}\NormalTok{Type }\SpecialCharTok{==} \DecValTok{2}\NormalTok{)}
+\NormalTok{ash3 }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(wineDf}\SpecialCharTok{$}\NormalTok{Ash, wineDf}\SpecialCharTok{$}\NormalTok{Type }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)}
+
+\CommentTok{\# Then, carry out the t{-}tests for 1\textasciitilde{}2, 2\textasciitilde{}3, 1\textasciitilde{}3}
+\FunctionTok{t.test}\NormalTok{(ash1, ash2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Welch Two Sample t-test
+
+data:  ash1 and ash2
+t = 4.4184, df = 125.59, p-value = 2.124e-05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ 0.116383 0.305226
+sample estimates:
+mean of x mean of y 
+ 2.455593  2.244789 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{t.test}\NormalTok{(ash2, ash3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Welch Two Sample t-test
+
+data:  ash2 and ash3
+t = -4.184, df = 114.96, p-value = 5.627e-05
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.2833328 -0.1012564
+sample estimates:
+mean of x mean of y 
+ 2.244789  2.437083 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{t.test}\NormalTok{(ash1, ash3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+    Welch Two Sample t-test
+
+data:  ash1 and ash3
+t = 0.46489, df = 105, p-value = 0.643
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.06043717  0.09745695
+sample estimates:
+mean of x mean of y 
+ 2.455593  2.437083 
+\end{verbatim}
+
+In the t-test of these 3 pairs of independent samples, we can observe
+that the p-value of the t-test results of the 2 pairs of samples,
+1\textasciitilde2 and 2\textasciitilde3, is much less than 0.05, so the
+null hypothesis can be rejected and it is considered that there is a
+significant difference between each of the 2 pairs of samples.
+
+On the contrary, the t-test for the pair of samples 1～3 showed a
+p-value greater than 0.05, so the null hypothesis could not be rejected
+and the pair of samples could not be considered significantly different
+from each other.
+
+\hypertarget{problem-2}{%
+\subsection{Problem 2}\label{problem-2}}
+
+\hypertarget{step-1-1}{%
+\subsubsection{Step 1}\label{step-1-1}}
+
+First, write the function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\textquotesingle{} This function identifies whether a given integer is a "perfect power\textquotesingle{}}
+\CommentTok{\#\textquotesingle{} }
+\CommentTok{\#\textquotesingle{} @param number the number to check}
+\CommentTok{\#\textquotesingle{} @param power the specified power}
+\CommentTok{\#\textquotesingle{} }
+\CommentTok{\#\textquotesingle{} @return the list that shows the result}
+\NormalTok{isPerfectPower }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(number, power) \{}
+  
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{abs}\NormalTok{(}\FunctionTok{round}\NormalTok{(number)}\SpecialCharTok{{-}}\NormalTok{number }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\textgreater{}=}\NormalTok{ .Machine}\SpecialCharTok{$}\NormalTok{double.eps}\SpecialCharTok{\^{}}\FloatTok{0.5}\NormalTok{) \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"The number must be an integer."}\NormalTok{)}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{abs}\NormalTok{(}\FunctionTok{round}\NormalTok{(power)}\SpecialCharTok{{-}}\NormalTok{power }\SpecialCharTok{!=} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\textgreater{}=}\NormalTok{ .Machine}\SpecialCharTok{$}\NormalTok{double.eps}\SpecialCharTok{\^{}}\FloatTok{0.5}\NormalTok{) \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"The power must be an integer."}\NormalTok{)}
+\NormalTok{  \}}
+  
+\NormalTok{  isPerfect }\OtherTok{=} \FunctionTok{abs}\NormalTok{(}\FunctionTok{round}\NormalTok{(number}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{power))}\SpecialCharTok{{-}}\NormalTok{number}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{power)) }\SpecialCharTok{\textless{}}\NormalTok{ .Machine}\SpecialCharTok{$}\NormalTok{double.eps}\SpecialCharTok{\^{}}\FloatTok{0.5}
+\NormalTok{  root }\OtherTok{=}\NormalTok{ number}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{power)}
+  
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{list}\NormalTok{(isPerfect, root))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{step-2-1}{%
+\subsubsection{Step 2}\label{step-2-1}}
+
+Next, demonstrate our function works.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#\textquotesingle{} This function which calls the function above, using a loop to identify both the root and power}
+\CommentTok{\#\textquotesingle{} }
+\CommentTok{\#\textquotesingle{} @param number the input number}
+\CommentTok{\#\textquotesingle{} }
+\CommentTok{\#\textquotesingle{} @return the root and the power as a valid string equation with an appropriate message if the input is not a perfect power}
+\NormalTok{findRootPower }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(number) \{}
+  
+\NormalTok{  myVar }\OtherTok{\textless{}{-}} \ConstantTok{FALSE}
+\NormalTok{  powers }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
+  
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\SpecialCharTok{:}\FunctionTok{round}\NormalTok{(}\FunctionTok{sqrt}\NormalTok{(number))) \{}
+    \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{isPerfectPower}\NormalTok{(number, i)[[}\DecValTok{1}\NormalTok{]] }\SpecialCharTok{==} \ConstantTok{TRUE}\NormalTok{) \{}
+\NormalTok{      myVar }\OtherTok{\textless{}{-}} \ConstantTok{TRUE}
+\NormalTok{      powers }\OtherTok{\textless{}{-}} \FunctionTok{append}\NormalTok{(powers, i)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \ControlFlowTok{if}\NormalTok{ (myVar }\SpecialCharTok{==} \ConstantTok{TRUE}\NormalTok{) \{}
+\NormalTok{    selectedPower }\OtherTok{=} \FunctionTok{min}\NormalTok{(powers)}
+\NormalTok{    myString }\OtherTok{=} \FunctionTok{paste}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(number), }
+                     \StringTok{" = "}\NormalTok{,}
+                     \FunctionTok{as.character}\NormalTok{(number}\SpecialCharTok{\^{}}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{selectedPower)),}
+                     \StringTok{"\^{}"}\NormalTok{, }
+                     \FunctionTok{as.character}\NormalTok{(selectedPower))}
+    \FunctionTok{return}\NormalTok{(myString)}
+\NormalTok{  \}}
+  \ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"The number entered is not a perfect power."}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{step-3-1}{%
+\subsubsection{Step 3}\label{step-3-1}}
+
+Finally, use this function to test on some examples.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{findRootPower}\NormalTok{(}\DecValTok{27}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "27  =  3 ^ 3"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{findRootPower}\NormalTok{(}\DecValTok{13060694016}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "13060694016  =  6 ^ 13"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{findRootPower}\NormalTok{(}\DecValTok{7776}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "7776  =  6 ^ 5"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{findRootPower}\NormalTok{(}\DecValTok{170859375}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "170859375  =  15 ^ 7"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{findRootPower}\NormalTok{(}\DecValTok{58247422}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The number entered is not a perfect power."
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{findRootPower}\NormalTok{(}\DecValTok{94143178827}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "94143178827  =  3 ^ 23"
+\end{verbatim}
+
+\hypertarget{problem-3}{%
+\subsection{Problem 3}\label{problem-3}}
+
+\hypertarget{step-1-2}{%
+\subsubsection{Step 1}\label{step-1-2}}
+
+Here is the answer from GPT-4:
+
+\emph{Here are two R functions that accomplish the tasks you described:}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Function to determine the name of a poker hand}
+\NormalTok{determine\_poker\_hand }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(suits, ranks) \{}
+  \CommentTok{\# Count the occurrences of each rank}
+\NormalTok{  rank\_counts }\OtherTok{\textless{}{-}} \FunctionTok{table}\NormalTok{(ranks)}
+  
+  \CommentTok{\# Check for a flush (all cards have the same suit)}
+\NormalTok{  is\_flush }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(suits)) }\SpecialCharTok{==} \DecValTok{1}
+  
+  \CommentTok{\# Check for a straight (consecutive ranks)}
+\NormalTok{  is\_straight }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{(ranks) }\SpecialCharTok{{-}} \FunctionTok{min}\NormalTok{(ranks) }\SpecialCharTok{==} \DecValTok{4} \SpecialCharTok{\&\&} \FunctionTok{length}\NormalTok{(}\FunctionTok{unique}\NormalTok{(ranks)) }\SpecialCharTok{==} \DecValTok{5}
+  
+  \CommentTok{\# Determine the hand name}
+  \ControlFlowTok{if}\NormalTok{ (is\_flush }\SpecialCharTok{\&\&}\NormalTok{ is\_straight) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Straight Flush"}\NormalTok{)  }\CommentTok{\# Both straight and flush}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{any}\NormalTok{(rank\_counts }\SpecialCharTok{==} \DecValTok{4}\NormalTok{)) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Four of a Kind"}\NormalTok{)  }\CommentTok{\# Have 4 cards with the same kind}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{all}\NormalTok{(rank\_counts }\SpecialCharTok{==} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{))) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Full House"}\NormalTok{)  }\CommentTok{\# Have 3 cards with identical rank and 2 cards with another identical rank}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (is\_flush) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Flush"}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (is\_straight) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Straight"}\NormalTok{)  }
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{any}\NormalTok{(rank\_counts }\SpecialCharTok{==} \DecValTok{3}\NormalTok{)) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Three of a Kind"}\NormalTok{)  }\CommentTok{\# Have 3 cards with identical kind}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(rank\_counts }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) }\SpecialCharTok{==} \DecValTok{4}\NormalTok{) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"Two Pair"}\NormalTok{)  }\CommentTok{\# Have 2 cards with identical rank and 2 cards with another identical rank}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{sum}\NormalTok{(rank\_counts }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) }\SpecialCharTok{==} \DecValTok{2}\NormalTok{) \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"One Pair"}\NormalTok{)  }\CommentTok{\# Have only 1 pair of cards with identical rank}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{return}\NormalTok{(}\StringTok{"High Card"}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\# Function to simulate dealing a round of poker}
+\NormalTok{deal\_poker\_round }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(num\_players) \{}
+  \CommentTok{\# Define the deck of cards}
+\NormalTok{  ranks }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{14}\NormalTok{, }\DecValTok{4}\NormalTok{) }\CommentTok{\# 2 through Ace (14), each repeated 4 times}
+\NormalTok{  suits }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Hearts"}\NormalTok{, }\StringTok{"Diamonds"}\NormalTok{, }\StringTok{"Clubs"}\NormalTok{, }\StringTok{"Spades"}\NormalTok{), }\AttributeTok{each =} \DecValTok{13}\NormalTok{)}
+\NormalTok{  deck }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Rank =}\NormalTok{ ranks, }\AttributeTok{Suit =}\NormalTok{ suits)  }\CommentTok{\# Combine the suits and ranks within a single data frame}
+  \CommentTok{\# Shuffle the deck}
+  \FunctionTok{set.seed}\NormalTok{(}\DecValTok{506}\NormalTok{)  }\CommentTok{\# This line is added by myself to make the results deterministic}
+\NormalTok{  shuffled\_deck }\OtherTok{\textless{}{-}}\NormalTok{ deck[}\FunctionTok{sample}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(deck)), ]}
+  
+  \CommentTok{\# Deal cards to each player}
+\NormalTok{  player\_hands }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{()  }\CommentTok{\# Initialize a empty list to store the cards of each player}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{num\_players) \{}
+\NormalTok{    player\_hand }\OtherTok{\textless{}{-}}\NormalTok{ shuffled\_deck[((i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*} \DecValTok{5} \SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(i }\SpecialCharTok{*} \DecValTok{5}\NormalTok{), ]  }\CommentTok{\# The numbers are taken sequentially from the data frame, and the process is treated as dealing cards to each players}
+\NormalTok{    player\_hands[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ player\_hand  }\CommentTok{\# append each player\textquotesingle{}s cards to the list}
+    \FunctionTok{cat}\NormalTok{(}\StringTok{"Player"}\NormalTok{, i, }\StringTok{"hand:"}\NormalTok{, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)  }\CommentTok{\# Output the player\textquotesingle{}s cards}
+    \FunctionTok{print}\NormalTok{(player\_hand)}
+\NormalTok{    hand\_name }\OtherTok{\textless{}{-}} \FunctionTok{determine\_poker\_hand}\NormalTok{(player\_hand}\SpecialCharTok{$}\NormalTok{Suit, player\_hand}\SpecialCharTok{$}\NormalTok{Rank)}
+    \FunctionTok{cat}\NormalTok{(}\StringTok{"Hand Name:"}\NormalTok{, hand\_name, }\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{)  }\CommentTok{\# Output the player\textquotesingle{}s name of the kind}
+\NormalTok{  \}}
+\NormalTok{\}}
+
+\CommentTok{\# Example usage:}
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{4}\NormalTok{)  }\CommentTok{\# Simulate a round of poker with 4 players}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 3 hand: 
+   Rank   Suit
+51   13 Spades
+36   11  Clubs
+32    7  Clubs
+34    9  Clubs
+49   11 Spades
+Hand Name: High Card 
+
+Player 4 hand: 
+   Rank   Suit
+39   14  Clubs
+11   12 Hearts
+40    2 Spades
+37   12  Clubs
+29    4  Clubs
+Hand Name: High Card 
+\end{verbatim}
+
+\emph{These functions allow you to determine the name of a poker hand
+based on a given set of suits and ranks, as well as simulate dealing a
+round of poker with a specified number of players, displaying each
+player's hand and its corresponding name.}
+
+\hypertarget{step-2-2}{%
+\subsubsection{Step 2}\label{step-2-2}}
+
+Test the code with a range of inputs.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 3 hand: 
+   Rank   Suit
+51   13 Spades
+36   11  Clubs
+32    7  Clubs
+34    9  Clubs
+49   11 Spades
+Hand Name: High Card 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 3 hand: 
+   Rank   Suit
+51   13 Spades
+36   11  Clubs
+32    7  Clubs
+34    9  Clubs
+49   11 Spades
+Hand Name: High Card 
+
+Player 4 hand: 
+   Rank   Suit
+39   14  Clubs
+11   12 Hearts
+40    2 Spades
+37   12  Clubs
+29    4  Clubs
+Hand Name: High Card 
+
+Player 5 hand: 
+   Rank     Suit
+24   12 Diamonds
+25   13 Diamonds
+6     7   Hearts
+2     3   Hearts
+44    6   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{6}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 3 hand: 
+   Rank   Suit
+51   13 Spades
+36   11  Clubs
+32    7  Clubs
+34    9  Clubs
+49   11 Spades
+Hand Name: High Card 
+
+Player 4 hand: 
+   Rank   Suit
+39   14  Clubs
+11   12 Hearts
+40    2 Spades
+37   12  Clubs
+29    4  Clubs
+Hand Name: High Card 
+
+Player 5 hand: 
+   Rank     Suit
+24   12 Diamonds
+25   13 Diamonds
+6     7   Hearts
+2     3   Hearts
+44    6   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 6 hand: 
+   Rank     Suit
+23   11 Diamonds
+21    9 Diamonds
+15    3 Diamonds
+14    2 Diamonds
+52   14   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{7}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 3 hand: 
+   Rank   Suit
+51   13 Spades
+36   11  Clubs
+32    7  Clubs
+34    9  Clubs
+49   11 Spades
+Hand Name: High Card 
+
+Player 4 hand: 
+   Rank   Suit
+39   14  Clubs
+11   12 Hearts
+40    2 Spades
+37   12  Clubs
+29    4  Clubs
+Hand Name: High Card 
+
+Player 5 hand: 
+   Rank     Suit
+24   12 Diamonds
+25   13 Diamonds
+6     7   Hearts
+2     3   Hearts
+44    6   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 6 hand: 
+   Rank     Suit
+23   11 Diamonds
+21    9 Diamonds
+15    3 Diamonds
+14    2 Diamonds
+52   14   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 7 hand: 
+   Rank     Suit
+35   10    Clubs
+18    6 Diamonds
+26   14 Diamonds
+50   12   Spades
+19    7 Diamonds
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+\end{verbatim}
+
+\hypertarget{step-3-2}{%
+\subsubsection{Step 3}\label{step-3-2}}
+
+I have already explained the code line by line in Step 1.
+
+\hypertarget{step-4-1}{%
+\subsubsection{Step 4}\label{step-4-1}}
+
+The function ``determine\_poker\_hand'' that ChatGPT generated above
+have 2 problems: a. it allows more than 10 hands to be dealt; b. it will
+generate the warning: ``Warning: longer object length is not a multiple
+of shorter object length''.
+
+Fore example:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Player 1 hand: 
+   Rank   Suit
+48   10 Spades
+3     4 Hearts
+1     2 Hearts
+43    5 Spades
+27    2  Clubs
+Hand Name: High Card 
+
+Player 2 hand: 
+   Rank     Suit
+22   10 Diamonds
+5     6   Hearts
+10   11   Hearts
+20    8 Diamonds
+8     9   Hearts
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 3 hand: 
+   Rank   Suit
+51   13 Spades
+36   11  Clubs
+32    7  Clubs
+34    9  Clubs
+49   11 Spades
+Hand Name: High Card 
+
+Player 4 hand: 
+   Rank   Suit
+39   14  Clubs
+11   12 Hearts
+40    2 Spades
+37   12  Clubs
+29    4  Clubs
+Hand Name: High Card 
+
+Player 5 hand: 
+   Rank     Suit
+24   12 Diamonds
+25   13 Diamonds
+6     7   Hearts
+2     3   Hearts
+44    6   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 6 hand: 
+   Rank     Suit
+23   11 Diamonds
+21    9 Diamonds
+15    3 Diamonds
+14    2 Diamonds
+52   14   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 7 hand: 
+   Rank     Suit
+35   10    Clubs
+18    6 Diamonds
+26   14 Diamonds
+50   12   Spades
+19    7 Diamonds
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 8 hand: 
+   Rank     Suit
+38   13    Clubs
+16    4 Diamonds
+13   14   Hearts
+12   13   Hearts
+4     5   Hearts
+Hand Name: High Card 
+
+Player 9 hand: 
+   Rank     Suit
+42    4   Spades
+45    7   Spades
+47    9   Spades
+17    5 Diamonds
+41    3   Spades
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: High Card 
+
+Player 10 hand: 
+   Rank   Suit
+31    6  Clubs
+33    8  Clubs
+7     8 Hearts
+46    8 Spades
+30    5  Clubs
+\end{verbatim}
+
+\begin{verbatim}
+Warning in rank_counts == c(2, 3): longer object length is not a multiple of
+shorter object length
+\end{verbatim}
+
+\begin{verbatim}
+Hand Name: Three of a Kind 
+
+Player 11 hand: 
+     Rank   Suit
+9      10 Hearts
+28      3  Clubs
+NA     NA   <NA>
+NA.1   NA   <NA>
+NA.2   NA   <NA>
+Hand Name: High Card 
+
+Player 12 hand: 
+     Rank Suit
+NA     NA <NA>
+NA.1   NA <NA>
+NA.2   NA <NA>
+NA.3   NA <NA>
+NA.4   NA <NA>
+Hand Name: Full House 
+\end{verbatim}
+
+It shows that the 11th player is only assigned 2 cards, and that the
+12th player is not assigned any cards.
+
+To revise the function and fix the problems, I made following attempts:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{deal\_poker\_round\_revised }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(num\_players) \{}
+  \ControlFlowTok{if}\NormalTok{ (num\_players }\SpecialCharTok{\textless{}=} \DecValTok{10}\NormalTok{) \{}
+\NormalTok{    ranks }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{2}\SpecialCharTok{:}\DecValTok{14}\NormalTok{, }\DecValTok{4}\NormalTok{) }
+\NormalTok{    suits }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Hearts"}\NormalTok{, }\StringTok{"Diamonds"}\NormalTok{, }\StringTok{"Clubs"}\NormalTok{, }\StringTok{"Spades"}\NormalTok{), }\AttributeTok{each =} \DecValTok{13}\NormalTok{)}
+\NormalTok{    deck }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Rank =}\NormalTok{ ranks, }\AttributeTok{Suit =}\NormalTok{ suits)  }
+  
+    \FunctionTok{set.seed}\NormalTok{(}\DecValTok{506}\NormalTok{)  }
+\NormalTok{    shuffled\_deck }\OtherTok{\textless{}{-}}\NormalTok{ deck[}\FunctionTok{sample}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(deck)), ]}
+  
+\NormalTok{    player\_hands }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{() }
+  
+    \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{num\_players) \{}
+\NormalTok{      player\_hand }\OtherTok{\textless{}{-}}\NormalTok{ shuffled\_deck[((i }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{) }\SpecialCharTok{*} \DecValTok{5} \SpecialCharTok{+} \DecValTok{1}\NormalTok{)}\SpecialCharTok{:}\NormalTok{(i }\SpecialCharTok{*} \DecValTok{5}\NormalTok{), ]  }
+\NormalTok{      player\_hands[[i]] }\OtherTok{\textless{}{-}}\NormalTok{ player\_hand }
+      \FunctionTok{cat}\NormalTok{(}\StringTok{"Player"}\NormalTok{, i, }\StringTok{"hand:"}\NormalTok{, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{) }
+      \FunctionTok{print}\NormalTok{(player\_hand)}
+\NormalTok{      hand\_name }\OtherTok{\textless{}{-}} \FunctionTok{determine\_poker\_hand}\NormalTok{(player\_hand}\SpecialCharTok{$}\NormalTok{Suit, player\_hand}\SpecialCharTok{$}\NormalTok{Rank)}
+      \FunctionTok{cat}\NormalTok{(}\StringTok{"Hand Name:"}\NormalTok{, hand\_name, }\StringTok{"}\SpecialCharTok{\textbackslash{}n\textbackslash{}n}\StringTok{"}\NormalTok{) }
+\NormalTok{    \}}
+\NormalTok{  \}}
+  \ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{print}\NormalTok{(}\StringTok{"The number of players exceeds the limit."}\NormalTok{)}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Then we can check what will it happen if the number of players exceeds
+the limit.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{deal\_poker\_round\_revised}\NormalTok{(}\DecValTok{11}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "The number of players exceeds the limit."
+\end{verbatim}
+
+As for the warning ``Warning: longer object length is not a multiple of
+shorter object length'', I'm still working on it.
+
+
+
+\end{document}
