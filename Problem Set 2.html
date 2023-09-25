@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yipeng Liu">
+
+<title>Problem Set 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Problem Set 2_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Problem Set 2_files/libs/quarto-html/quarto.js"></script>
+<script src="Problem Set 2_files/libs/quarto-html/popper.min.js"></script>
+<script src="Problem Set 2_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Problem Set 2_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Problem Set 2_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Problem Set 2_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Problem Set 2_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Problem Set 2_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Problem Set 2_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Problem Set 2</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yipeng Liu </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="homework-2" class="level1">
+<h1>Homework 2</h1>
+<p>Github Page:</p>
+<section id="problem-1" class="level2">
+<h2 class="anchored" data-anchor-id="problem-1">Problem 1</h2>
+<section id="step-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-1">Step 1</h3>
+<section id="version-1" class="level4">
+<h4 class="anchored" data-anchor-id="version-1">Version 1</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function implements this game using a loop over the die rolls</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param times the number of dice rolls</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return the total winnings or loses</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>roll_dice_v1 <span class="ot">&lt;-</span> <span class="cf">function</span>(times) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">506</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, times, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> result) {</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    score <span class="ot">&lt;-</span> score<span class="dv">-2</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      score <span class="ot">&lt;-</span> score<span class="sc">+</span>i</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(score)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="version-2" class="level3">
+<h3 class="anchored" data-anchor-id="version-2">Version 2</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function implements this game using built-in R vectorized functions</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param times the number of dice rolls</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return the total winnings or loses</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>roll_dice_v2 <span class="ot">&lt;-</span> <span class="cf">function</span>(times) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">506</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, times, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="fu">sum</span>(result[result <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)])<span class="sc">-</span><span class="dv">2</span><span class="sc">*</span>times</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(score)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="version-3" class="level3">
+<h3 class="anchored" data-anchor-id="version-3">Version 3</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function implements this game by collapsing the die rolls into a single table()</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param times the number of dice rolls</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return the total winnings or loses</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>roll_dice_v3 <span class="ot">&lt;-</span> <span class="cf">function</span>(times) {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">506</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  roll_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, times, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  roll_table <span class="ot">&lt;-</span> <span class="fu">table</span>(roll_vec)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  roll_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(roll_table)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(roll_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"roll"</span>, <span class="st">"freq"</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  roll_df<span class="sc">$</span>roll <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(roll_df<span class="sc">$</span>roll))</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="fu">sum</span>(roll_df<span class="sc">$</span>freq[roll_df<span class="sc">$</span>roll <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>]<span class="sc">*</span>roll_df<span class="sc">$</span>roll[roll_df<span class="sc">$</span>roll <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>])<span class="sc">-</span><span class="dv">2</span><span class="sc">*</span>times</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(score)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="version-4" class="level3">
+<h3 class="anchored" data-anchor-id="version-4">Version 4</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function implements this game by using one of the “apply” functions</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param times the number of dice rolls</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return the total winnings or loses</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>roll_dice_v4 <span class="ot">&lt;-</span> <span class="cf">function</span>(times) {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">506</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  roll_vec <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, times, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  wins <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">vapply</span>(roll_vec, <span class="cf">function</span>(x) <span class="fu">ifelse</span>(x <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>, x, <span class="dv">0</span>), <span class="fu">numeric</span>(<span class="dv">1</span>)))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> wins<span class="sc">-</span>times<span class="sc">*</span><span class="dv">2</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(score)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-2">Step 2</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demonstrate that version 1 works</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v1</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v1</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demonstrate that version 2 works</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v2</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v2</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demonstrate that version 3 works</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v3</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v3</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demonstrate that version 4 works</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v4</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v4</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+</div>
+<p>It can be seen that all version works.</p>
+</section>
+<section id="step-3" class="level3">
+<h3 class="anchored" data-anchor-id="step-3">Step 3</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Demonstrate that all versions give the same result</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v1</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v2</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v3</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v4</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v1</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v2</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v3</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roll_dice_v4</span>(<span class="dv">3000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 82</code></pre>
+</div>
+</div>
+<p>It shows that all versions give the same result.</p>
+</section>
+<section id="step-4" class="level3">
+<h3 class="anchored" data-anchor-id="step-4">Step 4</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microbenchmark)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Low input</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>try1 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try1 =</span> s1 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v1</span>(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in microbenchmark(try1 = s1 &lt;- roll_dice_v1(100)): less accurate
+nanosecond times to avoid potential integer overflows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>try2 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try2 =</span> s2 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v2</span>(<span class="dv">100</span>))</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>try3 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try3 =</span> s3 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v3</span>(<span class="dv">100</span>))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>try4 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try4 =</span> s4 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v4</span>(<span class="dv">100</span>))</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(try1, try2, try3, try4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: microseconds
+ expr     min       lq      mean   median      uq     max neval  cld
+ try1  14.473  14.7395  15.31473  14.9650  15.211  34.030   100 a   
+ try2  18.409  18.7370  21.11746  19.2905  20.500  79.007   100  b  
+ try3 112.094 116.8705 121.82002 117.8545 121.114 261.252   100   c 
+ try4  95.243  96.6370 100.25935  99.1175 102.746 116.522   100    d</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large input</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>try5 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try5 =</span> s5 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v1</span>(<span class="dv">10000</span>))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>try6 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try6 =</span> s6 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v2</span>(<span class="dv">10000</span>))</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>try7 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try7 =</span> s7 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v3</span>(<span class="dv">10000</span>))</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>try8 <span class="ot">&lt;-</span> <span class="fu">microbenchmark</span>(<span class="at">try8 =</span> s8 <span class="ot">&lt;-</span> <span class="fu">roll_dice_v4</span>(<span class="dv">10000</span>))</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(try5, try6, try7, try8)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unit: microseconds
+ expr      min        lq      mean   median        uq       max neval  cld
+ try5  994.701 1035.3730 1135.1235 1071.023  1170.202  2714.774   100 a   
+ try6  368.303  378.6555  391.4553  387.737   398.971   442.185   100  b  
+ try7  579.248  598.7230  643.7722  605.365   620.494  3924.561   100   c 
+ try8 8875.803 9302.6335 9794.0935 9461.652 10165.827 11713.987   100    d</code></pre>
+</div>
+</div>
+<p>It can be seen that when the amount of data input is small, the first method is the fastest, the second method is slightly slower than the first method, but the third method is much less efficient than the first two and becomes the slowest method, and the fourth method is at a lower level of efficiency.</p>
+<p>However, when the amount of data input is large, the speed advantage of the first method is lost, the second and third methods become the fastest, and the fourth method is the slowest.</p>
+<p>The first method uses loops, which is efficient when the data input is low, but when the data input increases, its running time increases linearly due to its time complexity of O(n); the second method is a vectorization method, which is a very efficient method and shows high performance whether the data input is small or large; the third method requires the creation of data tables and more complex operations, which makes it uneconomical when the data input is low, and its disadvantage decreases when the data input increases, making it a more efficient method; the low efficiency of fourth method may be due to the large time overhead inherent in the vapply function and the if-else conditional judgment statement, which can make it a less efficient method, especially when the data input is large.</p>
+</section>
+<section id="step-5" class="level3">
+<h3 class="anchored" data-anchor-id="step-5">Step 5</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function is for the Monte Carlo simulation with setting seed</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param times the number of dice rolls</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return the total winnings or loses</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>roll_dice <span class="ot">&lt;-</span> <span class="cf">function</span>(times) {</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  score <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, times, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> result) {</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>    score <span class="ot">&lt;-</span> score<span class="dv">-2</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>      score <span class="ot">&lt;-</span> score<span class="sc">+</span>i</span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(score)</span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a><span class="co">#' This function uses Monte Carlo simulation to determine whether the above dice rolling game is fair or not</span></span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param simulations the number of simulations</span></span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param rolls the number of dice rolls</span></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return the win-loss ratio</span></span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>monte_carlo_dice <span class="ot">&lt;-</span> <span class="cf">function</span>(simulations, rolls) {</span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>  win_times <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a>  loss_times <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>simulations) {</span>
+<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a>    score <span class="ot">&lt;-</span> <span class="fu">roll_dice</span>(rolls)</span>
+<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (score <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>      win_times <span class="ot">&lt;-</span> win_times<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a>      loss_times <span class="ot">&lt;-</span> loss_times<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb46-41"><a href="#cb46-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb46-42"><a href="#cb46-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb46-43"><a href="#cb46-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb46-44"><a href="#cb46-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(win_times<span class="sc">/</span>loss_times)</span>
+<span id="cb46-45"><a href="#cb46-45" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-46"><a href="#cb46-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-47"><a href="#cb46-47" aria-hidden="true" tabindex="-1"></a><span class="fu">monte_carlo_dice</span>(<span class="dv">100</span>, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">monte_carlo_dice</span>(<span class="dv">100</span>, <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.272727</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">monte_carlo_dice</span>(<span class="dv">10000</span>, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9297569</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">monte_carlo_dice</span>(<span class="dv">10000</span>, <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9904459</code></pre>
+</div>
+</div>
+<p>It can be seen that when the number of simulations and the number of rolls are both large, the win/loss ratio will be very close to 1, and so the game can be considered fair.</p>
+</section>
+</section>
+<section id="problem-2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2">Problem 2</h2>
+<section id="step-1-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-1">Step 1</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data set</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>cars <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 2/cars.csv"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the columns</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cars) <span class="ot">&lt;-</span> </span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"dim_h"</span>, <span class="st">"dim_l"</span>, <span class="st">"dim_w"</span>, </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eng_info_dr"</span>, <span class="st">"eng_info_type"</span>, <span class="st">"eng_info_hbd"</span>, <span class="st">"eng_info_numgears"</span>, <span class="st">"eng_info_trans"</span>, </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"fuel_info_city"</span>, <span class="st">"fuel_info_type"</span>, <span class="st">"fuel_info_hwy_mpg"</span>, </span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"iden_clf"</span>, <span class="st">"iden_id"</span>, <span class="st">"iden_make"</span>, <span class="st">"iden_mdyear"</span>, <span class="st">"iden_year"</span>, </span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"eng_info_stats_hp"</span>, <span class="st">"eng_info_stats_tq"</span>)</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Show how the data frame looks like</span></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cars, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   dim_h dim_l dim_w       eng_info_dr
+1    140   143   202   All-wheel drive
+2    140   143   202 Front-wheel drive
+3    140   143   202 Front-wheel drive
+4    140   143   202   All-wheel drive
+5    140   143   202   All-wheel drive
+6     91    17    62   All-wheel drive
+7     91    17    62   All-wheel drive
+8    201   221   191   All-wheel drive
+9    201   221   191   All-wheel drive
+10   147    96    34   All-wheel drive
+                                  eng_info_type eng_info_hbd eng_info_numgears
+1          Audi 3.2L 6 cylinder 250hp 236ft-lbs         True                 6
+2  Audi 2.0L 4 cylinder 200 hp 207 ft-lbs Turbo         True                 6
+3  Audi 2.0L 4 cylinder 200 hp 207 ft-lbs Turbo         True                 6
+4  Audi 2.0L 4 cylinder 200 hp 207 ft-lbs Turbo         True                 6
+5  Audi 2.0L 4 cylinder 200 hp 207 ft-lbs Turbo         True                 6
+6         Audi 3.2L 6 cylinder 265hp 243 ft-lbs         True                 6
+7         Audi 3.2L 6 cylinder 265hp 243 ft-lbs         True                 6
+8        Audi 4.2L 8 cylinder 350 hp 325 ft-lbs         True                 6
+9         Audi 3.6L 6 cylinder 280hp 266 ft-lbs         True                 6
+10 Audi 2.0L 4 cylinder 211 hp 258 ft-lbs Turbo         True                 6
+                   eng_info_trans fuel_info_city fuel_info_type
+1  6 Speed Automatic Select Shift             18       Gasoline
+2  6 Speed Automatic Select Shift             22       Gasoline
+3                  6 Speed Manual             21       Gasoline
+4  6 Speed Automatic Select Shift             21       Gasoline
+5  6 Speed Automatic Select Shift             21       Gasoline
+6                  6 Speed Manual             16       Gasoline
+7  6 Speed Automatic Select Shift             17       Gasoline
+8  6 Speed Automatic Select Shift             13       Gasoline
+9  6 Speed Automatic Select Shift             14       Gasoline
+10                 6 Speed Manual             22       Gasoline
+   fuel_info_hwy_mpg               iden_clf                          iden_id
+1                 25 Automatic transmission                 2009 Audi A3 3.2
+2                 28 Automatic transmission            2009 Audi A3 2.0 T AT
+3                 30    Manual transmission               2009 Audi A3 2.0 T
+4                 28 Automatic transmission       2009 Audi A3 2.0 T Quattro
+5                 28 Automatic transmission       2009 Audi A3 2.0 T Quattro
+6                 27    Manual transmission                 2009 Audi A5 3.2
+7                 26 Automatic transmission              2009 Audi A5 3.2 AT
+8                 18 Automatic transmission                 2009 Audi Q7 4.2
+9                 20 Automatic transmission                 2009 Audi Q7 3.6
+10                30    Manual transmission 2009 Audi A4 Sedan 2.0 T Quattro
+   iden_make        iden_mdyear iden_year eng_info_stats_hp eng_info_stats_tq
+1       Audi       2009 Audi A3      2009               250               236
+2       Audi       2009 Audi A3      2009               200               207
+3       Audi       2009 Audi A3      2009               200               207
+4       Audi       2009 Audi A3      2009               200               207
+5       Audi       2009 Audi A3      2009               200               207
+6       Audi       2009 Audi A5      2009               265               243
+7       Audi       2009 Audi A5      2009               265               243
+8       Audi       2009 Audi Q7      2009               350               325
+9       Audi       2009 Audi Q7      2009               280               266
+10      Audi 2009 Audi A4 Sedan      2009               211               258</code></pre>
+</div>
+</div>
+</section>
+<section id="step-2-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-1">Step 2</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Restrict the data to cars whose Fuel Type is “Gasoline”</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>cars_df <span class="ot">&lt;-</span> cars[cars<span class="sc">$</span>fuel_info_type <span class="sc">==</span> <span class="st">"Gasoline"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-1">Step 3</h3>
+<p>First, we transform the categorical variable into dummy variables, while avoiding multicollinearity in the subsequent regression analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the variable "iden_year" to the dummy variables</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>year <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">category =</span> <span class="fu">as.factor</span>(cars_df<span class="sc">$</span>iden_year))</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>dummy_year <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span>category<span class="dv">-1</span>, <span class="at">data =</span> year)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Put the dummy variables in the data frame</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>cars_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(cars_df, dummy_year)</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>cars_df <span class="ot">&lt;-</span> cars_df[, <span class="sc">-</span><span class="fu">ncol</span>(cars_df)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, fit the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>my_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(fuel_info_hwy_mpg<span class="sc">~</span>eng_info_stats_hp<span class="sc">+</span>eng_info_stats_tq<span class="sc">+</span>dim_l<span class="sc">+</span>dim_h<span class="sc">+</span>dim_w<span class="sc">+</span>category2009<span class="sc">+</span>category2010<span class="sc">+</span>category2011, <span class="at">data =</span> cars_df)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(my_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = fuel_info_hwy_mpg ~ eng_info_stats_hp + eng_info_stats_tq + 
+    dim_l + dim_h + dim_w + category2009 + category2010 + category2011, 
+    data = cars_df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-10.824  -2.550  -0.452   2.372 202.639 
+
+Coefficients:
+                    Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)       33.5955909  0.3499147  96.011  &lt; 2e-16 ***
+eng_info_stats_hp  0.0163556  0.0022772   7.182 7.96e-13 ***
+eng_info_stats_tq -0.0507425  0.0022030 -23.034  &lt; 2e-16 ***
+dim_l              0.0017290  0.0008836   1.957   0.0504 .  
+dim_h              0.0099079  0.0011267   8.794  &lt; 2e-16 ***
+dim_w             -0.0003343  0.0009045  -0.370   0.7117    
+category2009      -1.3029279  0.6810076  -1.913   0.0558 .  
+category2010      -1.7568960  0.1795627  -9.784  &lt; 2e-16 ***
+category2011      -1.1318263  0.1765013  -6.413 1.58e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.602 on 4582 degrees of freedom
+Multiple R-squared:  0.4192,    Adjusted R-squared:  0.4182 
+F-statistic: 413.3 on 8 and 4582 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The estimated coefficient of the predictor “horsepower” is 0.0163556, which means that in the case where the car was measured in the same year, the car’s length, width, and height dimensions are all equal, and the torque of the engine are all equal, for every unit of horsepower that increases, the mpg on the highway increases by 0.0163556.</p>
+</section>
+<section id="step-4-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-1">Step 4</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Refit the model including the interaction term</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>new_mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(fuel_info_hwy_mpg<span class="sc">~</span>eng_info_stats_hp<span class="sc">*</span>eng_info_stats_tq<span class="sc">+</span>dim_l<span class="sc">+</span>dim_h<span class="sc">+</span>dim_w<span class="sc">+</span>category2009<span class="sc">+</span>category2010<span class="sc">+</span>category2011, <span class="at">data =</span> cars_df)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(new_mod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = fuel_info_hwy_mpg ~ eng_info_stats_hp * eng_info_stats_tq + 
+    dim_l + dim_h + dim_w + category2009 + category2010 + category2011, 
+    data = cars_df)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-11.109  -2.313  -0.258   2.062 203.540 
+
+Coefficients:
+                                      Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                          4.338e+01  5.207e-01  83.321  &lt; 2e-16 ***
+eng_info_stats_hp                   -1.666e-02  2.539e-03  -6.563 5.84e-11 ***
+eng_info_stats_tq                   -8.606e-02  2.533e-03 -33.972  &lt; 2e-16 ***
+dim_l                                1.777e-03  8.318e-04   2.136   0.0327 *  
+dim_h                                6.560e-03  1.070e-03   6.133 9.32e-10 ***
+dim_w                               -1.169e-03  8.521e-04  -1.372   0.1700    
+category2009                        -1.197e+00  6.411e-01  -1.867   0.0619 .  
+category2010                        -1.760e+00  1.690e-01 -10.411  &lt; 2e-16 ***
+category2011                        -1.124e+00  1.662e-01  -6.768 1.47e-11 ***
+eng_info_stats_hp:eng_info_stats_tq  1.124e-04  4.628e-06  24.276  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.333 on 4581 degrees of freedom
+Multiple R-squared:  0.4854,    Adjusted R-squared:  0.4844 
+F-statistic: 480.1 on 9 and 4581 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine the variable "horsepower"</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cars_df<span class="sc">$</span>eng_info_stats_hp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  100.0   185.0   263.0   267.5   317.0   638.0 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the interaction plot, choosing 263, 267.5 and 317 as 3 reasonable values for horsepower and 2001 for year</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(interactions)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="fu">interact_plot</span>(new_mod, <span class="at">pred =</span> eng_info_stats_tq, </span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">modx =</span> eng_info_stats_hp, </span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">modxvals =</span> <span class="fu">c</span>(<span class="dv">263</span>, <span class="fl">267.5</span>, <span class="dv">317</span>), </span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">at =</span> <span class="fu">list</span>(<span class="at">category2009 =</span> <span class="dv">1</span>, <span class="at">category2010 =</span> <span class="dv">0</span>, <span class="at">category2011 =</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Problem-Set-2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="step-5-1" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-1">Step 5</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate beta manually</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">4591</span>), </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>eng_info_stats_hp, </span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>eng_info_stats_tq, </span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>dim_l, </span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>dim_h, </span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>dim_w, </span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>category2009, </span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>category2010, </span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>category2011,</span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>              cars_df<span class="sc">$</span>eng_info_stats_hp<span class="sc">*</span>cars_df<span class="sc">$</span>eng_info_stats_tq), </span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">nrow =</span> <span class="dv">4591</span>, <span class="at">ncol =</span> <span class="dv">10</span>)</span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(cars_df<span class="sc">$</span>fuel_info_hwy_mpg, </span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">nrow =</span> <span class="dv">4591</span>, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(X)<span class="sc">%*%</span>X)<span class="sc">%*%</span><span class="fu">t</span>(X)<span class="sc">%*%</span>y</span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a>beta</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               [,1]
+ [1,] 43.3849808673
+ [2,] -0.0166633227
+ [3,] -0.0860592704
+ [4,]  0.0017767232
+ [5,]  0.0065603903
+ [6,] -0.0011694485
+ [7,] -1.1970329986
+ [8,] -1.7598187756
+ [9,] -1.1244973555
+[10,]  0.0001123567</code></pre>
+</div>
+</div>
+<p>It can be shown that the beta estimator generated manually is identical to the one using lm() function.</p>
+</section>
+<section id="problem-3" class="level3">
+<h3 class="anchored" data-anchor-id="problem-3">Problem 3</h3>
+</section>
+<section id="step-1-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-2">Step 1</h3>
+<p>Import the data and rename the columns.</p>
+<p>Stata Input:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>import delimited <span class="kw">using</span> <span class="st">"/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 2/cars.csv"</span>, <span class="kw">clear</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> dimensionsheight dim_h</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> dimensionslength dim_l</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> dimensionswidth dim_w</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> engineinformationdriveline eng_info_dr</span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> engineinformationenginetype eng_info_type</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> engineinformationhybrid eng_info_hbd</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> engineinformationnumberofforward eng_info_numgears</span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> engineinformationtransmission eng_info_trans</span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> fuelinformationcitympg fuel_info_city</span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> fuelinformationfueltype fuel_info_type</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> fuelinformationhighwaympg fuel_info_hwy_mpg</span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> identificationclassification iden_clf</span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> identificationid iden_id</span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> identificationmake iden_make</span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> identificationmodelyear iden_mdyear</span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> identificationyear iden_year</span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> engineinformationenginestatistic eng_info_stats_hp</span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a><span class="kw">rename</span> v18 eng_info_stats_tq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="step-2-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-2">Step 2</h3>
+<p>Restrict the data to cars whose Fuel Type is “Gasoline”.</p>
+<p>Stata Input:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="kw">keep</span> <span class="kw">if</span> fuel_info_type == <span class="st">"Gasoline"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Stata Output:</p>
+<pre><code>(485 observations deleted)
+
+. 
+end of do-file</code></pre>
+</section>
+<section id="step-3-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-2">Step 3</h3>
+<p>First, we transform the categorical variable into dummy variables, while avoiding multicollinearity in the subsequent regression analysis.</p>
+<p>Stata Input:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="kw">tabulate</span> iden_year, <span class="kw">generate</span>(dummy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Stata Output:</p>
+<pre><code>Identificat |
+   ion.Year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2009 |         48        1.05        1.05
+       2010 |      1,633       35.57       36.62
+       2011 |      1,794       39.08       75.69
+       2012 |      1,116       24.31      100.00
+------------+-----------------------------------
+      Total |      4,591      100.00
+
+. 
+end of do-file</code></pre>
+<p>Then, fit the model.</p>
+<p>Stata Input:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">regress</span> fuel_info_hwy_mpg eng_info_stats_hp eng_info_stats_tq dim_l dim_h dim_w dummy1 dummy2 dummy3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Stata Output:</p>
+<pre><code>      Source |       SS           df       MS      Number of obs   =     4,591
+-------------+----------------------------------   F(8, 4582)      =    413.35
+       Model |  70043.6695         8  8755.45869   Prob &gt; F        =    0.0000
+    Residual |   97055.298     4,582  21.1818634   R-squared       =    0.4192
+-------------+----------------------------------   Adj R-squared   =    0.4182
+       Total |  167098.968     4,590  36.4050038   Root MSE        =    4.6024
+
+-------------------------------------------------------------------------------
+fuel_info_h~g | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+eng_info_st~p |   .0163556   .0022772     7.18   0.000     .0118913      .02082
+eng_info_st~q |  -.0507425    .002203   -23.03   0.000    -.0550614   -.0464236
+        dim_l |    .001729   .0008836     1.96   0.050    -3.36e-06    .0034613
+        dim_h |   .0099079   .0011267     8.79   0.000      .007699    .0121168
+        dim_w |  -.0003343   .0009045    -0.37   0.712    -.0021075    .0014388
+       dummy1 |  -1.302928   .6810076    -1.91   0.056    -2.638031    .0321751
+       dummy2 |  -1.756896   .1795627    -9.78   0.000    -2.108925   -1.404867
+       dummy3 |  -1.131826   .1765013    -6.41   0.000    -1.477854   -.7857987
+        _cons |   33.59559   .3499147    96.01   0.000     32.90959    34.28159
+-------------------------------------------------------------------------------
+. 
+end of do-file</code></pre>
+<p>The estimated coefficient of the predictor “horsepower” is 0.0163556, which means that in the case where the car was measured in the same year, the car’s length, width, and height dimensions are all equal, and the torque of the engine are all equal, for every unit of horsepower that increases, the mpg on the highway increases by 0.0163556. This result is consistent with what we obtained in R.</p>
+</section>
+<section id="step-4-2" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-2">Step 4</h3>
+<p>First, refit the model including the interaction term.</p>
+<p>Stata Input:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="kw">regress</span> fuel_info_hwy_mpg c.eng_info_stats_hp##c.eng_info_stats_tq dim_l dim_h dim_w dummy1 dummy2 dummy3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Stata Output:</p>
+<pre><code>. regress fuel_info_hwy_mpg c.eng_info_stats_hp##c.eng_info_stats_tq dim_l dim_h dim_w du
+&gt; mmy1 dummy2 dummy3
+
+      Source |       SS           df       MS      Number of obs   =     4,591
+-------------+----------------------------------   F(9, 4581)      =    480.07
+       Model |  81105.8715         9  9011.76351   Prob &gt; F        =    0.0000
+    Residual |   85993.096     4,581  18.7716865   R-squared       =    0.4854
+-------------+----------------------------------   Adj R-squared   =    0.4844
+       Total |  167098.968     4,590  36.4050038   Root MSE        =    4.3326
+
+--------------------------------------------------------------------------------------
+   fuel_info_hwy_mpg | Coefficient  Std. err.      t    P&gt;|t|     [95% conf. interval]
+---------------------+----------------------------------------------------------------
+   eng_info_stats_hp |  -.0166633   .0025388    -6.56   0.000    -.0216406    -.011686
+   eng_info_stats_tq |  -.0860593   .0025333   -33.97   0.000    -.0910257   -.0810928
+                     |
+ c.eng_info_stats_hp#|
+ c.eng_info_stats_tq |   .0001124   4.63e-06    24.28   0.000     .0001033    .0001214
+                     |
+               dim_l |   .0017767   .0008318     2.14   0.033     .0001459    .0034075
+               dim_h |   .0065604   .0010696     6.13   0.000     .0044634    .0086573
+               dim_w |  -.0011694   .0008521    -1.37   0.170      -.00284    .0005011
+              dummy1 |  -1.197033   .6411085    -1.87   0.062    -2.453915    .0598488
+              dummy2 |  -1.759819   .1690386   -10.41   0.000    -2.091216   -1.428422
+              dummy3 |  -1.124497   .1661568    -6.77   0.000    -1.450245   -.7987499
+               _cons |   43.38498   .5206996    83.32   0.000     42.36416     44.4058
+--------------------------------------------------------------------------------------</code></pre>
+<p>Then, plot the interaction plot.</p>
+<p>Stata Input:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="kw">sum</span> eng_info_stats_tq</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>margins, <span class="fu">at</span>(eng_info_stats_tq = (98(10)774) eng_info_stats_hp = (263, 267.5, 317) dummy1 = 1)</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>marginsplot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Stata Output:</p>
+<pre><code>. sum eng_info_stats_tq
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+eng_info_s~q |      4,591    267.2196    101.3269         98        774
+
+. margins, at(eng_info_stats_tq = (98(10)774) eng_info_stats_hp = (263, 267.5, 317) dummy
+&gt; 1 = 1)
+
+Predictive margins                                       Number of obs = 4,591
+Model VCE: OLS
+
+Expression: Linear prediction, predict()
+1._at:   eng_info_stats~p =   263
+         eng_info_stats~q =    98
+         dummy1           =     1
+2._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   108
+         dummy1           =     1
+3._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   118
+         dummy1           =     1
+4._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   128
+         dummy1           =     1
+5._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   138
+         dummy1           =     1
+6._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   148
+         dummy1           =     1
+7._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   158
+         dummy1           =     1
+8._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   168
+         dummy1           =     1
+9._at:   eng_info_stats~p =   263
+         eng_info_stats~q =   178
+         dummy1           =     1
+10._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   188
+         dummy1           =     1
+11._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   198
+         dummy1           =     1
+12._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   208
+         dummy1           =     1
+13._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   218
+         dummy1           =     1
+14._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   228
+         dummy1           =     1
+15._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   238
+         dummy1           =     1
+16._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   248
+         dummy1           =     1
+17._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   258
+         dummy1           =     1
+18._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   268
+         dummy1           =     1
+19._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   278
+         dummy1           =     1
+20._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   288
+         dummy1           =     1
+21._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   298
+         dummy1           =     1
+22._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   308
+         dummy1           =     1
+23._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   318
+         dummy1           =     1
+24._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   328
+         dummy1           =     1
+25._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   338
+         dummy1           =     1
+26._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   348
+         dummy1           =     1
+27._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   358
+         dummy1           =     1
+28._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   368
+         dummy1           =     1
+29._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   378
+         dummy1           =     1
+30._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   388
+         dummy1           =     1
+31._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   398
+         dummy1           =     1
+32._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   408
+         dummy1           =     1
+33._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   418
+         dummy1           =     1
+34._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   428
+         dummy1           =     1
+35._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   438
+         dummy1           =     1
+36._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   448
+         dummy1           =     1
+37._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   458
+         dummy1           =     1
+38._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   468
+         dummy1           =     1
+39._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   478
+         dummy1           =     1
+40._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   488
+         dummy1           =     1
+41._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   498
+         dummy1           =     1
+42._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   508
+         dummy1           =     1
+43._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   518
+         dummy1           =     1
+44._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   528
+         dummy1           =     1
+45._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   538
+         dummy1           =     1
+46._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   548
+         dummy1           =     1
+47._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   558
+         dummy1           =     1
+48._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   568
+         dummy1           =     1
+49._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   578
+         dummy1           =     1
+50._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   588
+         dummy1           =     1
+51._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   598
+         dummy1           =     1
+52._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   608
+         dummy1           =     1
+53._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   618
+         dummy1           =     1
+54._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   628
+         dummy1           =     1
+55._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   638
+         dummy1           =     1
+56._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   648
+         dummy1           =     1
+57._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   658
+         dummy1           =     1
+58._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   668
+         dummy1           =     1
+59._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   678
+         dummy1           =     1
+60._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   688
+         dummy1           =     1
+61._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   698
+         dummy1           =     1
+62._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   708
+         dummy1           =     1
+63._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   718
+         dummy1           =     1
+64._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   728
+         dummy1           =     1
+65._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   738
+         dummy1           =     1
+66._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   748
+         dummy1           =     1
+67._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   758
+         dummy1           =     1
+68._at:  eng_info_stats~p =   263
+         eng_info_stats~q =   768
+         dummy1           =     1
+69._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =    98
+         dummy1           =     1
+70._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   108
+         dummy1           =     1
+71._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   118
+         dummy1           =     1
+72._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   128
+         dummy1           =     1
+73._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   138
+         dummy1           =     1
+74._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   148
+         dummy1           =     1
+75._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   158
+         dummy1           =     1
+76._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   168
+         dummy1           =     1
+77._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   178
+         dummy1           =     1
+78._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   188
+         dummy1           =     1
+79._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   198
+         dummy1           =     1
+80._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   208
+         dummy1           =     1
+81._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   218
+         dummy1           =     1
+82._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   228
+         dummy1           =     1
+83._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   238
+         dummy1           =     1
+84._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   248
+         dummy1           =     1
+85._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   258
+         dummy1           =     1
+86._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   268
+         dummy1           =     1
+87._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   278
+         dummy1           =     1
+88._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   288
+         dummy1           =     1
+89._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   298
+         dummy1           =     1
+90._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   308
+         dummy1           =     1
+91._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   318
+         dummy1           =     1
+92._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   328
+         dummy1           =     1
+93._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   338
+         dummy1           =     1
+94._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   348
+         dummy1           =     1
+95._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   358
+         dummy1           =     1
+96._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   368
+         dummy1           =     1
+97._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   378
+         dummy1           =     1
+98._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   388
+         dummy1           =     1
+99._at:  eng_info_stats~p = 267.5
+         eng_info_stats~q =   398
+         dummy1           =     1
+100._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   408
+         dummy1           =     1
+101._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   418
+         dummy1           =     1
+102._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   428
+         dummy1           =     1
+103._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   438
+         dummy1           =     1
+104._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   448
+         dummy1           =     1
+105._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   458
+         dummy1           =     1
+106._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   468
+         dummy1           =     1
+107._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   478
+         dummy1           =     1
+108._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   488
+         dummy1           =     1
+109._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   498
+         dummy1           =     1
+110._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   508
+         dummy1           =     1
+111._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   518
+         dummy1           =     1
+112._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   528
+         dummy1           =     1
+113._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   538
+         dummy1           =     1
+114._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   548
+         dummy1           =     1
+115._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   558
+         dummy1           =     1
+116._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   568
+         dummy1           =     1
+117._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   578
+         dummy1           =     1
+118._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   588
+         dummy1           =     1
+119._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   598
+         dummy1           =     1
+120._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   608
+         dummy1           =     1
+121._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   618
+         dummy1           =     1
+122._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   628
+         dummy1           =     1
+123._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   638
+         dummy1           =     1
+124._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   648
+         dummy1           =     1
+125._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   658
+         dummy1           =     1
+126._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   668
+         dummy1           =     1
+127._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   678
+         dummy1           =     1
+128._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   688
+         dummy1           =     1
+129._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   698
+         dummy1           =     1
+130._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   708
+         dummy1           =     1
+131._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   718
+         dummy1           =     1
+132._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   728
+         dummy1           =     1
+133._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   738
+         dummy1           =     1
+134._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   748
+         dummy1           =     1
+135._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   758
+         dummy1           =     1
+136._at: eng_info_stats~p = 267.5
+         eng_info_stats~q =   768
+         dummy1           =     1
+137._at: eng_info_stats~p =   317
+         eng_info_stats~q =    98
+         dummy1           =     1
+138._at: eng_info_stats~p =   317
+         eng_info_stats~q =   108
+         dummy1           =     1
+139._at: eng_info_stats~p =   317
+         eng_info_stats~q =   118
+         dummy1           =     1
+140._at: eng_info_stats~p =   317
+         eng_info_stats~q =   128
+         dummy1           =     1
+141._at: eng_info_stats~p =   317
+         eng_info_stats~q =   138
+         dummy1           =     1
+142._at: eng_info_stats~p =   317
+         eng_info_stats~q =   148
+         dummy1           =     1
+143._at: eng_info_stats~p =   317
+         eng_info_stats~q =   158
+         dummy1           =     1
+144._at: eng_info_stats~p =   317
+         eng_info_stats~q =   168
+         dummy1           =     1
+145._at: eng_info_stats~p =   317
+         eng_info_stats~q =   178
+         dummy1           =     1
+146._at: eng_info_stats~p =   317
+         eng_info_stats~q =   188
+         dummy1           =     1
+147._at: eng_info_stats~p =   317
+         eng_info_stats~q =   198
+         dummy1           =     1
+148._at: eng_info_stats~p =   317
+         eng_info_stats~q =   208
+         dummy1           =     1
+149._at: eng_info_stats~p =   317
+         eng_info_stats~q =   218
+         dummy1           =     1
+150._at: eng_info_stats~p =   317
+         eng_info_stats~q =   228
+         dummy1           =     1
+151._at: eng_info_stats~p =   317
+         eng_info_stats~q =   238
+         dummy1           =     1
+152._at: eng_info_stats~p =   317
+         eng_info_stats~q =   248
+         dummy1           =     1
+153._at: eng_info_stats~p =   317
+         eng_info_stats~q =   258
+         dummy1           =     1
+154._at: eng_info_stats~p =   317
+         eng_info_stats~q =   268
+         dummy1           =     1
+155._at: eng_info_stats~p =   317
+         eng_info_stats~q =   278
+         dummy1           =     1
+156._at: eng_info_stats~p =   317
+         eng_info_stats~q =   288
+         dummy1           =     1
+157._at: eng_info_stats~p =   317
+         eng_info_stats~q =   298
+         dummy1           =     1
+158._at: eng_info_stats~p =   317
+         eng_info_stats~q =   308
+         dummy1           =     1
+159._at: eng_info_stats~p =   317
+         eng_info_stats~q =   318
+         dummy1           =     1
+160._at: eng_info_stats~p =   317
+         eng_info_stats~q =   328
+         dummy1           =     1
+161._at: eng_info_stats~p =   317
+         eng_info_stats~q =   338
+         dummy1           =     1
+162._at: eng_info_stats~p =   317
+         eng_info_stats~q =   348
+         dummy1           =     1
+163._at: eng_info_stats~p =   317
+         eng_info_stats~q =   358
+         dummy1           =     1
+164._at: eng_info_stats~p =   317
+         eng_info_stats~q =   368
+         dummy1           =     1
+165._at: eng_info_stats~p =   317
+         eng_info_stats~q =   378
+         dummy1           =     1
+166._at: eng_info_stats~p =   317
+         eng_info_stats~q =   388
+         dummy1           =     1
+167._at: eng_info_stats~p =   317
+         eng_info_stats~q =   398
+         dummy1           =     1
+168._at: eng_info_stats~p =   317
+         eng_info_stats~q =   408
+         dummy1           =     1
+169._at: eng_info_stats~p =   317
+         eng_info_stats~q =   418
+         dummy1           =     1
+170._at: eng_info_stats~p =   317
+         eng_info_stats~q =   428
+         dummy1           =     1
+171._at: eng_info_stats~p =   317
+         eng_info_stats~q =   438
+         dummy1           =     1
+172._at: eng_info_stats~p =   317
+         eng_info_stats~q =   448
+         dummy1           =     1
+173._at: eng_info_stats~p =   317
+         eng_info_stats~q =   458
+         dummy1           =     1
+174._at: eng_info_stats~p =   317
+         eng_info_stats~q =   468
+         dummy1           =     1
+175._at: eng_info_stats~p =   317
+         eng_info_stats~q =   478
+         dummy1           =     1
+176._at: eng_info_stats~p =   317
+         eng_info_stats~q =   488
+         dummy1           =     1
+177._at: eng_info_stats~p =   317
+         eng_info_stats~q =   498
+         dummy1           =     1
+178._at: eng_info_stats~p =   317
+         eng_info_stats~q =   508
+         dummy1           =     1
+179._at: eng_info_stats~p =   317
+         eng_info_stats~q =   518
+         dummy1           =     1
+180._at: eng_info_stats~p =   317
+         eng_info_stats~q =   528
+         dummy1           =     1
+181._at: eng_info_stats~p =   317
+         eng_info_stats~q =   538
+         dummy1           =     1
+182._at: eng_info_stats~p =   317
+         eng_info_stats~q =   548
+         dummy1           =     1
+183._at: eng_info_stats~p =   317
+         eng_info_stats~q =   558
+         dummy1           =     1
+184._at: eng_info_stats~p =   317
+         eng_info_stats~q =   568
+         dummy1           =     1
+185._at: eng_info_stats~p =   317
+         eng_info_stats~q =   578
+         dummy1           =     1
+186._at: eng_info_stats~p =   317
+         eng_info_stats~q =   588
+         dummy1           =     1
+187._at: eng_info_stats~p =   317
+         eng_info_stats~q =   598
+         dummy1           =     1
+188._at: eng_info_stats~p =   317
+         eng_info_stats~q =   608
+         dummy1           =     1
+189._at: eng_info_stats~p =   317
+         eng_info_stats~q =   618
+         dummy1           =     1
+190._at: eng_info_stats~p =   317
+         eng_info_stats~q =   628
+         dummy1           =     1
+191._at: eng_info_stats~p =   317
+         eng_info_stats~q =   638
+         dummy1           =     1
+192._at: eng_info_stats~p =   317
+         eng_info_stats~q =   648
+         dummy1           =     1
+193._at: eng_info_stats~p =   317
+         eng_info_stats~q =   658
+         dummy1           =     1
+194._at: eng_info_stats~p =   317
+         eng_info_stats~q =   668
+         dummy1           =     1
+195._at: eng_info_stats~p =   317
+         eng_info_stats~q =   678
+         dummy1           =     1
+196._at: eng_info_stats~p =   317
+         eng_info_stats~q =   688
+         dummy1           =     1
+197._at: eng_info_stats~p =   317
+         eng_info_stats~q =   698
+         dummy1           =     1
+198._at: eng_info_stats~p =   317
+         eng_info_stats~q =   708
+         dummy1           =     1
+199._at: eng_info_stats~p =   317
+         eng_info_stats~q =   718
+         dummy1           =     1
+200._at: eng_info_stats~p =   317
+         eng_info_stats~q =   728
+         dummy1           =     1
+201._at: eng_info_stats~p =   317
+         eng_info_stats~q =   738
+         dummy1           =     1
+202._at: eng_info_stats~p =   317
+         eng_info_stats~q =   748
+         dummy1           =     1
+203._at: eng_info_stats~p =   317
+         eng_info_stats~q =   758
+         dummy1           =     1
+204._at: eng_info_stats~p =   317
+         eng_info_stats~q =   768
+         dummy1           =     1
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |     Margin   std. err.      t    P&gt;|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         _at |
+          1  |   32.23445   .7230805    44.58   0.000     30.81686    33.65204
+          2  |   31.66935   .7135325    44.38   0.000     30.27049    33.06822
+          3  |   31.10426   .7044738    44.15   0.000     29.72315    32.48537
+          4  |   30.53917   .6959235    43.88   0.000     29.17482    31.90351
+          5  |   29.97407   .6879005    43.57   0.000     28.62545    31.32269
+          6  |   29.40898   .6804235    43.22   0.000     28.07502    30.74293
+          7  |   28.84388   .6735107    42.83   0.000     27.52348    30.16429
+          8  |   28.27879   .6671797    42.39   0.000     26.97079    29.58678
+          9  |   27.71369    .661447    41.90   0.000     26.41694    29.01045
+         10  |    27.1486   .6563285    41.36   0.000     25.86188    28.43532
+         11  |    26.5835   .6518386    40.78   0.000     25.30559    27.86142
+         12  |   26.01841   .6479903    40.15   0.000     24.74804    27.28878
+         13  |   25.45331   .6447952    39.48   0.000      24.1892    26.71742
+         14  |   24.88822   .6422629    38.75   0.000     23.62907    26.14736
+         15  |   24.32312   .6404014    37.98   0.000     23.06763    25.57862
+         16  |   23.75803   .6392165    37.17   0.000     22.50486     25.0112
+         17  |   23.19294    .638712    36.31   0.000     21.94075    24.44512
+         18  |   22.62784   .6388894    35.42   0.000     21.37531    23.88037
+         19  |   22.06275   .6397483    34.49   0.000     20.80853    23.31696
+         20  |   21.49765   .6412859    33.52   0.000     20.24042    22.75488
+         21  |   20.93256   .6434972    32.53   0.000     19.67099    22.19412
+         22  |   20.36746   .6463755    31.51   0.000     19.10026    21.63467
+         23  |   19.80237   .6499118    30.47   0.000     18.52823    21.07651
+         24  |   19.23727   .6540954    29.41   0.000     17.95493    20.51962
+         25  |   18.67218   .6589141    28.34   0.000     17.38039    19.96397
+         26  |   18.10708   .6643541    27.26   0.000     16.80463    19.40954
+         27  |   17.54199   .6704001    26.17   0.000     16.22768     18.8563
+         28  |    16.9769   .6770359    25.08   0.000     15.64958    18.30421
+         29  |    16.4118   .6842445    23.99   0.000     15.07035    17.75325
+         30  |   15.84671   .6920079    22.90   0.000     14.49004    17.20337
+         31  |   15.28161   .7003076    21.82   0.000     13.90867    16.65455
+         32  |   14.71652   .7091248    20.75   0.000     13.32629    16.10674
+         33  |   14.15142   .7184405    19.70   0.000     12.74293    15.55991
+         34  |   13.58633   .7282355    18.66   0.000     12.15864    15.01402
+         35  |   13.02123   .7384908    17.63   0.000     11.57344    14.46903
+         36  |   12.45614   .7491874    16.63   0.000     10.98737    13.92491
+         37  |   11.89104   .7603068    15.64   0.000     10.40048    13.38161
+         38  |   11.32595   .7718306    14.67   0.000     9.812789    12.83911
+         39  |   10.76085   .7837411    13.73   0.000     9.224344    12.29737
+         40  |   10.19576   .7960208    12.81   0.000     8.635176    11.75634
+         41  |   9.630666    .808653    11.91   0.000     8.045316    11.21602
+         42  |   9.065571   .8216213    11.03   0.000     7.454797    10.67634
+         43  |   8.500476   .8349102    10.18   0.000      6.86365     10.1373
+         44  |   7.935382   .8485046     9.35   0.000     6.271904     9.59886
+         45  |   7.370287   .8623899     8.55   0.000     5.679587    9.060987
+         46  |   6.805193   .8765525     7.76   0.000     5.086727    8.523658
+         47  |   6.240098    .890979     7.00   0.000      4.49335    7.986846
+         48  |   5.675003   .9056569     6.27   0.000     3.899479    7.450527
+         49  |   5.109909   .9205741     5.55   0.000      3.30514    6.914678
+         50  |   4.544814   .9357192     4.86   0.000     2.710354    6.379275
+         51  |    3.97972   .9510813     4.18   0.000     2.115142    5.844297
+         52  |   3.414625     .96665     3.53   0.000     1.519525    5.309725
+         53  |    2.84953   .9824156     2.90   0.004     .9235224    4.775539
+         54  |   2.284436   .9983687     2.29   0.022     .3271521     4.24172
+         55  |   1.719341     1.0145     1.69   0.090    -.2695685    3.708251
+         56  |   1.154247   1.030802     1.12   0.263    -.8666229    3.175116
+         57  |   .5891521   1.047267     0.56   0.574    -1.463995      2.6423
+         58  |   .0240575   1.063886     0.02   0.982    -2.061672    2.109787
+         59  |  -.5410371   1.080653    -0.50   0.617    -2.659637    1.577563
+         60  |  -1.106132    1.09756    -1.01   0.314    -3.257879    1.045615
+         61  |  -1.671226   1.114602    -1.50   0.134    -3.856384    .5139316
+         62  |  -2.236321   1.131773    -1.98   0.048    -4.455141   -.0175006
+         63  |  -2.801415   1.149066    -2.44   0.015    -5.054139   -.5486923
+         64  |   -3.36651   1.166476    -2.89   0.004    -5.653366   -1.079654
+         65  |  -3.931605   1.183999    -3.32   0.001    -6.252813   -1.610397
+         66  |  -4.496699   1.201628    -3.74   0.000    -6.852469   -2.140929
+         67  |  -5.061794    1.21936    -4.15   0.000    -7.452327   -2.671261
+         68  |  -5.626888    1.23719    -4.55   0.000    -8.052377     -3.2014
+         69  |   32.20901   .7274416    44.28   0.000     30.78288    33.63515
+         70  |   31.64897   .7176988    44.10   0.000     30.24194    33.05601
+         71  |   31.08894   .7084358    43.88   0.000     29.70006    32.47781
+         72  |    30.5289   .6996718    43.63   0.000      29.1572    31.90059
+         73  |   29.96886   .6914258    43.34   0.000     28.61333    31.32439
+         74  |   29.40882   .6837164    43.01   0.000     28.06841    30.74923
+         75  |   28.84878   .6765621    42.64   0.000     27.52239    30.17517
+         76  |   28.28874   .6699806    42.22   0.000     26.97526    29.60223
+         77  |   27.72871   .6639889    41.76   0.000     26.42697    29.03044
+         78  |   27.16867   .6586031    41.25   0.000     25.87749    28.45985
+         79  |   26.60863   .6538383    40.70   0.000     25.32679    27.89047
+         80  |   26.04859    .649708    40.09   0.000     24.77485    27.32233
+         81  |   25.48855   .6462245    39.44   0.000     24.22164    26.75546
+         82  |   24.92851   .6433982    38.75   0.000     23.66714    26.18988
+         83  |   24.36847   .6412378    38.00   0.000     23.11134    25.62561
+         84  |   23.80844   .6397502    37.22   0.000     22.55422    25.06265
+         85  |    23.2484   .6389399    36.39   0.000     21.99577    24.50103
+         86  |   22.68836   .6388095    35.52   0.000     21.43598    23.94073
+         87  |   22.12832   .6393596    34.61   0.000     20.87487    23.38177
+         88  |   21.56828   .6405882    33.67   0.000     20.31242    22.82414
+         89  |   21.00824   .6424916    32.70   0.000     19.74865    22.26784
+         90  |    20.4482   .6450637    31.70   0.000     19.18357    21.71284
+         91  |   19.88817   .6482967    30.68   0.000     18.61719    21.15914
+         92  |   19.32813   .6521806    29.64   0.000     18.04954    20.60672
+         93  |   18.76809   .6567039    28.58   0.000     17.48063    20.05554
+         94  |   18.20805   .6618535    27.51   0.000      16.9105     19.5056
+         95  |   17.64801   .6676149    26.43   0.000     16.33916    18.95686
+         96  |   17.08797   .6739725    25.35   0.000     15.76666    18.40928
+         97  |   16.52793   .6809095    24.27   0.000     15.19302    17.86285
+         98  |    15.9679   .6884084    23.20   0.000     14.61828    17.31751
+         99  |   15.40786   .6964511    22.12   0.000     14.04248    16.77324
+        100  |   14.84782   .7050189    21.06   0.000     13.46564       16.23
+        101  |   14.28778    .714093    20.01   0.000     12.88781    15.68775
+        102  |   13.72774   .7236542    18.97   0.000     12.30903    15.14645
+        103  |    13.1677   .7336837    17.95   0.000     11.72933    14.60608
+        104  |   12.60766   .7441623    16.94   0.000     11.14875    14.06658
+        105  |   12.04763   .7550715    15.96   0.000     10.56732    13.52793
+        106  |   11.48759   .7663928    14.99   0.000     9.985088    12.99009
+        107  |   10.92755   .7781083    14.04   0.000     9.402082    12.45302
+        108  |   10.36751   .7902004    13.12   0.000     8.818337    11.91668
+        109  |   9.807472   .8026521    12.22   0.000     8.233887    11.38106
+        110  |   9.247433    .815447    11.34   0.000     7.648764     10.8461
+        111  |   8.687395    .828569    10.48   0.000        7.063    10.31179
+        112  |   8.127356    .842003     9.65   0.000     6.476625    9.778088
+        113  |   7.567318   .8557343     8.84   0.000     5.889666    9.244969
+        114  |   7.007279   .8697487     8.06   0.000     5.302153    8.712406
+        115  |   6.447241   .8840328     7.29   0.000      4.71411    8.180371
+        116  |   5.887202   .8985737     6.55   0.000     4.125565     7.64884
+        117  |   5.327164   .9133592     5.83   0.000     3.536539    7.117788
+        118  |   4.767125   .9283776     5.13   0.000     2.947058    6.587193
+        119  |   4.207087   .9436178     4.46   0.000     2.357141    6.057032
+        120  |   3.647048   .9590691     3.80   0.000      1.76681    5.527286
+        121  |   3.087009   .9747216     3.17   0.002     1.176085    4.997934
+        122  |   2.526971   .9905657     2.55   0.011     .5849847    4.468957
+        123  |   1.966932   1.006592     1.95   0.051    -.0064739    3.940339
+        124  |   1.406894   1.022793     1.38   0.169    -.5982735    3.412061
+        125  |   .8468553    1.03916     0.81   0.415    -1.190398    2.884109
+        126  |   .2868168   1.055684     0.27   0.786    -1.782833    2.356467
+        127  |  -.2732217    1.07236    -0.25   0.799    -2.375564     1.82912
+        128  |  -.8332603   1.089179    -0.77   0.444    -2.968576    1.302056
+        129  |  -1.393299   1.106136    -1.26   0.208    -3.561858    .7752603
+        130  |  -1.953337   1.123224    -1.74   0.082    -4.155397    .2487221
+        131  |  -2.513376   1.140437    -2.20   0.028    -4.749181   -.2775706
+        132  |  -3.073414   1.157769    -2.65   0.008      -5.3432   -.8036288
+        133  |  -3.633453   1.175216    -3.09   0.002    -5.937443   -1.329463
+        134  |  -4.193492   1.192773    -3.52   0.000    -6.531901   -1.855083
+        135  |   -4.75353   1.210433    -3.93   0.000    -7.126563   -2.380497
+        136  |  -5.313569   1.228194    -4.33   0.000    -7.721421   -2.905716
+        137  |   31.92922    .783094    40.77   0.000     30.39398    33.46446
+        138  |    31.4248   .7713268    40.74   0.000     29.91263    32.93697
+        139  |   30.92038   .7599436    40.69   0.000     29.43052    32.41023
+        140  |   30.41596   .7489617    40.61   0.000     28.94763    31.88428
+        141  |   29.91153    .738399    40.51   0.000     28.46392    31.35915
+        142  |   29.40711   .7282739    40.38   0.000     27.97934    30.83488
+        143  |   28.90269   .7186048    40.22   0.000     27.49388     30.3115
+        144  |   28.39827   .7094104    40.03   0.000     27.00748    29.78905
+        145  |   27.89385   .7007093    39.81   0.000     26.52012    29.26757
+        146  |   27.38942   .6925201    39.55   0.000     26.03175     28.7471
+        147  |     26.885   .6848612    39.26   0.000     25.54234    28.22766
+        148  |   26.38058   .6777507    38.92   0.000     25.05186     27.7093
+        149  |   25.87616   .6712058    38.55   0.000     24.56027    27.19204
+        150  |   25.37174   .6652433    38.14   0.000     24.06754    26.67593
+        151  |   24.86731   .6598791    37.68   0.000     23.57363    26.16099
+        152  |   24.36289   .6551277    37.19   0.000     23.07853    25.64726
+        153  |   23.85847   .6510026    36.65   0.000     22.58219    25.13475
+        154  |   23.35405   .6475158    36.07   0.000      22.0846    24.62349
+        155  |   22.84963   .6446776    35.44   0.000     21.58575     24.1135
+        156  |    22.3452   .6424967    34.78   0.000      21.0856    23.60481
+        157  |   21.84078   .6409797    34.07   0.000     20.58415    23.09741
+        158  |   21.33636   .6401313    33.33   0.000     20.08139    22.59133
+        159  |   20.83194   .6399543    32.55   0.000     19.57732    22.08656
+        160  |   20.32752   .6404491    31.74   0.000     19.07193     21.5831
+        161  |   19.82309   .6416143    30.90   0.000     18.56522    21.08097
+        162  |   19.31867   .6434461    30.02   0.000     18.05721    20.58014
+        163  |   18.81425    .645939    29.13   0.000      17.5479     20.0806
+        164  |   18.30983   .6490852    28.21   0.000     17.03731    19.58235
+        165  |   17.80541   .6528754    27.27   0.000     16.52546    19.08536
+        166  |   17.30098   .6572984    26.32   0.000     16.01236    18.58961
+        167  |   16.79656   .6623415    25.36   0.000     15.49805    18.09507
+        168  |   16.29214   .6679907    24.39   0.000     14.98256    17.60172
+        169  |   15.78772   .6742307    23.42   0.000      14.4659    17.10954
+        170  |    15.2833   .6810453    22.44   0.000     13.94812    16.61847
+        171  |   14.77887   .6884175    21.47   0.000     13.42924     16.1285
+        172  |   14.27445   .6963296    20.50   0.000     12.90931    15.63959
+        173  |   13.77003   .7047632    19.54   0.000     12.38835    15.15171
+        174  |   13.26561   .7137001    18.59   0.000     11.86641     14.6648
+        175  |   12.76119   .7231214    17.65   0.000     11.34352    14.17885
+        176  |   12.25676   .7330086    16.72   0.000     10.81971    13.69381
+        177  |   11.75234    .743343    15.81   0.000     10.29503    13.20965
+        178  |   11.24792   .7541062    14.92   0.000     9.769509    12.72633
+        179  |    10.7435   .7652802    14.04   0.000      9.24318    12.24382
+        180  |   10.23908   .7768473    13.18   0.000     8.716081    11.76207
+        181  |   9.734655   .7887901    12.34   0.000     8.188246    11.28106
+        182  |   9.230233   .8010918    11.52   0.000     7.659707    10.80076
+        183  |   8.725811   .8137362    10.72   0.000     7.130496    10.32113
+        184  |   8.221389   .8267075     9.94   0.000     6.600644    9.842134
+        185  |   7.716967   .8399906     9.19   0.000      6.07018    9.363753
+        186  |   7.212545   .8535709     8.45   0.000     5.539134    8.885955
+        187  |   6.708123   .8674345     7.73   0.000     5.007533    8.408712
+        188  |   6.203701    .881568     7.04   0.000     4.475403    7.931999
+        189  |   5.699279   .8959587     6.36   0.000     3.942768     7.45579
+        190  |   5.194857   .9105943     5.70   0.000     3.409653     6.98006
+        191  |   4.690435   .9254632     5.07   0.000     2.876081    6.504789
+        192  |   4.186013   .9405544     4.45   0.000     2.342073    6.029953
+        193  |   3.681591   .9558573     3.85   0.000      1.80765    5.555532
+        194  |   3.177169   .9713619     3.27   0.001     1.272831    5.081506
+        195  |   2.672747   .9870588     2.71   0.007      .737636    4.607858
+        196  |   2.168325   1.002939     2.16   0.031     .2020815    4.134568
+        197  |   1.663903   1.018993     1.63   0.103    -.3338154    3.661621
+        198  |   1.159481   1.035215     1.12   0.263    -.8700387    3.189001
+        199  |    .655059   1.051595     0.62   0.533    -1.406573    2.716691
+        200  |    .150637   1.068126     0.14   0.888    -1.943405    2.244679
+        201  |  -.3537849   1.084802    -0.33   0.744     -2.48052     1.77295
+        202  |  -.8582069   1.101616    -0.78   0.436    -3.017906    1.301492
+        203  |  -1.362629   1.118562    -1.22   0.223     -3.55555    .8302918
+        204  |  -1.867051   1.135634    -1.64   0.100     -4.09344    .3593386
+------------------------------------------------------------------------------
+
+. marginsplot
+
+Variables that uniquely identify margins: eng_info_stats_tq eng_info_stats_hp
+
+. 
+end of do-file
+
+. graph save "Graph" "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Proble
+&gt; m Set 2/Interaction Plot.gph"
+file /Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 2/Interacti
+&gt; on Plot.gph saved</code></pre>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="/Users/yipengliu/Desktop/Graduate%20Courses/STATS%20506/Homework/Problem%20Set%202/Interaction%20Plot.png" class="img-fluid figure-img" width="500"></p>
+<figcaption class="figure-caption">Interaction Plot</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
