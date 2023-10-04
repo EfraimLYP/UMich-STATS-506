@@ -1,0 +1,683 @@
+---
+title: "Problem Set 3"
+author: "Yipeng Liu"
+format:
+  html:
+    embed-resources: true
+editor: visual
+---
+
+# Homework 3
+
+Github Page: https://github.com/EfraimLYP/stats506
+
+## Problem 1
+
+### Step 1
+
+First, use R to read this .XPT file and store it locally as a Stata-readable .dta file.
+
+```{r}
+library(haven)
+
+# Read the .XPT file
+vix_D_data <- read_xpt("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/VIX_D.XPT")
+
+# Store it locally as a .dta file
+haven:: write_dta(vix_D_data, "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/VIX_D.dta")
+```
+
+Then, we can read it in Stata.
+
+```stata
+use "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/VIX_D.dta", clear
+describe
+```
+
+Output:
+
+```
+. use "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/VIX_D.d
+> ta", clear
+
+. describe
+
+Contains data from /Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem S
+> et 3/VIX_D.dta
+ Observations:         6,980                  
+    Variables:            57                  28 Sep 2023 13:26
+-----------------------------------------------------------------------------------------
+Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+-----------------------------------------------------------------------------------------
+SEQN            double  %10.0g                Respondent sequence number
+VIQ110          double  %10.0g                SP has a severe eye infection?
+VIQ121          double  %10.0g                Which eye(s) infected?
+VIQ130          double  %10.0g                Is SP wearing an eye patch?
+VIQ141          double  %10.0g                Which eye has eye patch?
+VIQ150          double  %10.0g                Glasses/contact lenses for near work?
+VIQ160          double  %10.0g                Glasses/contact lenses available?
+VIQ170          double  %10.0g                Glasses or contacts worn for near test?
+VIXNC1          double  %10.0g                Line read on near card
+VIXNC2          double  %10.0g                Testing distance of near card
+VIQ180          double  %10.0g                Eye surgery for near sightedness?
+VIQ191          double  %10.0g                Which eye(s) surgery - near-sightedness?
+VIQ200          double  %10.0g                Eye surgery for cataracts?
+VIQ211          double  %10.0g                Which eye(s) cataract surgery?
+VIQ220          double  %10.0g                Glasses/contact lenses worn for distance
+VIQ230          double  %10.0g                Is distance correction available?
+VIQ240          double  %10.0g                Which type? Glasses or contacts?
+VIQ250          double  %10.0g                Was prescription obtained?
+VIXPRS          double  %10.0g                Prescription, right sphere
+VIXPRC          double  %10.0g                Prescription, right cylinder
+VIXPRA          double  %10.0g                Prescription, right axis
+VIXPLS          double  %10.0g                Prescription, left sphere
+VIXPLC          double  %10.0g                Prescription, left cylinder
+VIXPLA          double  %10.0g                Prescription, left axis
+VIXOCMT         double  %10.0g                Visual Acuity Comments
+VIXORSM         double  %10.0g                OR right sphere, median
+VIXORCM         double  %10.0g                OR right cylinder, median
+VIXORAM         double  %10.0g                OR right axis, median
+VIDORFM         double  %10.0g                OR right confidence level reading
+VIXOLSM         double  %10.0g                OR left sphere, median
+VIXOLCM         double  %10.0g                OR left cylinder, median
+VIXOLAM         double  %10.0g                OR left axis, median
+VIDOLFM         double  %10.0g                OR left confidence level reading
+VIXKRM1         double  %10.0g                Right keratometry radius flat curve (mm)
+VIXKRD1         double  %10.0g                Right keratometry power flat curve (D)
+VIXKRG1         double  %10.0g                Right keratometry axis flat curve (deg)
+VIXKRM2         double  %10.0g                Right keratometry radius steep curve(mm)
+VIXKRD2         double  %10.0g                Right keratometry power steep curve (D)
+VIXKRG2         double  %10.0g                Right keratometry axis steep curve (deg)
+VIXKRMM         double  %10.0g                Right keratometry radius, average (mm)
+VIXKRDM         double  %10.0g                Right keratometry power, average (D)
+VIXKRCD         double  %10.0g                Right keratometry cylinder
+VIXKRCG         double  %10.0g                Right keratometry axis (deg)
+VIXKLM1         double  %10.0g                Left keratometry radius flat curve (mm)
+VIXKLD1         double  %10.0g                Left keratometry power flat curve (D)
+VIXKLG1         double  %10.0g                Left keratometry axis flat curve (deg)
+VIXKLM2         double  %10.0g                Left keratometry radius steep curve (mm)
+VIXKLD2         double  %10.0g                Left keratometry power steep curve (D)
+VIXKLG2         double  %10.0g                Left keratometry axis steep curve (deg)
+VIXKLMM         double  %10.0g                Left keratometry radius, average (mm)
+VIXKLDM         double  %10.0g                Left keratometry power, average (D)
+VIXKLCD         double  %10.0g                Left keratometry cylinder
+VIXKLCG         double  %10.0g                Left keratometry axis (deg)
+VIDRVA          double  %10.0g                Right visual acuity, presenting
+VIDLVA          double  %10.0g                Left visual acuity, presenting
+VIDROVA         double  %10.0g                Right visual acuity, w/ obj. refraction
+VIDLOVA         double  %10.0g                Left visual acuity, w/ obj. refraction
+-----------------------------------------------------------------------------------------
+Sorted by: 
+
+. 
+end of do-file
+```
+
+Do the same for the DEMO_D data.
+
+```{r}
+# Read the .XPT file
+demo_D_data <- read_xpt("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/DEMO_D.XPT")
+
+# Store it locally as a .dta file
+haven:: write_dta(demo_D_data, "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/DEMO_D.dta")
+```
+
+Finally, we merge the two files to create a single Stata data set, using the SEQN variable for merging and keeping only records which matched. 
+
+```stata
+merge 1:1 SEQN using "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/DEMO_D.dta"
+keep if _merge == 3
+count
+```
+
+Output:
+
+```
+. merge 1:1 SEQN using "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Prob
+> lem Set 3/DEMO_D.dta"
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                         3,368
+        from master                         0  (_merge==1)
+        from using                      3,368  (_merge==2)
+
+    Matched                             6,980  (_merge==3)
+    -----------------------------------------
+
+. keep if _merge == 3
+(3,368 observations deleted)
+
+. count
+  6,980
+
+. 
+end of do-file
+```
+
+### Step 2
+
+Now, without fitting any models, we estimate the proportion of respondents within each 10-year age bracket (e.g. 0-9, 10-19, 20-29, etc) who wear glasses/contact lenses for distance vision.
+
+First, we create a new column in the data set to store the 10-year age bracket of each observation.
+
+```stata
+gen age_bracket = int(RIDAGEYR/10)
+gen age_bracket_str = ""
+replace age_bracket_str = "10-19" if age_bracket == 1
+replace age_bracket_str = "20-29" if age_bracket == 2
+replace age_bracket_str = "30-39" if age_bracket == 3
+replace age_bracket_str = "40-49" if age_bracket == 4
+replace age_bracket_str = "50-59" if age_bracket == 5
+replace age_bracket_str = "60-69" if age_bracket == 6
+replace age_bracket_str = "70-79" if age_bracket == 7
+replace age_bracket_str = "80-89" if age_bracket == 8
+```
+
+Output:
+
+```
+. gen age_bracket = int(RIDAGEYR/10)
+
+. gen age_bracket_str = ""
+(6,980 missing values generated)
+
+. replace age_bracket_str = "10-19" if age_bracket == 1
+variable age_bracket_str was str1 now str5
+(2,207 real changes made)
+
+. replace age_bracket_str = "20-29" if age_bracket == 2
+(1,021 real changes made)
+
+. replace age_bracket_str = "30-39" if age_bracket == 3
+(818 real changes made)
+
+. replace age_bracket_str = "40-49" if age_bracket == 4
+(815 real changes made)
+
+. replace age_bracket_str = "50-59" if age_bracket == 5
+(631 real changes made)
+
+. replace age_bracket_str = "60-69" if age_bracket == 6
+(661 real changes made)
+
+. replace age_bracket_str = "70-79" if age_bracket == 7
+(469 real changes made)
+
+. replace age_bracket_str = "80-89" if age_bracket == 8
+(358 real changes made)
+
+. 
+end of do-file
+```
+
+Then, estimate the proportion of respondents within each 10-year age bracket who wear glasses/contact lenses for distance vision.
+
+```stata
+tabulate age_bracket_str VIQ220
+```
+
+Output:
+
+```
+. tabulate age_bracket_str VIQ220
+
+           | Glasses/contact lenses worn for
+age_bracke |             distance
+     t_str |         1          2          9 |     Total
+-----------+---------------------------------+----------
+     10-19 |       670      1,418          0 |     2,088 
+     20-29 |       306        631          2 |       939 
+     30-39 |       269        481          0 |       750 
+     40-49 |       286        487          0 |       773 
+     50-59 |       335        274          0 |       609 
+     60-69 |       392        238          0 |       630 
+     70-79 |       299        148          0 |       447 
+     80-89 |       208        103          0 |       311 
+-----------+---------------------------------+----------
+     Total |     2,765      3,780          2 |     6,547 
+```
+
+This output deletes all missing values.
+
+### Step 3
+
+Next, we fit three logistic regression models predicting whether a respondent wears glasses/contact lenses for distance vision.
+
+Before performing the logistic regression, we are going to remove the lines that are 9 and empty in VIQ220, the predictor, because they do not give us information about whether a respondent wears glasses/contactlenses for distance vision. Then, we need to convert this variable to a boolean one.
+
+```stata
+keep if VIQ220 == 1 | VIQ220 == 2
+gen logicalVIQ220 = (VIQ220 == 1)
+```
+
+##### Predictor: age
+
+```stata
+logit logicalVIQ220 RIDAGEYR
+```
+
+Output:
+
+```
+. logit logicalVIQ220 RIDAGEYR
+
+Iteration 0:   log likelihood = -4457.6265  
+Iteration 1:   log likelihood = -4236.2351  
+Iteration 2:   log likelihood = -4235.9433  
+Iteration 3:   log likelihood = -4235.9433  
+
+Logistic regression                                     Number of obs =  6,545
+                                                        LR chi2(1)    = 443.37
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -4235.9433                             Pseudo R2     = 0.0497
+
+-------------------------------------------------------------------------------
+logicalVIQ220 | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+     RIDAGEYR |   .0246729   .0012055    20.47   0.000     .0223101    .0270357
+        _cons |   -1.26097   .0534482   -23.59   0.000    -1.365727   -1.156213
+-------------------------------------------------------------------------------
+```
+
+##### Predictor: age, race, gender
+
+RIDRETH1 should be a factorial variable, so we first have to perform a one-hot encoding on it.
+
+```stata
+gen RIDRETH1_1 = (RIDRETH1 == 1)
+gen RIDRETH1_2 = (RIDRETH1 == 2)
+gen RIDRETH1_3 = (RIDRETH1 == 3)
+gen RIDRETH1_4 = (RIDRETH1 == 4)
+```
+
+Then we convert RIAGENDR to a boolean variable.
+
+```stata
+gen logicalRIAGENDR = (RIAGENDR == 1)
+```
+
+Now, we can fit the regression model.
+
+```stata
+logit logicalVIQ220 RIDAGEYR RIDRETH1_1 RIDRETH1_2 RIDRETH1_3 RIDRETH1_4 logicalRIAGENDR
+```
+
+Output:
+
+```
+. logit logicalVIQ220 RIDAGEYR RIDRETH1_1 RIDRETH1_2 RIDRETH1_3 RIDRETH1_4 logicalRIAGEND
+> R
+
+Iteration 0:   log likelihood = -4457.6265  
+Iteration 1:   log likelihood = -4138.3859  
+Iteration 2:   log likelihood = -4136.8807  
+Iteration 3:   log likelihood = -4136.8805  
+
+Logistic regression                                     Number of obs =  6,545
+                                                        LR chi2(6)    = 641.49
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -4136.8805                             Pseudo R2     = 0.0720
+
+---------------------------------------------------------------------------------
+  logicalVIQ220 | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       RIDAGEYR |   .0225742   .0012624    17.88   0.000     .0200999    .0250484
+     RIDRETH1_1 |  -.6509919   .1354071    -4.81   0.000    -.9163849   -.3855989
+     RIDRETH1_2 |  -.4946699   .1974205    -2.51   0.012     -.881607   -.1077328
+     RIDRETH1_3 |   .0179388   .1300575     0.14   0.890    -.2369692    .2728468
+     RIDRETH1_4 |    -.38912   .1336348    -2.91   0.004    -.6510394   -.1272006
+logicalRIAGENDR |  -.5020895    .053011    -9.47   0.000    -.6059891   -.3981899
+          _cons |  -.6835841   .1309719    -5.22   0.000    -.9402844   -.4268839
+---------------------------------------------------------------------------------
+
+. 
+end of do-file
+```
+
+##### Predictor: age, race, gender, Poverty Income ratio
+
+The first step is to remove the missing values in the column INDFMPIR.
+
+```stata
+drop if missing(INDFMPIR)
+```
+
+Output:
+
+```
+. drop if missing(INDFMPIR)
+(298 observations deleted)
+```
+
+Now, we can fit the regression model.
+
+```stata
+logit logicalVIQ220 RIDAGEYR RIDRETH1_1 RIDRETH1_2 RIDRETH1_3 RIDRETH1_4 logicalRIAGENDR INDFMPIR
+```
+
+```
+. logit logicalVIQ220 RIDAGEYR RIDRETH1_1 RIDRETH1_2 RIDRETH1_3 RIDRETH1_4 logicalRIAGEND
+> R INDFMPIR
+
+Iteration 0:   log likelihood = -4259.5533  
+Iteration 1:   log likelihood = -3948.3256  
+Iteration 2:   log likelihood = -3946.9043  
+Iteration 3:   log likelihood = -3946.9041  
+
+Logistic regression                                     Number of obs =  6,247
+                                                        LR chi2(7)    = 625.30
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -3946.9041                             Pseudo R2     = 0.0734
+
+---------------------------------------------------------------------------------
+  logicalVIQ220 | Coefficient  Std. err.      z    P>|z|     [95% conf. interval]
+----------------+----------------------------------------------------------------
+       RIDAGEYR |   .0221883   .0012949    17.14   0.000     .0196504    .0247263
+     RIDRETH1_1 |  -.5327271   .1401516    -3.80   0.000    -.8074192   -.2580349
+     RIDRETH1_2 |  -.4167045    .202299    -2.06   0.039    -.8132033   -.0202058
+     RIDRETH1_3 |  -.0311981   .1335307    -0.23   0.815    -.2929136    .2305173
+     RIDRETH1_4 |  -.3253425   .1372987    -2.37   0.018    -.5944431    -.056242
+logicalRIAGENDR |  -.5162712    .054305    -9.51   0.000     -.622707   -.4098355
+       INDFMPIR |   .1135978   .0177073     6.42   0.000      .078892    .1483035
+          _cons |  -.9671613   .1428519    -6.77   0.000    -1.247146   -.6871767
+---------------------------------------------------------------------------------
+```
+
+After that, we produce a table presenting the estimated odds ratios for the coefficients in each model, along with the sample size for the model, the pseudo-R square, and AIC values.
+
+Suppose we name these three logistic regression models successively as model1, model2, model3. Based on the output of the above models, we created this table manually.
+
+Before that, we manually set it so that the output of each logistic regression contains the AIC value. For example, in model1:
+
+```
+. estat ic
+
+Akaike's information criterion and Bayesian information criterion
+
+-----------------------------------------------------------------------------
+       Model |          N   ll(null)  ll(model)      df        AIC        BIC
+-------------+---------------------------------------------------------------
+           . |      6,545  -4457.627  -4235.943       2   8475.887    8489.46
+-----------------------------------------------------------------------------
+Note: BIC uses N = number of observations. See [R] BIC note.
+```
+
+Next up is a table of results.
+
+```stata
+matrix outputTable = J(3, 10, .)
+matrix rownames outputTable = "model1" "model2" "model3"
+matrix colnames outputTable = "RIDAGEYR" "RIDRETH1_1" "RIDRETH1_2" "RIDRETH1_3" "RIDRETH1_4" "logicalRIAGENDR" "INDFMPIR" "sample size" "pseudo-R square" "AIC value"
+matrix outputTable[1, 1] = exp(0.0246729)
+matrix outputTable[1, 8] = 6545
+matrix outputTable[1, 9] = 0.0497
+matrix outputTable[1, 10] = 8475.887
+matrix outputTable[2, 1] = exp(0.0225742)
+matrix outputTable[2, 2] = exp(-0.6509919)
+matrix outputTable[2, 3] = exp(-0.4946699)
+matrix outputTable[2, 4] = exp(0.0179388)
+matrix outputTable[2, 5] = exp(-0.38912)
+matrix outputTable[2, 6] = exp(-0.5020895)
+matrix outputTable[2, 8] = 6545
+matrix outputTable[2, 9] = 0.0720
+matrix outputTable[2, 10] =  8287.761
+matrix outputTable[3, 1] = exp(0.0221883)
+matrix outputTable[3, 2] = exp(-.5327271)
+matrix outputTable[3, 3] = exp(-.4167045)
+matrix outputTable[3, 4] = exp(-.0311981)
+matrix outputTable[3, 5] = exp(-.3253425)
+matrix outputTable[3, 6] = exp(-.5162712)
+matrix outputTable[3, 7] = exp(.1135978)
+matrix outputTable[3, 8] = 6247
+matrix outputTable[3, 9] = 0.0734
+matrix outputTable[3, 10] =  87909.808
+matrix list outputTable
+```
+
+Output:
+
+```
+outputTable[3,10]
+            RIDAGEYR    RIDRETH1_1    RIDRETH1_2    RIDRETH1_3    RIDRETH1_4  logicalRIA~R
+model1     1.0249798             .             .             .             .             .
+model2     1.0228309     .52152822     .60977216     1.0181007     .67765295     .60526464
+model3     1.0224363     .58700197     .65921569     .96928354     .72227993     .59674153
+
+            INDFMPIR   sample size  pseudo-R s~e     AIC value
+model1             .          6545         .0497      8475.887
+model2             .          6545          .072      8287.761
+model3     1.1203014          6247         .0734     87909.808
+```
+
+### Step 4
+
+We can see that in this logistic regression model, the coefficient fitted value before predictor logicalRIAGENDR is -0.5162712, which suggests that, all else being equal, women are more likely to wear glasses/contact lenses relative to men. In addition, the coefficient fitted value has a p-value very close to 0 in the z-test, indicating that the coefficient is significant, and that the odds of men and women being wears of glasess/contact lenses for distance vision significantly differs.
+
+To test whether the proportion of wearers of glasses/contact lenses for distance vision differs between men and women, we can use a chi-square test, as follows:
+
+```
+. tabulate logicalRIAGENDR logicalVIQ220, chi2
+
+logicalRIA |     logicalVIQ220
+     GENDR |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     1,673      1,521 |     3,194 
+         1 |     1,919      1,134 |     3,053 
+-----------+----------------------+----------
+     Total |     3,592      2,655 |     6,247 
+
+          Pearson chi2(1) =  70.1108   Pr = 0.000
+```
+
+The value of this test statistic is close to 0, which shows that the proportion of wearers of glasses/contact lenses for distance vision differs between men and women.
+
+## Problem 2
+
+### Step 1
+
+First, connect to the database, load the .db file and check the database.
+
+```{r}
+library(DBI)
+
+sakila <- dbConnect(RSQLite::SQLite(), "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/sakila_master.db")
+dbListTables(sakila)
+```
+
+Find out what language is most common for films aside from English.
+
+```{r}
+gg <- function(x) {
+  dbGetQuery(sakila, x)
+}
+
+d1 <- gg("
+SELECT name, count
+  FROM (SELECT l.name AS name, COUNT(l.name) AS count 
+    FROM film f LEFT JOIN language l 
+      ON f.language_id = l.language_id
+        GROUP BY l.name) AS movie_count
+")
+d1
+```
+
+As we can see, there are no movies other than in English.
+
+### Step 2
+
+Find out what genre of movie is the most common in the data, and how many movies are of this genre.
+
+Approach 1. using SQL query or queries to extract the appropriate table(s), then using regular R to answer the question.
+
+```{r}
+# Find out how many movies are there in each genre
+d2 <- gg("
+SELECT name, count
+  FROM (SELECT c.name AS name, COUNT(c.name) AS count
+    FROM film_category fc LEFT JOIN category c
+      ON c.category_id = fc.category_id
+        GROUP BY c.category_id)
+  ORDER BY count DESC
+")
+d2
+
+# Find out what genre of movie is the most common in the data
+d2[d2$count == max(d2$count), 'name']
+```
+
+Approach 2. using a single SQL query to answer the question
+
+```{r}
+d3 <- gg("
+SELECT name
+  FROM (SELECT c.name AS name, COUNT(c.name) AS count
+    FROM film_category fc LEFT JOIN category c
+      ON c.category_id = fc.category_id
+        GROUP BY c.category_id)
+  ORDER BY count DESC
+  LIMIT 1
+")
+d3
+```
+
+### Step 3
+
+Identify which country or countries have exactly 9 customers.
+
+Approach 1. using SQL query or queries to extract the appropriate table(s), then using regular R to answer the question.
+
+```{r}
+# Find how many customers are there in each country
+d4 <- gg("
+SELECT COUNT(ctm.customer_id) AS count, ctry.country AS country
+  FROM customer ctm LEFT JOIN address a 
+    ON ctm.address_id = a.address_id 
+  LEFT JOIN city ct
+    ON a.city_id = ct.city_id
+  LEFT JOIN country ctry
+    ON ct.country_id = ctry.country_id
+  GROUP BY country
+  ORDER BY count DESC
+")
+d4
+
+# Identify which country or countries have exactly 9 customers
+d4[d4$count == 9, 'country']
+```
+
+Approach 2. using a single SQL query to answer the question
+
+```{r}
+d5 <- gg("
+SELECT country FROM (
+  SELECT COUNT(ctm.customer_id) AS count, ctry.country AS country
+    FROM customer ctm LEFT JOIN address a 
+      ON ctm.address_id = a.address_id 
+    LEFT JOIN city ct
+      ON a.city_id = ct.city_id
+    LEFT JOIN country ctry
+      ON ct.country_id = ctry.country_id
+    GROUP BY ctry.country)
+  WHERE count = 9
+")
+d5
+```
+
+## Problem 3
+
+### Step 1
+
+First, load and check the data set.
+
+```{r}
+us500_df <- read.csv("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 3/us-500.csv", 
+                     header = TRUE)
+```
+
+Calculate the proportion of email addresses are hosted at a domain with TLD “.net”.
+
+```{r}
+# Calculate the total number of email addresses are hosted at a domain with TLD “.net”
+net_num <- length(grep(".net$", us500_df$email))
+
+# Calculate the proportion of email addresses that are hosted at a domain with TLD “.net”
+net_proportion <- net_num/nrow(us500_df)
+net_proportion
+```
+
+### Step 2
+
+Calculate the proportion of email addresses that have at least one non alphanumeric character in them.
+
+```{r}
+# Calculate the total number of email addresses that have at least one non alphanumeric character in them
+non_alphanum_num <- length(grep("[^[:alnum:]]+", us500_df$email))
+
+# Calculate the proportion of email addresses that have at least one non alphanumeric character in them
+non_alphanum_proportion <- non_alphanum_num/nrow(us500_df)
+non_alphanum_proportion
+```
+
+
+### Step 3
+
+Calculate the most common area code amongst all phone numbers.
+
+```{r}
+# Combine all phone numbers in a single vector
+all_phones <- c(us500_df$phone1, us500_df$phone2)
+
+# Get the area code for each phone number
+all_phones_area <- substr(all_phones, 1, 3)
+
+# Get the most common area code amongst all phone numbers
+names(table(all_phones_area))[which.max(table(all_phones_area))]
+```
+
+### Step 4
+
+Produce a histogram of the log of the apartment numbers for all addresses.
+
+```{r}
+# Get the apartment numbers for all addresses
+all_apt_nums <- regmatches(us500_df$address, 
+                           regexpr("[1234567890]+$", 
+                                   us500_df$address))
+
+# Get the log of the apartment numbers for all addresses
+log_all_apt_nums <- log(as.numeric(all_apt_nums))
+
+# Produce a histogram of the log of the apartment numbers for all addresses
+hist(log_all_apt_nums)
+```
+
+### Step 5
+
+Examine whether the apartment numbers appear to follow Benford’s law.
+
+```{r}
+library(BenfordTests)
+chisq.benftest(as.numeric(all_apt_nums))
+```
+
+It can be seen that there is a significant difference between the observed data and the Benford distribution, i.e. the apartment numbers would not pass as real data.
+
+### Step 6
+
+```{r}
+# Get the street numbers for all addresses
+all_st_nums <- regmatches(us500_df$address, regexpr("\\d+", us500_df$address))
+
+# Get the last digits of the street numbers for all addresses
+last_d_all_st_nums <- as.numeric(substr(all_st_nums,
+                                        nchar(all_st_nums),
+                                        nchar(all_st_nums)))
+
+# Conduct the Chi-Square Test for Benford Distribution
+chisq.benftest(last_d_all_st_nums)
+```
+
+It can be seen that there is a significant difference between the observed data and the Benford distribution, i.e. the street numbers would not pass as real data.
