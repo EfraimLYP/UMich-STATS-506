@@ -1,0 +1,872 @@
+---
+title: "Problem Set 4"
+author: "Yipeng Liu"
+format: html
+editor: visual
+---
+
+# Homework 4
+
+GitHub Page: https://github.com/EfraimLYP/stats506
+
+## Problem 1
+
+### Step 1
+
+Generate a table (which can just be a nicely printed tibble) reporting the mean and median departure delay per airport. Additionally, • Order both tables in descending mean delay. • Both tables should use the airport names not the airport codes. • Both tables should print all rows.
+
+```{r}
+library(dplyr)
+library(nycflights13)
+
+# Check what the data sets "flights" and "airports" look like
+data(flights)
+data(airports)
+head(flights, 5)
+head(airports, 5)
+
+# Rename the airport codes to airport names
+airports %>%
+  select(faa, name) %>%
+  rename(origin = faa) %>%
+  right_join(flights, by = "origin") %>% 
+  select(name, dep_delay) -> renamed_flights_dep
+
+# Generate the table
+renamed_flights_dep %>%
+  group_by(name) %>%
+  summarize(mean_dep_delay = mean(dep_delay, na.rm = TRUE), 
+            median_dep_delay = median(dep_delay, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(-mean_dep_delay) -> flights_1
+
+# Display the table
+flights_1
+```
+
+Generate a second table (which again can be a nicely printed tibble) reporting the mean and median arrival delay per airport. Exclude any destination with under 10 flights. Additionally, • Order both tables in descending mean delay. • Both tables should use the airport names not the airport codes. • Both tables should print all rows.
+
+```{r}
+# Exclude any destination with under 10 flights
+flights %>% 
+  group_by(dest) %>%
+  summarize(num_flights = n()) %>%
+  filter(num_flights >= 10) %>%
+  inner_join(flights, by = "dest") %>%
+  select(dep_delay, origin, arr_delay, dest) %>%
+  ungroup() -> filtered_flights
+
+# Rename the airport codes to airport names
+airports %>%
+  select(faa, name) %>%
+  rename(dest = faa) %>%
+  right_join(filtered_flights, by = "dest") %>% 
+  select(name, arr_delay) -> renamed_flights_dest
+
+# Generate the table
+renamed_flights_dest %>%
+  group_by(name) %>%
+  summarize(mean_arr_delay = mean(arr_delay, na.rm = TRUE), 
+            median_arr_delay = median(arr_delay, na.rm = TRUE)) %>%
+  ungroup() %>%
+  arrange(-mean_arr_delay) -> flights_2
+
+# Display the table
+print(flights_2, n = 99)
+```
+
+### Step 2
+
+How many flights did the aircraft model with the fastest average speed take? Produce a tibble with 1 row, and entires for the model, average speed (in MPH) and number of flights.
+
+```{r}
+# Check what the data set "planes" looks like
+data(planes)
+head(planes)
+
+# Calculate each flight's average speed (in MPH)
+flights %>%
+  select(tailnum, air_time, distance) %>%
+  filter(!is.na(air_time)) %>%
+  mutate(
+    air_time_h = air_time/60, 
+    speed_mph = distance/air_time_h) -> flights_speed
+
+# Merge the data frame "planes" and "flights_speed"
+flights_speed %>%
+  inner_join(planes, by = "tailnum") %>%
+  select(tailnum, speed_mph, model)-> flights_and_planes
+
+# Get the model with the highest average speed
+flights_and_planes %>%
+  group_by(model) %>%
+  summarize(mean_speed_by_mod = mean(speed_mph)) %>%
+  filter(mean_speed_by_mod == max(mean_speed_by_mod)) %>%
+  ungroup() -> max_model
+
+# Get the flights that are took by the model with the highest average speed
+flights_and_planes %>%
+  filter(model == max_model$model[1]) -> flights_max_model
+
+# Produce the result tibble
+flights_max_model %>%
+  summarize(
+    model = max_model$model[1], 
+    avg_speed = max_model$mean_speed_by_mod[1], 
+    flights_num = n()
+  ) -> max_model_flights_num
+
+# Display the tibble
+max_model_flights_num
+```
+
+## Problem 2
+
+Load the Chicago NNMAPS data.
+
+```{r}
+nnmaps <- read.csv("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 4/chicago-nmmaps.csv", header = TRUE)
+head(nnmaps, 5)
+```
+
+Write a function get_temp() that allows a user to request the average temperature for a given month.
+
+```{r}
+library(dplyr)
+library(lubridate)
+#' This function allows a user to request the average temperature for a given month
+#' 
+#' @param month month, either a numeric 1-12 or a string
+#' @param year a numeric year
+#' @param data the data set to obtain data from
+#' @param celsius logically indicating whether the results should be in Celsius; default FALSE
+#' @param average_fn a function with which to compute the mean; default is mean
+#' 
+#' @return a numeric vector of length 1
+get_temp <- function(month, year, data, celsius = FALSE, average_fn = mean) {
+  # Create a new column to store the months
+  data %>% 
+    rename(year_num = year) %>%
+    mutate(month_num = as.integer(substring(date, 6, 7))) %>%
+    mutate(month_name = month(month_num, label = TRUE, abbr = FALSE), 
+           month_abbr = month(month_num, label = TRUE, abbr = TRUE)) %>% 
+    mutate(temp_f = temp*9/5+32) %>% 
+    select(temp, temp_f, month_num, month_name, month_abbr, year_num) %>%
+    group_by(year_num, month_num) %>%
+    summarize(avg_temp_t = average_fn(temp), 
+              avg_temp_f = average_fn(temp_f),
+              month_num = month_num, 
+              month_name = month_name, 
+              month_abbr = month_abbr,
+              year_num = year_num) %>%
+    distinct() %>%
+    ungroup() %>% 
+    filter(month_num == month | month_name == month | month_abbr == month, year_num == year) -> avg_temp
+  
+  # Return the result
+  if (celsius) {
+    return (avg_temp$avg_temp_t)
+  }
+  else {
+    return (avg_temp$avg_temp_f)
+  }
+}
+```
+
+Finally, use the following test cases to test the function.
+
+```{r}
+get_temp("Apr", 1999, data = nnmaps)
+get_temp("Apr", 1999, data = nnmaps, celsius = TRUE)
+get_temp(10, 1998, data = nnmaps, average_fn = median)
+get_temp(13, 1998, data = nnmaps)
+get_temp(2, 2005, data = nnmaps)
+get_temp("November", 1999, data =nnmaps, celsius = TRUE, average_fn = 
+           function(x) { 
+             x %>% sort -> x 
+             x[2:(length(x) - 1)] %>% mean %>% return
+})
+```
+
+As we can see, the 4th and 5th cases return the value numeric(0), which is an incorrect result due to the fact that there is no month 13 and the nnmaps data set does not contain data for 2005.
+
+## Problem 3
+
+First, load or import the data into SAS.
+
+``` sas
+/* Generated Code (IMPORT) */
+/* Source File: recs2020_public_v5.csv */
+/* Source Path: /home/u63636985/sasuser.v94 */
+/* Code generated on: 10/17/23, 11:13 PM */
+
+%web_drop_table(WORK.IMPORT);
+
+
+FILENAME REFFILE '/home/u63636985/sasuser.v94/recs2020_public_v5.csv';
+
+PROC IMPORT DATAFILE=REFFILE
+    DBMS=CSV
+    OUT=WORK.IMPORT;
+    GETNAMES=YES;
+RUN;
+
+PROC CONTENTS DATA=WORK.IMPORT; RUN;
+
+
+%web_open_table(WORK.IMPORT);
+```
+
+### Step 1
+
+First, we calculate the total number of records for each state, taking into account sampling weights.
+
+``` sas
+PROC SUMMARY DATA = WORK.IMPORT NWAY;
+    VAR NWEIGHT;
+    CLASS state_postal;
+    OUTPUT OUT = state_sum SUM = weighted_state_sum;
+RUN;
+```
+
+Then, we calculate the sum of the total number of all state records, and the result is 123529025.
+
+``` sas
+PROC MEANS DATA = state_sum SUM;
+  VAR weighted_state_sum;
+RUN;
+```
+
+Next, we calculated the percentage of the total number of records in each state and sort them. We can know from the output that California has the highest percentage of records
+
+``` sas
+DATA state_pct;
+    SET state_sum;
+    total_state_sum = SUM(weighted_state_sum);
+    weighted_state_pct = weighted_state_sum/123529025;
+    FORMAT weighted_state_pct percent9.2;
+RUN;
+
+PROC SORT DATA = state_pct OUT = sorted_state_pct;
+  BY DESCENDING weighted_state_pct;
+RUN;
+```
+
+Finally, we calculate what percentage of all records correspond to Michigan, which is 3.17% from the output.
+
+``` sas
+DATA MI_pct;
+    SET sorted_state_pct;
+    WHERE state_postal = 'MI';
+RUN;
+```
+
+### Step 2
+
+In this part, we generate a histogram of the total electricity cost in dollars, amongst those with a strictly positive cost.
+
+First, we filter out values in the data set where DOLLAREL is less than 0.
+
+``` sas
+DATA FILTERED_WORK;
+  SET WORK.IMPORT;
+  if DOLLAREL > 0;
+run;
+```
+
+Then, we generate the histogram.
+
+``` sas
+PROC UNIVARIATE DATA = FILTERED_WORK;
+    VAR DOLLAREL;
+    HISTOGRAM;
+RUN;
+```
+
+Output:
+
+```         
+The UNIVARIATE Procedure
+
+Variable: DOLLAREL
+
+Moments
+N   18481   Sum Weights 18481
+Mean    1426.06646  Sum Observations    26355134.3
+Std Deviation   861.277417  Variance    741798.79
+Skewness    2.13904168  Kurtosis    13.1508069
+Uncorrected SS  5.12926E10  Corrected SS    1.37084E10
+Coeff Variation 60.3953209  Std Error Mean  6.33549171
+Basic Statistical Measures
+Location    Variability
+Mean    1426.066    Std Deviation   861.27742
+Median  1258.600    Variance    741799
+Mode    656.660 Range   15677
+        Interquartile Range 981.79000
+Tests for Location: Mu0=0
+Test    Statistic   p Value
+Student's t t   225.0917    Pr > |t|    <.0001
+Sign    M   9240.5  Pr >= |M|   <.0001
+Signed Rank S   85391461    Pr >= |S|   <.0001
+Quantiles (Definition 5)
+Level   Quantile
+100% Max    15680.18
+99% 4267.36
+95% 2978.88
+90% 2475.08
+75% Q3  1819.12
+50% Median  1258.60
+25% Q1  837.33
+10% 549.63
+5%  415.03
+1%  197.90
+0% Min  2.85
+Extreme Observations
+Lowest  Highest
+Value   Obs Value   Obs
+2.85    3326    10714.3 5837
+5.48    6647    10716.4 10470
+7.39    6864    12036.4 6658
+8.51    17029   12064.8 14329
+11.50   16490   15680.2 10454
+```
+
+![Histogram of DOLLAREL](/Users/yipengliu/Desktop/Graduate%20Courses/STATS%20506/Homework/Problem%20Set%204/dollarel_hist.jpg){fig-align="center" width="500"}
+
+### Step 3
+
+In this part, we generate a histogram of the log of the total electricity cost.
+
+First, we add a column which is the log of DOLLAREL.
+
+``` sas
+DATA LOG_WORK;
+    SET FILTERED_WORK;
+    log_dollarel = LOG(DOLLAREL);
+RUN;
+```
+
+Then, we generate the histogram.
+
+``` sas
+PROC UNIVARIATE DATA = LOG_WORK;
+    VAR log_dollarel;
+    HISTOGRAM;
+RUN;
+```
+
+Output:
+
+``` sas
+The UNIVARIATE Procedure
+
+Variable: log_dollarel
+
+Moments
+N   18481   Sum Weights 18481
+Mean    7.0882232   Sum Observations    130997.453
+Std Deviation   0.62667352  Variance    0.39271971
+Skewness    -0.841461   Kurtosis    3.20442521
+Uncorrected SS  935796.645  Corrected SS    7257.46015
+Coeff Variation 8.84105235  Std Error Mean  0.00460976
+Basic Statistical Measures
+Location    Variability
+Mean    7.088223    Std Deviation   0.62667
+Median  7.137755    Variance    0.39272
+Mode    6.487166    Range   8.61283
+        Interquartile Range 0.77589
+Tests for Location: Mu0=0
+Test    Statistic   p Value
+Student's t t   1537.655    Pr > |t|    <.0001
+Sign    M   9240.5  Pr >= |M|   <.0001
+Signed Rank S   85391461    Pr >= |S|   <.0001
+Quantiles (Definition 5)
+Level   Quantile
+100% Max    9.66015
+99% 8.35875
+95% 7.99930
+90% 7.81403
+75% Q3  7.50611
+50% Median  7.13776
+25% Q1  6.73022
+10% 6.30925
+5%  6.02835
+1%  5.28776
+0% Min  1.04732
+Extreme Observations
+Lowest  Highest
+Value   Obs Value   Obs
+1.04732 3326    9.27933 5837
+1.70111 6647    9.27953 10470
+2.00013 6864    9.39569 6658
+2.14124 17029   9.39805 14329
+2.44235 16490   9.66015 10454
+```
+
+![Histogram of log_DOLLAREL](/Users/yipengliu/Desktop/Graduate%20Courses/STATS%20506/Homework/Problem%20Set%204/logdollarel_hist.jpg){fig-align="center" width="500"}
+
+### Step 4
+
+Fit a linear regression model predicting the log of the total electricity cost based upon the number of rooms in the house and whether or not the house has a garage, including the weight variable.
+
+``` sas
+PROC REG DATA = WORK.LOG_WORK;
+    MODEL log_dollarel = TOTROOMS PRKGPLC1;
+    WEIGHT NWEIGHT;
+RUN;
+```
+
+Output:
+
+```         
+The REG Procedure
+
+Model: MODEL1
+
+Dependent Variable: log_dollarel
+
+Number of Observations Read 18481
+Number of Observations Used 18481
+Weight: NWEIGHT
+
+Analysis of Variance
+Source  DF  Sum of
+Squares Mean
+Square  F Value Pr > F
+Model   2   8899106 4449553 1949.17 <.0001
+Error   18478   42181548    2282.79837       
+Corrected Total 18480   51080655             
+Root MSE    47.77864    R-Square    0.1742
+Dependent Mean  7.04925 Adj R-Sq    0.1741
+Coeff Var   677.78361        
+Parameter Estimates
+Variable    DF  Parameter
+Estimate    Standard
+Error   t Value Pr > |t|
+Intercept   1   6.51523 0.01528 426.50  <.0001
+TOTROOMS    1   0.08780 0.00226 38.87   <.0001
+PRKGPLC1    1   0.06878 0.00416 16.53   <.0001
+```
+
+### Step 5
+
+Use that model to generate predicted values and create a scatterplot of predicted total electricity cost vs actual total electricity cost.
+
+``` sas
+PROC REG DATA = WORK.LOG_WORK;
+    MODEL log_dollarel = TOTROOMS PRKGPLC1;
+    WEIGHT NWEIGHT;
+    OUTPUT OUT = PREDICTION PREDICTED = PREDICTED
+RUN;
+
+DATA PREDICTION;
+    SET PREDICTION;  
+    PREDICTED_VAL = EXP(PREDICTED);
+RUN;
+
+PROC SGPLOT DATA = PREDICTION;
+    SCATTER x = DOLLAREL y = PREDICTED_VAL;
+    XAXIS LABEL="Actual Total Electricity Cost (DOLLAREL)";
+    YAXIS LABEL="Predicted Total Electricity Cost (PREDICTED_VAL)";
+RUN;
+```
+
+Output:
+
+![Scatter plot of predicted total electricity cost vs actual total electricity cost](/Users/yipengliu/Desktop/Graduate%20Courses/STATS%20506/Homework/Problem%20Set%204/Scatterplot.jpg){fig-align="center" width="500"}
+
+## Problem 4
+
+### Part 1. SAS
+
+Import the data into SAS and use proc sql to select only the variables we'll need for our analysis, as well as subsetting the data if needed. The variables we are goint to use are shown above, according to the Codebook:<br>
+
+CaseID: CaseID 2022<br>
+
+weight_pop: Post-stratification weight -Main qualified respondents scaled to U.S. population<br>
+
+B3: Compared to 12 months ago, would you say that you (and your family) are better off, the same, or worse off financially?<br>
+
+ND2: Five years from now, do you think that the chance that you will experience a natural disaster or severe weather event will be higher, lower or about the same as it is now:<br>
+
+B7_a: In your community -How would you rate economic conditions today?<br>
+
+GH1: This section will ask some questions about your home and your car. Do you (and/or your spouse or partner):<br>
+
+ppeducat: Education (4 Categories)<br>
+
+race_5cat: Race/Ethnicity -5 categories<br>
+
+``` sas
+PROC SQL;
+   CREATE TABLE public2022_useful AS
+   SELECT 
+      CaseID,
+      weight_pop,
+      B3,   
+      ND2, 
+      B7_a,  
+      GH1,
+      ppeducat,
+      race_5cat
+   FROM WORK.IMPORT; 
+QUIT;
+RUN;
+```
+
+Then, get the data out of SAS and into Stata. We choose to export it as a .csv format.
+
+```         
+PROC EXPORT DATA = public2022_useful
+    OUTFILE = "~/sasuser.v94/public2022_useful.csv"
+    DBMS = CSV REPLACE;
+RUN;
+```
+
+### Part 2. Stata
+
+Demonstrate that you've successfully extracted the appropriate data by showing the number of observations and variables.
+
+``` stata
+import delimited "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 4/public2022_useful.csv", clear
+summarize
+```
+
+Stata Output:
+
+```         
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+      caseid |     11,667    5889.991    3397.957          1      11775
+  weight_pop |     11,667    21866.31    10952.98   3666.639   88732.65
+          b3 |     11,667    2.764035    .9363138          1          5
+         nd2 |     11,667    2.633753     .772071          1          5
+        b7_a |     11,667    2.225936    .7751958          1          4
+-------------+---------------------------------------------------------
+         gh1 |     11,667    1.964944    .9790652          1          4
+    ppeducat |     11,667    3.071398    .9462462          1          4
+   race_5cat |     11,667    1.630925    1.090644          1          5
+```
+
+We proceed to look up the summary of our selected variables in the Codebook:
+
+```         
+caseid
+Type: Numeric (long)
+Range: [1,11775] Units: 1
+Unique values: 11,667 Missing .: 0/11,667
+Mean: 5889.99
+Std. dev.: 3397.96
+Percentiles:10%
+25%
+50%
+75%
+90%
+1178
+2949
+5890
+8829
+10601
+```
+
+```         
+Type: Numeric (double)
+Range: [3666.6386,88732.647] Units: .0001
+Unique values: 2,850 Missing .: 0/11,667
+Mean: 21866.3
+Std. dev.: 10953
+Percentiles:
+10%
+25%
+50%
+75%
+90%
+11814.2
+15092.1
+19790.4
+25890
+33955.1
+```
+
+```         
+b3
+Type: Numeric (byte)
+Label: B3
+Range: [1,5] Units: 1
+Unique values: 5 Missing .: 0/11,667
+Tabulation:
+Freq.
+Numeric
+Label
+1,020
+1
+Much worse off
+3,276
+2
+Somewhat worse off
+5,287
+3
+About the same
+1,605
+4
+Somewhat better off
+479
+5
+Much better off
+```
+
+```         
+nd2
+Type: Numeric (byte)
+Label: ND2
+Range: [1,5] Units: 1
+Unique values: 5 Missing .: 0/11,667
+Tabulation:
+Freq.
+Numeric
+Label
+1,065
+1
+Much higher
+2,915
+2
+Somewhat higher
+7,201
+3
+About the same
+200
+4
+Somewhat lower
+286
+5
+Much lower
+```
+
+```         
+b7_a
+Type: Numeric (byte)
+Label: B7_A
+Range: [1,4] Units: 1
+Unique values: 4 Missing .: 0/11,667
+Tabulation:
+Freq.
+Numeric
+Label
+2,171
+1
+Poor
+5,003
+2
+Only fair
+4,179
+3
+Good
+314
+4
+Excellent
+```
+
+```         
+gh1
+Type: Numeric (byte)
+Label: GH1
+Range: [1,4] Units: 1
+Unique values: 4 Missing .: 0/11,667
+Tabulation:
+Freq.
+Numeric
+Label
+4,982
+1
+Own your home with a mortgage or loan
+2,933
+2
+Own your home free and clear (without a mortgage or loan)
+2,931
+3
+Pay rent
+821
+4
+Neither own nor pay rent
+```
+
+```         
+ppeducat
+Type: Numeric (byte)
+Label: PPEDUCAT
+Range: [1,4] Units: 1
+Unique values: 4 Missing .: 0/11,667
+Tabulation:
+Freq.
+Numeric
+Label
+688
+1
+No high school diploma or GED
+2,772
+2
+High school graduate (high school diploma or the equivalent GED)
+3,226
+3
+Some college or Associate's degree
+4,981
+4
+Bachelor's degree or higher
+```
+
+```         
+race_5cat
+Type: Numeric (byte)
+Label: race_5cat
+Range: [1,5] Units: 1
+Unique values: 5 Missing .: 0/11,667
+Tabulation:
+Freq.
+Numeric
+Label
+8,060
+1
+White
+1,225
+2
+Black
+1,464
+3
+Hispanic
+464
+4
+Asian
+454
+5
+Other
+```
+
+We can see that the number of rows of the imported data and the number of rows of the data described in the Codebook are consistent, i.e. both of which are 11667. Meanwhile, the basic information of each column of imported data also matches the description of the corresponding column in the Codebook. Therefore, we can assume that the data has been successfully imported.
+
+The response variable is a Likert scale; convert it to a binary of worse off versus same/better. That is, we have to do the following with the column b3: convert 1/2 to 0 (worsed off) and 3/4/5 to 1 (same/better).
+
+``` stata
+recode b3 (1=0) (2=0) (3=1) (4=1) (5=1), generate(b3_binary)
+```
+
+Use the following code to tell Stata that the data is from a complex sample:
+
+``` stata
+svyset caseid [pw = weight_pop]
+```
+
+Stata Output:
+
+```         
+Sampling weights: weight_pop
+             VCE: linearized
+     Single unit: missing
+        Strata 1: <one>
+ Sampling unit 1: caseid
+           FPC 1: <zero>
+```
+
+Carry out a logisitic regression model accounting for the complex survey design. In this case, we treat all of the predictors as categorical:
+
+``` stata
+svy: logit b3_binary i.nd2 i.b7_a i.gh1 i.ppeducat i.race_5cat
+```
+
+Stata Output:
+
+```         
+(running logit on estimation sample)
+
+Survey: Logistic regression
+
+Number of strata =      1                        Number of obs   =      11,667
+Number of PSUs   = 11,667                        Population size = 255,114,223
+                                                 Design df       =      11,666
+                                                 F(17, 11650)    =       55.16
+                                                 Prob > F        =      0.0000
+
+------------------------------------------------------------------------------
+             |             Linearized
+   b3_binary | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+         nd2 |
+          2  |   .0516539   .0920761     0.56   0.575    -.1288307    .2321385
+          3  |  -.0168983    .085543    -0.20   0.843    -.1845769    .1507802
+          4  |   .2395472   .1992676     1.20   0.229    -.1510506     .630145
+          5  |   .2256698    .167205     1.35   0.177      -.10208    .5534197
+             |
+        b7_a |
+          2  |    .812257   .0600331    13.53   0.000     .6945821    .9299318
+          3  |    1.76666    .067935    26.01   0.000     1.633496    1.899824
+          4  |   2.605681   .1981719    13.15   0.000     2.217231    2.994131
+             |
+         gh1 |
+          2  |  -.0302041   .0563929    -0.54   0.592    -.1407436    .0803354
+          3  |   .1143763   .0589749     1.94   0.052    -.0012243    .2299769
+          4  |   .3674756   .0977701     3.76   0.000     .1758299    .5591214
+             |
+    ppeducat |
+          2  |  -.0198248   .1019437    -0.19   0.846    -.2196516    .1800019
+          3  |   .0132185   .0988547     0.13   0.894    -.1805532    .2069902
+          4  |   .0737979   .0984407     0.75   0.453    -.1191623    .2667581
+             |
+   race_5cat |
+          2  |   .8555888   .0808241    10.59   0.000       .69716    1.014017
+          3  |   .2646536   .0706892     3.74   0.000     .1260909    .4032164
+          4  |   .5486136   .1243165     4.41   0.000     .3049326    .7922947
+          5  |   .0077989   .1677612     0.05   0.963    -.3210411    .3366389
+             |
+       _cons |   -.603436   .1319128    -4.57   0.000    -.8620071   -.3448648
+------------------------------------------------------------------------------
+```
+
+The researchers question of interest is whether the respondent's family is better off, the same, or worse off financially compared to 12 month's ago can be predicted by thinking that the chance of experiencing a natural disaster or severe weather event will be higher, lower or about the same in 5 years. From the output above, we can conclude that when the respondents' assessment of the economic conditions today in the country, their housing situation, their level of education and their race are fixed, Each of the dummy variables generated by the categorical predictor "the chance of experiencing a natural disaster or severe weather event will be higher, lower or about the same in 5 years" is not significant (they all have large p-values). Therefore, the question of interest to the researchers cannot be answered by our output of the logistic regression for now.
+
+Finally, we get the data out of Stata and into R.
+
+``` stata
+cd "/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 4"
+export delimited using "public2022_useful_edited.csv"
+```
+
+Stata Output:
+
+```         
+file public2022_useful_edited.csv saved
+```
+
+### Part 3. R
+
+First, we load the .csv file into R and check the data:
+
+```{r}
+public2022 <- read.csv("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 4/public2022_useful_edited.csv", 
+                       header = TRUE)
+head(public2022, 5)
+```
+
+Use the survey package to obtain the pseudo $R^2$:
+
+```{r}
+# Create a complex survey design object
+library(survey)
+my_svydesign <- svydesign(id = ~ caseid, weight = ~ weight_pop, data = public2022)
+
+# Treat predictors as categorical variables
+public2022$nd2 <- factor(public2022$nd2)
+public2022$b7_a <- factor(public2022$b7_a)
+public2022$gh1 <- factor(public2022$gh1)
+public2022$ppeducat <- factor(public2022$ppeducat)
+public2022$race_5cat <- factor(public2022$race_5cat)
+
+# Fit the logistic regression model
+my_glm <- svyglm(b3_binary~nd2+b7_a+gh1+ppeducat+race_5cat, 
+                 design = my_svydesign)
+
+# Obtain the pseudo R2
+library(rsq)
+pseudo_r2 <- rsq(my_glm)
+pseudo_r2
+```
+
+It can be seen that the pseudo $R^2$ of this model is 0.09526968.
