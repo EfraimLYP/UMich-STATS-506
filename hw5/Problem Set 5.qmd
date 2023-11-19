@@ -1,0 +1,327 @@
+---
+title: "Problem Set 5"
+author: "Yipeng Liu"
+format: html
+editor: visual
+---
+
+GitHub Page: https://github.com/EfraimLYP/stats506
+
+# Problem 1
+
+Use the nnmaps data.
+
+```{r}
+nnmaps <- read.csv("/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 5/chicago-nmmaps.csv")
+```
+
+## Part a
+
+Produce a graph of the mean monthly temperature in celsius. Draw a scatter-plot where the x-axis is month and the y-axis is the average monthly temperature in celsius. Add a line connecting the points within each season and color the lines and points by season (same color for lines and points in the same season). Be sure both x-axis and the legend are ordered appropriately, and that all labels/titles are clear and ready for publication (e.g. no variable names).
+
+```{r}
+# Calculate the average temperature (in celsius) of each month
+library(tidyverse)
+nnmaps %>% 
+  mutate(temp_c = 5*(temp-32)/9) %>%
+  group_by(month_numeric) %>%
+  mutate(avg_temp = mean(temp_c)) %>%
+  select(avg_temp, month_numeric, season) %>%
+  ungroup() %>%
+  distinct() -> nnmaps_with_avg_temp
+
+# Generate the scatter-plot
+library(ggplot2)
+ggplot(nnmaps_with_avg_temp, 
+       aes(x = month_numeric, y = avg_temp, color = season)) +
+  geom_point() + 
+  geom_line() + 
+  labs(title = "Average Temperature by Month", 
+       x = "Month", 
+       y = "Average Temperature (in Celsius)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+## Part b
+
+Produce a similar plot with four sets of lines: mean monthly temperature in celsius, mean monthly o3, mean monthly PM10, and mean monthly dewpoint. Figure out a way to distinguish between the four lines. Again, make sure the plot is publication-ready (clean and clear labels).
+
+```{r}
+# Calculate those quantities of each month
+library(tidyverse)
+nnmaps %>% 
+  mutate(temp_c = 5*(temp-32)/9) %>%
+  drop_na() %>%
+  group_by(month_numeric) %>%
+  mutate(avg_temp = mean(temp_c), 
+         avg_o3 = mean(o3), 
+         avg_pm10 = mean(pm10), 
+         avg_dewpoint = mean(dewpoint)) %>%
+  select(avg_temp, avg_o3, avg_pm10, avg_dewpoint, 
+         month_numeric, season) %>%
+  ungroup() %>%
+  distinct() -> nnmaps_with_avg
+
+# Generate the plot
+library(ggplot2)
+ggplot(nnmaps_with_avg, aes(x = month_numeric)) +
+  geom_point(aes(y = avg_temp, color = season)) + 
+  geom_point(aes(y = avg_o3, color = season)) +
+  geom_point(aes(y = avg_pm10, color = season)) + 
+  geom_point(aes(y = avg_dewpoint, color = season)) +
+  geom_line(aes(y = avg_temp, color = season, linetype = "Average Temperature")) + 
+  geom_line(aes(y = avg_o3, color = season, linetype = "Average O3")) +
+  geom_line(aes(y = avg_pm10, color = season, linetype = "Average PM10")) + 
+  geom_line(aes(y = avg_dewpoint, color = season, linetype = "Average Dewpoint")) + 
+  labs(title = "Quantities by Month", 
+       x = "Month", 
+       y = "Quantity") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+It seems that PM10 has the least seasonal trend. Because PM10 quantities fluctuate the least among the four variables with season and month.
+
+# Problem 2
+
+Create a class to represent a polynomial expression called poly. Do this using S4.
+
+## Part a
+
+For the poly class, define the following:
+
+• A constructor
+
+• A validator
+
+• A show method
+
+• Addition and substraction
+
+```{r}
+# Define the class "poly"
+setClass("poly", 
+         slots = c(coefficients = "numeric", 
+                   degree = "integer", 
+                   string = "character"))
+
+# Define the constructor of "poly"
+library(ch)
+make_poly <- function(string) {
+  poly_str <- gsub("([0-9a-zA-Z]+)([a-zA-Z])", "\\1*\\2", string)
+  coef <- sym2coef(poly_str)
+  deg <- as.integer(length(coef)-1)
+  return(new("poly", coefficients = coef, degree = deg, string = string))
+}
+
+# Define the validator of "poly"
+setValidity("poly", function(object) {
+  poly_str <- gsub("([0-9a-zA-Z]+)([a-zA-Z])", "\\1*\\2", object@string)
+  coef <- sym2coef(poly_str)
+  deg <- as.integer(length(coef)-1)
+  
+  if (!is.numeric(coef)) {
+    stop("coefficients not numeric")
+  }
+  else if (!is.integer(deg)) {
+    stop("degree not integer")
+  }
+  else if (deg < 0) {
+    stop("degree is negative")
+  }
+  else {
+    return(TRUE)
+  }
+})
+
+# Define the show method
+##' @title Display a `poly` object
+##' @param object A `poly` object
+setMethod("show", "poly", function(object) {
+    cat(object@string)
+})
+
+# Define the addition method
+##' @title `poly` arithmetic.
+##'
+##' @param e1 A `poly`
+##' @param e2 A `poly`
+##' @return A `poly`
+setMethod("+", signature(e1 = "poly", 
+                         e2 = "poly"), 
+          function(e1, e2) {
+            poly_str_1 <- gsub("([0-9a-zA-Z]+)([a-zA-Z])", "\\1*\\2", e1@string)
+            coef_1 <- sym2coef(poly_str_1)
+            deg_1 <- as.integer(length(coef_1)-1)
+  
+            poly_str_2 <- gsub("([0-9a-zA-Z]+)([a-zA-Z])", "\\1*\\2", e2@string)
+            coef_2 <- sym2coef(poly_str_2)
+            deg_2 <- as.integer(length(coef_2)-1)
+            
+            max_len <- max(length(coef_1), length(coef_2))
+            coef_1_exd <- c(coef_1, rep(0, max_len-length(coef_1)))
+            coef_2_exd <- c(coef_2, rep(0, max_len-length(coef_2)))
+            coef <- coef_1_exd+coef_2_exd
+            deg <- as.integer(length(coef)-1)
+            str <- paste(coef, "x^", seq_along(coef) - 1, sep = "", collapse = "+")
+            str <- gsub("x\\^0", "", str)
+            str <- gsub("x\\^1", "x", str)
+            str <- gsub("\\+([+-])", "\\1", str)
+            str <- gsub("1x", "x", str)
+            
+            return(make_poly(str))
+          })
+
+# Define the substraction method
+##' @title `poly` arithmetic.
+##'
+##' @param e1 A `poly`
+##' @param e2 A `poly`
+##' @return A `poly`
+setMethod("-", signature(e1 = "poly", 
+                         e2 = "poly"), 
+          function(e1, e2) {
+            poly_str_1 <- gsub("([0-9a-zA-Z]+)([a-zA-Z])", "\\1*\\2", e1@string)
+            coef_1 <- sym2coef(poly_str_1)
+            deg_1 <- as.integer(length(coef_1)-1)
+  
+            poly_str_2 <- gsub("([0-9a-zA-Z]+)([a-zA-Z])", "\\1*\\2", e2@string)
+            coef_2 <- sym2coef(poly_str_2)
+            deg_2 <- as.integer(length(coef_2)-1)
+            
+            max_len <- max(length(coef_1), length(coef_2))
+            coef_1_exd <- c(coef_1, rep(0, max_len-length(coef_1)))
+            coef_2_exd <- c(coef_2, rep(0, max_len-length(coef_2)))
+            coef <- coef_1_exd-coef_2_exd
+            deg <- as.integer(length(coef)-1)
+            str <- paste(coef, "x^", seq_along(coef) - 1, sep = "", collapse = "+")
+            str <- gsub("x\\^0", "", str)
+            str <- gsub("x\\^1", "x", str)
+            str <- gsub("\\+([+-])", "\\1", str)
+            str <- gsub("1x", "x", str)
+            
+            return(make_poly(str))
+          })
+```
+
+## Part b
+
+Use my poly class to run the following code:
+
+```{r}
+p1 <- make_poly("3x^2 + 2")
+p2 <- make_poly("7x^3 - 2x^2 - x + 17")
+p1
+p2
+p1 + p2
+p1 - p2
+```
+
+# Problem 3
+
+## Part a
+
+Generate a table reporting the mean and median departure delay per airport. Additionally,
+
+• Order both tables in descending mean delay;
+
+• Both tables should use the airport names not the airport codes;
+
+• Both tables should print all rows.
+
+```{r}
+library(nycflights13)
+library(data.table)
+
+# Check what the data sets "flights" and "airports" look like
+data(flights)
+data(airports)
+flights <- data.table(flights)
+airports <- data.table(airports)
+flights
+airports
+
+# Rename the airport codes to airport names
+airports[, .(faa, name)] |>
+  rename(origin = faa) |>
+  merge(x = _, flights, by = 'origin', all.y = TRUE) |>
+  select(name, dep_delay) -> renamed_flights_dep
+
+# Generate the table
+renamed_flights_dep_no_na <- na.omit(renamed_flights_dep)
+flights1 <- renamed_flights_dep_no_na[, 
+                                      .(mean_dep_delay = 
+                                          mean(dep_delay), 
+                        median_dep_delay = 
+                          median(dep_delay)), 
+                    by = .(name)][order(-mean_dep_delay)]
+flights1
+```
+
+Generate a second table reporting the mean and median arrival delay per airport. Exclude any destination with under 10 flights. Additionally, 
+
+• Order both tables in descending mean delay;
+
+• Both tables should use the airport names not the airport codes;
+
+• Both tables should print all rows.
+
+```{r}
+# Exclude any destination with under 10 flights
+flights_filtered <- flights[, .N, by = dest][N >= 10]
+flights_filtered |> 
+  rename(num_flights = N) |>
+  merge(x = _, flights, by = 'dest', all = TRUE) |>
+  select(dep_delay, origin, arr_delay, dest) -> filtered_flights
+
+# Rename the airport codes to airport names
+airports[, .(faa, name)] |>
+  rename(dest = faa) |>
+  merge(x = _, filtered_flights, by = 'dest', all.y = TRUE) |>
+  select(name, arr_delay) -> renamed_flights_dest
+
+# Generate the table
+renamed_flights_dest_no_na <- na.omit(renamed_flights_dest)
+flights2 <- renamed_flights_dest_no_na[, 
+                                      .(mean_dest_delay = 
+                                          mean(arr_delay), 
+                        median_dest_delay = 
+                          median(arr_delay)), 
+                    by = .(name)][order(-mean_dest_delay)]
+flights2
+```
+
+## Part b
+
+How many flights did the aircraft model with the fastest average speed take? Produce a data.table with 1 row, and entires for the model, average speed (in MPH) and number of flights.
+
+```{r}
+# Check what the data set "planes" looks like
+data(planes)
+planes <- data.table(planes)
+planes
+
+# Calculate each flight's average speed (in MPH)
+flights_selected <- flights[, .(tailnum, air_time, distance)]
+flights_selected_no_na <- na.omit(flights_selected)
+flights_speed <- flights_selected_no_na[, 
+                                        .(tailnum, 
+                                          speed_mph = distance*60/air_time)]
+
+# Merge the data.table "planes" and "flights_speed"
+flights_speed |>
+  merge(x = _, planes, by = 'tailnum') |>
+  select(tailnum, speed_mph, model) -> flights_and_planes
+
+# Get the model with the highest average speed
+flights_and_planes_mean_speed <- flights_and_planes[, .(mean_speed_by_mod = mean(speed_mph)), by = model]
+max_model <- flights_and_planes_mean_speed[mean_speed_by_mod == max(mean_speed_by_mod), ]
+
+# Get the flights that are took by the model with the highest average speed
+flights_max_model <- flights_and_planes[model == max_model$model[1], ]
+
+# Produce the result data.table
+max_model_flights_num <- flights_max_model[, .(avg_speed = mean(speed_mph), flights_num = .N), by = 'model']
+
+# Display the tibble
+max_model_flights_num
+```

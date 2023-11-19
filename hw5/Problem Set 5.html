@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yipeng Liu">
+
+<title>Problem Set 5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Problem Set 5_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Problem Set 5_files/libs/quarto-html/quarto.js"></script>
+<script src="Problem Set 5_files/libs/quarto-html/popper.min.js"></script>
+<script src="Problem Set 5_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Problem Set 5_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Problem Set 5_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Problem Set 5_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Problem Set 5_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Problem Set 5_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Problem Set 5_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Problem Set 5</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yipeng Liu </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>GitHub Page: https://github.com/EfraimLYP/stats506</p>
+<section id="problem-1" class="level1">
+<h1>Problem 1</h1>
+<p>Use the nnmaps data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nnmaps <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"/Users/yipengliu/Desktop/Graduate Courses/STATS 506/Homework/Problem Set 5/chicago-nmmaps.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="part-a" class="level2">
+<h2 class="anchored" data-anchor-id="part-a">Part a</h2>
+<p>Produce a graph of the mean monthly temperature in celsius. Draw a scatter-plot where the x-axis is month and the y-axis is the average monthly temperature in celsius. Add a line connecting the points within each season and color the lines and points by season (same color for lines and points in the same season). Be sure both x-axis and the legend are ordered appropriately, and that all labels/titles are clear and ready for publication (e.g.&nbsp;no variable names).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average temperature (in celsius) of each month</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.3     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nnmaps <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">temp_c =</span> <span class="dv">5</span><span class="sc">*</span>(temp<span class="dv">-32</span>)<span class="sc">/</span><span class="dv">9</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month_numeric) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">avg_temp =</span> <span class="fu">mean</span>(temp_c)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(avg_temp, month_numeric, season) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="ot">-&gt;</span> nnmaps_with_avg_temp</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the scatter-plot</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nnmaps_with_avg_temp, </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> month_numeric, <span class="at">y =</span> avg_temp, <span class="at">color =</span> season)) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average Temperature by Month"</span>, </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Average Temperature (in Celsius)"</span>) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Problem-Set-5_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="part-b" class="level2">
+<h2 class="anchored" data-anchor-id="part-b">Part b</h2>
+<p>Produce a similar plot with four sets of lines: mean monthly temperature in celsius, mean monthly o3, mean monthly PM10, and mean monthly dewpoint. Figure out a way to distinguish between the four lines. Again, make sure the plot is publication-ready (clean and clear labels).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate those quantities of each month</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>nnmaps <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">temp_c =</span> <span class="dv">5</span><span class="sc">*</span>(temp<span class="dv">-32</span>)<span class="sc">/</span><span class="dv">9</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(month_numeric) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">avg_temp =</span> <span class="fu">mean</span>(temp_c), </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">avg_o3 =</span> <span class="fu">mean</span>(o3), </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">avg_pm10 =</span> <span class="fu">mean</span>(pm10), </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">avg_dewpoint =</span> <span class="fu">mean</span>(dewpoint)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(avg_temp, avg_o3, avg_pm10, avg_dewpoint, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>         month_numeric, season) <span class="sc">%&gt;%</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="ot">-&gt;</span> nnmaps_with_avg</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the plot</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(nnmaps_with_avg, <span class="fu">aes</span>(<span class="at">x =</span> month_numeric)) <span class="sc">+</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_temp, <span class="at">color =</span> season)) <span class="sc">+</span> </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_o3, <span class="at">color =</span> season)) <span class="sc">+</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_pm10, <span class="at">color =</span> season)) <span class="sc">+</span> </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_dewpoint, <span class="at">color =</span> season)) <span class="sc">+</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_temp, <span class="at">color =</span> season, <span class="at">linetype =</span> <span class="st">"Average Temperature"</span>)) <span class="sc">+</span> </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_o3, <span class="at">color =</span> season, <span class="at">linetype =</span> <span class="st">"Average O3"</span>)) <span class="sc">+</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_pm10, <span class="at">color =</span> season, <span class="at">linetype =</span> <span class="st">"Average PM10"</span>)) <span class="sc">+</span> </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> avg_dewpoint, <span class="at">color =</span> season, <span class="at">linetype =</span> <span class="st">"Average Dewpoint"</span>)) <span class="sc">+</span> </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Quantities by Month"</span>, </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>, </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Quantity"</span>) <span class="sc">+</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Problem-Set-5_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It seems that PM10 has the least seasonal trend. Because PM10 quantities fluctuate the least among the four variables with season and month.</p>
+</section>
+</section>
+<section id="problem-2" class="level1">
+<h1>Problem 2</h1>
+<p>Create a class to represent a polynomial expression called poly. Do this using S4.</p>
+<section id="part-a-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-1">Part a</h2>
+<p>For the poly class, define the following:</p>
+<p>• A constructor</p>
+<p>• A validator</p>
+<p>• A show method</p>
+<p>• Addition and substraction</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the class "poly"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setClass</span>(<span class="st">"poly"</span>, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">slots =</span> <span class="fu">c</span>(<span class="at">coefficients =</span> <span class="st">"numeric"</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">degree =</span> <span class="st">"integer"</span>, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">string =</span> <span class="st">"character"</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the constructor of "poly"</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome to ch package
+Frequently functions about ch:
+   show_color(), ggpng(), plot_table()
+   showruler(), period_table(), symb()
+   csv2vcf(), lat_fmt(), ground_state()
+   state_1(), state_2(), sym2poly()</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>make_poly <span class="ot">&lt;-</span> <span class="cf">function</span>(string) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  poly_str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"([0-9a-zA-Z]+)([a-zA-Z])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1*</span><span class="sc">\\</span><span class="st">2"</span>, string)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  coef <span class="ot">&lt;-</span> <span class="fu">sym2coef</span>(poly_str)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  deg <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">new</span>(<span class="st">"poly"</span>, <span class="at">coefficients =</span> coef, <span class="at">degree =</span> deg, <span class="at">string =</span> string))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the validator of "poly"</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">setValidity</span>(<span class="st">"poly"</span>, <span class="cf">function</span>(object) {</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  poly_str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"([0-9a-zA-Z]+)([a-zA-Z])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1*</span><span class="sc">\\</span><span class="st">2"</span>, object<span class="sc">@</span>string)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  coef <span class="ot">&lt;-</span> <span class="fu">sym2coef</span>(poly_str)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  deg <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.numeric</span>(coef)) {</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"coefficients not numeric"</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.integer</span>(deg)) {</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"degree not integer"</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> <span class="cf">if</span> (deg <span class="sc">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"degree is negative"</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> {</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="cn">TRUE</span>)</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Class "poly" [in ".GlobalEnv"]
+
+Slots:
+                                             
+Name:  coefficients       degree       string
+Class:      numeric      integer    character</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the show method</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="do">##' @title Display a `poly` object</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param object A `poly` object</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">setMethod</span>(<span class="st">"show"</span>, <span class="st">"poly"</span>, <span class="cf">function</span>(object) {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(object<span class="sc">@</span>string)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the addition method</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="do">##' @title `poly` arithmetic.</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param e1 A `poly`</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param e2 A `poly`</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="do">##' @return A `poly`</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="fu">setMethod</span>(<span class="st">"+"</span>, <span class="fu">signature</span>(<span class="at">e1 =</span> <span class="st">"poly"</span>, </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">e2 =</span> <span class="st">"poly"</span>), </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>          <span class="cf">function</span>(e1, e2) {</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            poly_str_1 <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"([0-9a-zA-Z]+)([a-zA-Z])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1*</span><span class="sc">\\</span><span class="st">2"</span>, e1<span class="sc">@</span>string)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>            coef_1 <span class="ot">&lt;-</span> <span class="fu">sym2coef</span>(poly_str_1)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>            deg_1 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef_1)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            poly_str_2 <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"([0-9a-zA-Z]+)([a-zA-Z])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1*</span><span class="sc">\\</span><span class="st">2"</span>, e2<span class="sc">@</span>string)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            coef_2 <span class="ot">&lt;-</span> <span class="fu">sym2coef</span>(poly_str_2)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>            deg_2 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef_2)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>            max_len <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">length</span>(coef_1), <span class="fu">length</span>(coef_2))</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>            coef_1_exd <span class="ot">&lt;-</span> <span class="fu">c</span>(coef_1, <span class="fu">rep</span>(<span class="dv">0</span>, max_len<span class="sc">-</span><span class="fu">length</span>(coef_1)))</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>            coef_2_exd <span class="ot">&lt;-</span> <span class="fu">c</span>(coef_2, <span class="fu">rep</span>(<span class="dv">0</span>, max_len<span class="sc">-</span><span class="fu">length</span>(coef_2)))</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>            coef <span class="ot">&lt;-</span> coef_1_exd<span class="sc">+</span>coef_2_exd</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>            deg <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">paste</span>(coef, <span class="st">"x^"</span>, <span class="fu">seq_along</span>(coef) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">sep =</span> <span class="st">""</span>, <span class="at">collapse =</span> <span class="st">"+"</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"x</span><span class="sc">\\</span><span class="st">^0"</span>, <span class="st">""</span>, str)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"x</span><span class="sc">\\</span><span class="st">^1"</span>, <span class="st">"x"</span>, str)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">+([+-])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, str)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"1x"</span>, <span class="st">"x"</span>, str)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">return</span>(<span class="fu">make_poly</span>(str))</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>          })</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the substraction method</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="do">##' @title `poly` arithmetic.</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="do">##'</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param e1 A `poly`</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param e2 A `poly`</span></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="do">##' @return A `poly`</span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="fu">setMethod</span>(<span class="st">"-"</span>, <span class="fu">signature</span>(<span class="at">e1 =</span> <span class="st">"poly"</span>, </span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>                         <span class="at">e2 =</span> <span class="st">"poly"</span>), </span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>          <span class="cf">function</span>(e1, e2) {</span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>            poly_str_1 <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"([0-9a-zA-Z]+)([a-zA-Z])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1*</span><span class="sc">\\</span><span class="st">2"</span>, e1<span class="sc">@</span>string)</span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>            coef_1 <span class="ot">&lt;-</span> <span class="fu">sym2coef</span>(poly_str_1)</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>            deg_1 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef_1)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>            poly_str_2 <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"([0-9a-zA-Z]+)([a-zA-Z])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1*</span><span class="sc">\\</span><span class="st">2"</span>, e2<span class="sc">@</span>string)</span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>            coef_2 <span class="ot">&lt;-</span> <span class="fu">sym2coef</span>(poly_str_2)</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>            deg_2 <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef_2)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>            max_len <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">length</span>(coef_1), <span class="fu">length</span>(coef_2))</span>
+<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>            coef_1_exd <span class="ot">&lt;-</span> <span class="fu">c</span>(coef_1, <span class="fu">rep</span>(<span class="dv">0</span>, max_len<span class="sc">-</span><span class="fu">length</span>(coef_1)))</span>
+<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>            coef_2_exd <span class="ot">&lt;-</span> <span class="fu">c</span>(coef_2, <span class="fu">rep</span>(<span class="dv">0</span>, max_len<span class="sc">-</span><span class="fu">length</span>(coef_2)))</span>
+<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>            coef <span class="ot">&lt;-</span> coef_1_exd<span class="sc">-</span>coef_2_exd</span>
+<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>            deg <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">length</span>(coef)<span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">paste</span>(coef, <span class="st">"x^"</span>, <span class="fu">seq_along</span>(coef) <span class="sc">-</span> <span class="dv">1</span>, <span class="at">sep =</span> <span class="st">""</span>, <span class="at">collapse =</span> <span class="st">"+"</span>)</span>
+<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"x</span><span class="sc">\\</span><span class="st">^0"</span>, <span class="st">""</span>, str)</span>
+<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"x</span><span class="sc">\\</span><span class="st">^1"</span>, <span class="st">"x"</span>, str)</span>
+<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">+([+-])"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">1"</span>, str)</span>
+<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>            str <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"1x"</span>, <span class="st">"x"</span>, str)</span>
+<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>            <span class="fu">return</span>(<span class="fu">make_poly</span>(str))</span>
+<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>          })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="part-b-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-1">Part b</h2>
+<p>Use my poly class to run the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">make_poly</span>(<span class="st">"3x^2 + 2"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">make_poly</span>(<span class="st">"7x^3 - 2x^2 - x + 17"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3x^2 + 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7x^3 - 2x^2 - x + 17</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>19-x+x^2+7x^3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">-</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-15+x+5x^2-7x^3</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-3" class="level1">
+<h1>Problem 3</h1>
+<section id="part-a-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-a-2">Part a</h2>
+<p>Generate a table reporting the mean and median departure delay per airport. Additionally,</p>
+<p>• Order both tables in descending mean delay;</p>
+<p>• Both tables should use the airport names not the airport codes;</p>
+<p>• Both tables should print all rows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'data.table'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:lubridate':
+
+    hour, isoweek, mday, minute, month, quarter, second, wday, week,
+    yday, year</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:dplyr':
+
+    between, first, last</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    transpose</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check what the data sets "flights" and "airports" look like</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(flights)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airports)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>flights <span class="ot">&lt;-</span> <span class="fu">data.table</span>(flights)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>airports <span class="ot">&lt;-</span> <span class="fu">data.table</span>(airports)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>flights</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        year month day dep_time sched_dep_time dep_delay arr_time
+     1: 2013     1   1      517            515         2      830
+     2: 2013     1   1      533            529         4      850
+     3: 2013     1   1      542            540         2      923
+     4: 2013     1   1      544            545        -1     1004
+     5: 2013     1   1      554            600        -6      812
+    ---                                                          
+336772: 2013     9  30       NA           1455        NA       NA
+336773: 2013     9  30       NA           2200        NA       NA
+336774: 2013     9  30       NA           1210        NA       NA
+336775: 2013     9  30       NA           1159        NA       NA
+336776: 2013     9  30       NA            840        NA       NA
+        sched_arr_time arr_delay carrier flight tailnum origin dest air_time
+     1:            819        11      UA   1545  N14228    EWR  IAH      227
+     2:            830        20      UA   1714  N24211    LGA  IAH      227
+     3:            850        33      AA   1141  N619AA    JFK  MIA      160
+     4:           1022       -18      B6    725  N804JB    JFK  BQN      183
+     5:            837       -25      DL    461  N668DN    LGA  ATL      116
+    ---                                                                     
+336772:           1634        NA      9E   3393    &lt;NA&gt;    JFK  DCA       NA
+336773:           2312        NA      9E   3525    &lt;NA&gt;    LGA  SYR       NA
+336774:           1330        NA      MQ   3461  N535MQ    LGA  BNA       NA
+336775:           1344        NA      MQ   3572  N511MQ    LGA  CLE       NA
+336776:           1020        NA      MQ   3531  N839MQ    LGA  RDU       NA
+        distance hour minute           time_hour
+     1:     1400    5     15 2013-01-01 05:00:00
+     2:     1416    5     29 2013-01-01 05:00:00
+     3:     1089    5     40 2013-01-01 05:00:00
+     4:     1576    5     45 2013-01-01 05:00:00
+     5:      762    6      0 2013-01-01 06:00:00
+    ---                                         
+336772:      213   14     55 2013-09-30 14:00:00
+336773:      198   22      0 2013-09-30 22:00:00
+336774:      764   12     10 2013-09-30 12:00:00
+336775:      419   11     59 2013-09-30 11:00:00
+336776:      431    8     40 2013-09-30 08:00:00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>airports</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      faa                          name      lat        lon  alt tz dst
+   1: 04G             Lansdowne Airport 41.13047  -80.61958 1044 -5   A
+   2: 06A Moton Field Municipal Airport 32.46057  -85.68003  264 -6   A
+   3: 06C           Schaumburg Regional 41.98934  -88.10124  801 -6   A
+   4: 06N               Randall Airport 41.43191  -74.39156  523 -5   A
+   5: 09J         Jekyll Island Airport 31.07447  -81.42778   11 -5   A
+  ---                                                                  
+1454: ZUN                    Black Rock 35.08323 -108.79178 6454 -7   A
+1455: ZVE        New Haven Rail Station 41.29867  -72.92599    7 -5   A
+1456: ZWI     Wilmington Amtrak Station 39.73667  -75.55167    0 -5   A
+1457: ZWU      Washington Union Station 38.89746  -77.00643   76 -5   A
+1458: ZYP                  Penn Station 40.75050  -73.99350   35 -5   A
+                 tzone
+   1: America/New_York
+   2:  America/Chicago
+   3:  America/Chicago
+   4: America/New_York
+   5: America/New_York
+  ---                 
+1454:   America/Denver
+1455: America/New_York
+1456: America/New_York
+1457: America/New_York
+1458: America/New_York</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the airport codes to airport names</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>airports[, .(faa, name)] <span class="sc">|&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">origin =</span> faa) <span class="sc">|&gt;</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">merge</span>(<span class="at">x =</span> _, flights, <span class="at">by =</span> <span class="st">'origin'</span>, <span class="at">all.y =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, dep_delay) <span class="ot">-&gt;</span> renamed_flights_dep</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the table</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>renamed_flights_dep_no_na <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(renamed_flights_dep)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>flights1 <span class="ot">&lt;-</span> renamed_flights_dep_no_na[, </span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                                      .(<span class="at">mean_dep_delay =</span> </span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">mean</span>(dep_delay), </span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">median_dep_delay =</span> </span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">median</span>(dep_delay)), </span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>                    by <span class="ot">=</span> .(name)][<span class="fu">order</span>(<span class="sc">-</span>mean_dep_delay)]</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>flights1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  name mean_dep_delay median_dep_delay
+1: Newark Liberty Intl       15.10795               -1
+2: John F Kennedy Intl       12.11216               -1
+3:          La Guardia       10.34688               -3</code></pre>
+</div>
+</div>
+<p>Generate a second table reporting the mean and median arrival delay per airport. Exclude any destination with under 10 flights. Additionally,</p>
+<p>• Order both tables in descending mean delay;</p>
+<p>• Both tables should use the airport names not the airport codes;</p>
+<p>• Both tables should print all rows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exclude any destination with under 10 flights</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>flights_filtered <span class="ot">&lt;-</span> flights[, .N, by <span class="ot">=</span> dest][N <span class="sc">&gt;=</span> <span class="dv">10</span>]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>flights_filtered <span class="sc">|&gt;</span> </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">num_flights =</span> N) <span class="sc">|&gt;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">merge</span>(<span class="at">x =</span> _, flights, <span class="at">by =</span> <span class="st">'dest'</span>, <span class="at">all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(dep_delay, origin, arr_delay, dest) <span class="ot">-&gt;</span> filtered_flights</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the airport codes to airport names</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>airports[, .(faa, name)] <span class="sc">|&gt;</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">dest =</span> faa) <span class="sc">|&gt;</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">merge</span>(<span class="at">x =</span> _, filtered_flights, <span class="at">by =</span> <span class="st">'dest'</span>, <span class="at">all.y =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, arr_delay) <span class="ot">-&gt;</span> renamed_flights_dest</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the table</span></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>renamed_flights_dest_no_na <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(renamed_flights_dest)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>flights2 <span class="ot">&lt;-</span> renamed_flights_dest_no_na[, </span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>                                      .(<span class="at">mean_dest_delay =</span> </span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>                                          <span class="fu">mean</span>(arr_delay), </span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>                        <span class="at">median_dest_delay =</span> </span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">median</span>(arr_delay)), </span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>                    by <span class="ot">=</span> .(name)][<span class="fu">order</span>(<span class="sc">-</span>mean_dest_delay)]</span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a>flights2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                     name mean_dest_delay median_dest_delay
+  1:                Columbia Metropolitan     41.76415094              28.0
+  2:                           Tulsa Intl     33.65986395              14.0
+  3:                    Will Rogers World     30.61904762              16.0
+  4:                 Jackson Hole Airport     28.09523810              15.0
+  5:                        Mc Ghee Tyson     24.06920415               2.0
+  6:               Dane Co Rgnl Truax Fld     20.19604317               1.0
+  7:                        Richmond Intl     20.11125320               1.0
+  8:        Akron Canton Regional Airport     19.69833729               3.0
+  9:                      Des Moines Intl     19.00573614               0.0
+ 10:                   Gerald R Ford Intl     18.18956044               1.0
+ 11:                      Birmingham Intl     16.87732342              -2.0
+ 12:         Theodore Francis Green State     16.23463687               1.0
+ 13: Greenville-Spartanburg International     15.93544304              -0.5
+ 14:    Cincinnati Northern Kentucky Intl     15.36456376              -3.0
+ 15:            Savannah Hilton Head Intl     15.12950601              -1.0
+ 16:          Manchester Regional Airport     14.78755365              -3.0
+ 17:                          Eppley Afld     14.69889841              -2.0
+ 18:                               Yeager     14.67164179              -1.5
+ 19:                     Kansas City Intl     14.51405836               0.0
+ 20:                          Albany Intl     14.39712919              -4.0
+ 21:                General Mitchell Intl     14.16722038               0.0
+ 22:                       Piedmont Triad     14.11260054              -2.0
+ 23:               Washington Dulles Intl     13.86420212              -3.0
+ 24:               Cherry Capital Airport     12.96842105             -10.0
+ 25:              James M Cox Dayton Intl     12.68048606              -3.0
+ 26:     Louisville International Airport     12.66938406              -2.0
+ 27:                  Chicago Midway Intl     12.36422360              -1.0
+ 28:                      Sacramento Intl     12.10992908               4.0
+ 29:                    Jacksonville Intl     11.84483416              -2.0
+ 30:                       Nashville Intl     11.81245891              -2.0
+ 31:                Portland Intl Jetport     11.66040210              -4.0
+ 32:               Greater Rochester Intl     11.56064461              -5.0
+ 33:      Hartsfield Jackson Atlanta Intl     11.30011285              -1.0
+ 34:                Lambert St Louis Intl     11.07846451              -3.0
+ 35:                         Norfolk Intl     10.94909344              -4.0
+ 36:            Baltimore Washington Intl     10.72673385              -5.0
+ 37:                         Memphis Intl     10.64531435              -2.5
+ 38:                   Port Columbus Intl     10.60132291              -3.0
+ 39:                  Charleston Afb Intl     10.59296847              -4.0
+ 40:                    Philadelphia Intl     10.12719014              -3.0
+ 41:                  Raleigh Durham Intl     10.05238095              -3.0
+ 42:                    Indianapolis Intl      9.94043412              -3.0
+ 43:            Charlottesville-Albemarle      9.50000000              -5.0
+ 44:               Cleveland Hopkins Intl      9.18161129              -5.0
+ 45:        Ronald Reagan Washington Natl      9.06695204              -2.0
+ 46:                      Burlington Intl      8.95099602              -4.0
+ 47:                 Buffalo Niagara Intl      8.94595186              -5.0
+ 48:                Syracuse Hancock Intl      8.90392501              -5.0
+ 49:                          Denver Intl      8.60650021              -2.0
+ 50:                      Palm Beach Intl      8.56297210              -3.0
+ 51:                             Bob Hope      8.17567568              -3.0
+ 52:       Fort Lauderdale Hollywood Intl      8.08212154              -3.0
+ 53:                          Bangor Intl      8.02793296              -9.0
+ 54:           Asheville Regional Airport      8.00383142              -1.0
+ 55:                      Pittsburgh Intl      7.68099053              -5.0
+ 56:                       Gallatin Field      7.60000000              -2.0
+ 57:                 NW Arkansas Regional      7.46572581              -2.0
+ 58:                           Tampa Intl      7.40852503              -4.0
+ 59:               Charlotte Douglas Intl      7.36031885              -3.0
+ 60:             Minneapolis St Paul Intl      7.27016886              -5.0
+ 61:                      William P Hobby      7.17618819              -4.0
+ 62:                         Bradley Intl      7.04854369             -10.0
+ 63:                     San Antonio Intl      6.94537178              -9.0
+ 64:                      South Bend Rgnl      6.50000000              -3.5
+ 65:     Louis Armstrong New Orleans Intl      6.49017497              -6.0
+ 66:                        Key West Intl      6.35294118               7.0
+ 67:                        Eagle Co Rgnl      6.30434783              -4.0
+ 68:                Austin Bergstrom Intl      6.01990875              -5.0
+ 69:                   Chicago Ohare Intl      5.87661475              -8.0
+ 70:                         Orlando Intl      5.45464309              -5.0
+ 71:               Detroit Metro Wayne Co      5.42996346              -7.0
+ 72:                        Portland Intl      5.14157973              -5.0
+ 73:                        Nantucket Mem      4.85227273              -3.0
+ 74:                      Wilmington Intl      4.63551402              -7.0
+ 75:                    Myrtle Beach Intl      4.60344828             -13.0
+ 76:    Albuquerque International Sunport      4.38188976              -5.5
+ 77:         George Bush Intercontinental      4.24079040              -5.0
+ 78:        Norman Y Mineta San Jose Intl      3.44817073              -7.0
+ 79:               Southwest Florida Intl      3.23814963              -5.0
+ 80:                       San Diego Intl      3.13916574              -5.0
+ 81:              Sarasota Bradenton Intl      3.08243131              -5.0
+ 82:            Metropolitan Oakland Intl      3.07766990              -9.0
+ 83:   General Edward Lawrence Logan Intl      2.91439222              -9.0
+ 84:                   San Francisco Intl      2.67289152              -8.0
+ 85:                         Yampa Valley      2.14285714               2.0
+ 86:              Phoenix Sky Harbor Intl      2.09704733              -6.0
+ 87:            Montrose Regional Airport      1.78571429             -10.5
+ 88:                     Los Angeles Intl      0.54711094              -7.0
+ 89:               Dallas Fort Worth Intl      0.32212685              -9.0
+ 90:                           Miami Intl      0.29905978              -9.0
+ 91:                       Mc Carran Intl      0.25772849              -8.0
+ 92:                  Salt Lake City Intl      0.17625459              -8.0
+ 93:                           Long Beach     -0.06202723             -10.0
+ 94:                Martha\\\\'s Vineyard     -0.28571429             -11.0
+ 95:                  Seattle Tacoma Intl     -1.09909910             -11.0
+ 96:                        Honolulu Intl     -1.36519258              -7.0
+ 97:           Ted Stevens Anchorage Intl     -2.50000000               1.5
+ 98:            John Wayne Arpt Orange Co     -7.86822660             -11.0
+ 99:                    Palm Springs Intl    -12.72222222             -13.5
+100:                           Blue Grass    -22.00000000             -22.0
+                                     name mean_dest_delay median_dest_delay</code></pre>
+</div>
+</div>
+</section>
+<section id="part-b-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-b-2">Part b</h2>
+<p>How many flights did the aircraft model with the fastest average speed take? Produce a data.table with 1 row, and entires for the model, average speed (in MPH) and number of flights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check what the data set "planes" looks like</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(planes)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>planes <span class="ot">&lt;-</span> <span class="fu">data.table</span>(planes)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>planes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      tailnum year                    type                  manufacturer
+   1:  N10156 2004 Fixed wing multi engine                       EMBRAER
+   2:  N102UW 1998 Fixed wing multi engine              AIRBUS INDUSTRIE
+   3:  N103US 1999 Fixed wing multi engine              AIRBUS INDUSTRIE
+   4:  N104UW 1999 Fixed wing multi engine              AIRBUS INDUSTRIE
+   5:  N10575 2002 Fixed wing multi engine                       EMBRAER
+  ---                                                                   
+3318:  N997AT 2002 Fixed wing multi engine                        BOEING
+3319:  N997DL 1992 Fixed wing multi engine MCDONNELL DOUGLAS AIRCRAFT CO
+3320:  N998AT 2002 Fixed wing multi engine                        BOEING
+3321:  N998DL 1992 Fixed wing multi engine MCDONNELL DOUGLAS CORPORATION
+3322:  N999DN 1992 Fixed wing multi engine MCDONNELL DOUGLAS CORPORATION
+          model engines seats speed    engine
+   1: EMB-145XR       2    55    NA Turbo-fan
+   2:  A320-214       2   182    NA Turbo-fan
+   3:  A320-214       2   182    NA Turbo-fan
+   4:  A320-214       2   182    NA Turbo-fan
+   5: EMB-145LR       2    55    NA Turbo-fan
+  ---                                        
+3318:   717-200       2   100    NA Turbo-fan
+3319:     MD-88       2   142    NA Turbo-fan
+3320:   717-200       2   100    NA Turbo-fan
+3321:     MD-88       2   142    NA Turbo-jet
+3322:     MD-88       2   142    NA Turbo-jet</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate each flight's average speed (in MPH)</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>flights_selected <span class="ot">&lt;-</span> flights[, .(tailnum, air_time, distance)]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>flights_selected_no_na <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(flights_selected)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>flights_speed <span class="ot">&lt;-</span> flights_selected_no_na[, </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                                        .(tailnum, </span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">speed_mph =</span> distance<span class="sc">*</span><span class="dv">60</span><span class="sc">/</span>air_time)]</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the data.table "planes" and "flights_speed"</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>flights_speed <span class="sc">|&gt;</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">merge</span>(<span class="at">x =</span> _, planes, <span class="at">by =</span> <span class="st">'tailnum'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(tailnum, speed_mph, model) <span class="ot">-&gt;</span> flights_and_planes</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the model with the highest average speed</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>flights_and_planes_mean_speed <span class="ot">&lt;-</span> flights_and_planes[, .(<span class="at">mean_speed_by_mod =</span> <span class="fu">mean</span>(speed_mph)), by <span class="ot">=</span> model]</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>max_model <span class="ot">&lt;-</span> flights_and_planes_mean_speed[mean_speed_by_mod <span class="sc">==</span> <span class="fu">max</span>(mean_speed_by_mod), ]</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the flights that are took by the model with the highest average speed</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>flights_max_model <span class="ot">&lt;-</span> flights_and_planes[model <span class="sc">==</span> max_model<span class="sc">$</span>model[<span class="dv">1</span>], ]</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Produce the result data.table</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>max_model_flights_num <span class="ot">&lt;-</span> flights_max_model[, .(<span class="at">avg_speed =</span> <span class="fu">mean</span>(speed_mph), <span class="at">flights_num =</span> .N), by <span class="ot">=</span> <span class="st">'model'</span>]</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the tibble</span></span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>max_model_flights_num</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     model avg_speed flights_num
+1: 777-222  482.6254           4</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
