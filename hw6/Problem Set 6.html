@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.353">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Yipeng Liu">
+
+<title>Problem Set 6</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Problem Set 6_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Problem Set 6_files/libs/quarto-html/quarto.js"></script>
+<script src="Problem Set 6_files/libs/quarto-html/popper.min.js"></script>
+<script src="Problem Set 6_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Problem Set 6_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Problem Set 6_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Problem Set 6_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Problem Set 6_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Problem Set 6_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Problem Set 6_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Problem Set 6</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Yipeng Liu </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="stratified-bootstrapping" class="level1">
+<h1>Stratified Bootstrapping</h1>
+<p>If a sample has a categorical variable with small groups, bootstrapping can be tricky. Consider a situation where n = 100, but there is some categorical variable g where category g = 1 has only 2 observations. If we resample with replacement 100 times from those observations, there is a</p>
+<p><span class="math display">\[(\frac{98}{100})^{100}\approx13\%\]</span></p>
+<p>chance that the bootstrap sample does not include either observation from g = 1. This implies that if we are attempting to obtain a bootstrap estimate in group g = 1, 13% of the bootstrapped samples will have no observations from that group and thus unable to produce an estimate.</p>
+<p>A way around this is to carry out stratified bootstrap: Instead of taking a sample with replacement of the whole sample, take separate samples with replacement within each strata of the same size of the strata, then combine those resamples to generate the bootstrap sample.</p>
+<p>Use the flights data from the nycflights13 package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the data</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(flights)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Stratify the data by ‘dests' </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>splitted_dat <span class="ot">&lt;-</span> <span class="fu">split</span>(flights, flights<span class="sc">$</span>dest)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>splitted_dat_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(splitted_dat, as.data.frame)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Check an example</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>splitted_dat_list<span class="sc">$</span>AVL</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    year month day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+1   2013     1   1      946            959       -13     1146           1202
+2   2013     1   2     1033            929        64     1235           1132
+3   2013    10   1     1632           1638        -6     1806           1829
+4   2013    10   2     1636           1638        -2     1822           1829
+5   2013    10   3     1746           1638        68     1937           1829
+6   2013    10   4     1643           1638         5     1839           1829
+7   2013    10   5     1631           1638        -7     1821           1829
+8   2013    10   6     1731           1638        53     1920           1829
+9   2013    10   7       NA           1638        NA       NA           1829
+10  2013    10   8     1643           1638         5     1846           1829
+11  2013    10   9     1634           1638        -4     1818           1829
+12  2013    10  10       NA           1638        NA       NA           1829
+13  2013    10  11       NA           1638        NA       NA           1829
+14  2013    10  12     1629           1638        -9     1809           1829
+15  2013    10  13     1659           1638        21     1848           1829
+16  2013    10  14     1630           1638        -8     1825           1829
+17  2013    10  15     1713           1638        35     1859           1829
+18  2013    10  16     1637           1638        -1     1836           1829
+19  2013    10  17     1704           1638        26     1912           1829
+20  2013    10  18     1722           1638        44     1914           1829
+21  2013    10  19     1630           1638        -8     1837           1829
+22  2013    10  20     1633           1638        -5     1836           1829
+23  2013    10  21     1631           1638        -7     1829           1829
+24  2013    10  22     1630           1638        -8     1836           1829
+25  2013    10  23     1747           1638        69     2003           1829
+26  2013    10  24     1644           1638         6     1843           1829
+27  2013    10  25     1745           1638        67     1946           1829
+28  2013    10  26     1640           1638         2     1829           1829
+29  2013    10  27     1707           1638        29     1908           1829
+30  2013    10  28     1632           1638        -6     1820           1829
+31  2013    10  29     1636           1638        -2     1834           1829
+32  2013    10  30     1634           1638        -4     1829           1829
+33  2013    10  31     1628           1638       -10     1831           1829
+34  2013    11   1     1726           1638        48     1932           1829
+35  2013    11   2     1634           1638        -4     1836           1829
+36  2013    11   3     1638           1638         0     1824           1829
+37  2013    11   4     1633           1638        -5     1831           1829
+38  2013    11   5     1442           1446        -4     1631           1644
+39  2013    11   6     1440           1446        -6     1643           1644
+40  2013    11   7     1443           1446        -3     1650           1644
+41  2013    11   8     1539           1446        53     1731           1644
+42  2013    11   9     1513           1446        27     1720           1644
+43  2013    11  10     1440           1445        -5     1646           1643
+44  2013    11  11     1444           1446        -2     1634           1644
+45  2013    11  12     1443           1446        -3     1651           1644
+46  2013    11  13     1445           1446        -1     1618           1644
+47  2013    11  14     1447           1446         1     1633           1644
+48  2013    11  15     1459           1446        13     1653           1644
+49  2013    11  16     1446           1446         0     1638           1644
+50  2013    11  17     1440           1445        -5     1632           1643
+51  2013    11  18     1453           1446         7     1643           1644
+52  2013    11  19     1443           1446        -3     1631           1644
+53  2013    11  20     1441           1446        -5     1628           1644
+54  2013    11  21     1506           1446        20     1707           1644
+55  2013    11  22     1441           1446        -5     1639           1644
+56  2013    11  23     1445           1446        -1     1648           1644
+57  2013    11  24     1451           1445         6     1650           1643
+58  2013    11  25     1445           1446        -1     1641           1644
+59  2013    11  26     1459           1446        13     1713           1644
+60  2013    11  27     1517           1446        31     1754           1644
+61  2013    11  28     1543           1446        57     1734           1644
+62  2013    11  29     1440           1446        -6     1638           1644
+63  2013    11  30     1508           1446        22     1652           1644
+64  2013    12   1     1446           1445         1     1640           1643
+65  2013    12   2     1443           1446        -3     1639           1644
+66  2013    12   3     1441           1446        -5     1632           1644
+67  2013    12   4     1343           1349        -6     1526           1547
+68  2013    12   5       NA           1349        NA       NA           1547
+69  2013    12   6       NA           1349        NA       NA           1547
+70  2013    12   8     1343           1349        -6     1554           1547
+71  2013    12   9       NA           1349        NA       NA           1547
+72  2013    12  10       NA           1400        NA       NA           1558
+73  2013    12  11     1453           1349        64     1652           1547
+74  2013    12  12     1414           1349        25     1611           1547
+75  2013    12  13     1346           1349        -3     1545           1547
+76  2013    12  15     1341           1349        -8     1545           1547
+77  2013    12  16     1419           1349        30     1612           1547
+78  2013    12  17       NA           1400        NA       NA           1558
+79  2013    12  18     1345           1349        -4     1533           1547
+80  2013    12  19     1327           1329        -2     1509           1530
+81  2013    12  20     1414           1329        45     1609           1530
+82  2013    12  21     1431           1335        56     1621           1536
+83  2013    12  22     1316           1324        -8     1516           1525
+84  2013    12  23     1330           1329         1     1549           1530
+85  2013    12  24     1327           1329        -2     1522           1530
+86  2013    12  25     1326           1329        -3     1522           1530
+87  2013    12  26     1458           1329        89     1710           1530
+88  2013    12  27     1328           1329        -1     1524           1530
+89  2013    12  28     1405           1329        36     1559           1530
+90  2013    12  29     1322           1324        -2     1519           1525
+91  2013    12  30     1336           1329         7     1552           1530
+92  2013    12  31     1337           1329         8     1539           1530
+93  2013     4  14      937            945        -8     1130           1159
+94  2013     4  21      942            945        -3     1137           1159
+95  2013     4  28      940            945        -5     1153           1159
+96  2013     5   1      832            841        -9     1019           1039
+97  2013     5   2      832            841        -9     1016           1039
+98  2013     5   3      840            841        -1     1041           1039
+99  2013     5   4      824            832        -8     1009           1030
+100 2013     5   5      829            837        -8     1010           1035
+101 2013     5   5      954            935        19     1157           1151
+102 2013     5   6      837            841        -4     1031           1039
+103 2013     5   7      835            836        -1     1031           1034
+104 2013     5   8      849            841         8     1024           1039
+105 2013     5   9      836            841        -5     1040           1039
+106 2013     5  10      837            841        -4     1031           1039
+107 2013     5  11      822            832       -10     1030           1030
+108 2013     5  12      828            837        -9     1017           1035
+109 2013     5  12      924            935       -11     1127           1151
+110 2013     5  13      839            841        -2     1033           1039
+111 2013     5  14      839            841        -2     1038           1039
+112 2013     5  15      837            841        -4     1027           1039
+113 2013     5  16      838            841        -3     1039           1039
+114 2013     5  17      833            841        -8     1022           1039
+115 2013     5  18      822            832       -10     1014           1030
+116 2013     5  19      827            837       -10     1015           1035
+117 2013     5  19      925            935       -10     1122           1151
+118 2013     5  20      833            841        -8     1026           1039
+119 2013     5  21      850            841         9     1105           1039
+120 2013     5  22      834            841        -7     1029           1039
+121 2013     5  23      839            841        -2     1059           1039
+122 2013     5  24      837            841        -4     1045           1039
+123 2013     5  25      825            829        -4     1003           1027
+124 2013     5  26      826            832        -6     1006           1030
+125 2013     5  26     1151           1159        -8     1400           1408
+126 2013     5  27      833            841        -8     1013           1039
+127 2013     5  28      847            841         6     1042           1039
+128 2013     5  29      837            841        -4     1040           1039
+129 2013     5  30      836            841        -5     1023           1039
+130 2013     5  31      926            841        45     1106           1039
+131 2013     6   1      851            832        19     1035           1030
+132 2013     6   2      832            837        -5     1025           1035
+133 2013     6   2      928            935        -7     1148           1151
+134 2013     6   3      840            841        -1     1059           1039
+135 2013     6   4      837            841        -4     1041           1039
+136 2013     6   5      835            841        -6     1038           1039
+137 2013     6   6      827            819         8     1058           1010
+138 2013     6   7      957            818        99     1146           1009
+139 2013     6   8      845            815        30     1035           1010
+140 2013     6   8     1200           1200         0     1354           1350
+141 2013     6   9      807            814        -7     1000           1011
+142 2013     6   9      938            935         3     1132           1151
+143 2013     6   9     1056           1053         3     1237           1250
+144 2013     6  10      813            816        -3     1010           1007
+145 2013     6  11      809            816        -7      955           1007
+146 2013     6  12      853            816        37     1053           1007
+147 2013     6  13      832            816        16     1137           1007
+148 2013     6  14     1158            816       222     1335           1007
+149 2013     6  15      809            815        -6      949           1010
+150 2013     6  15     1157           1200        -3     1344           1350
+151 2013     6  16      810            814        -4      957           1011
+152 2013     6  16     1049           1053        -4     1231           1250
+153 2013     6  17      817            816         1     1010           1007
+154 2013     6  18      820            816         4     1026           1007
+155 2013     6  19      845            816        29     1102           1007
+156 2013     6  20      815            816        -1     1003           1007
+157 2013     6  21      817            816         1     1005           1007
+158 2013     6  22      935            815        80     1124           1010
+159 2013     6  22     1156           1200        -4     1339           1350
+160 2013     6  23      822            814         8     1009           1011
+161 2013     6  23     1049           1053        -4     1242           1250
+162 2013     6  24      813            816        -3     1007           1007
+163 2013     6  25      809            816        -7     1000           1007
+164 2013     6  26      808            816        -8     1010           1007
+165 2013     6  27      811            816        -5      955           1007
+166 2013     6  28      827            816        11     1015           1007
+167 2013     6  29      812            815        -3     1003           1010
+168 2013     6  29     1158           1200        -2     1343           1350
+169 2013     6  30      808            814        -6     1006           1011
+170 2013     6  30     1051           1053        -2     1239           1250
+171 2013     7   1      814            816        -2     1047           1007
+172 2013     7   2      837            835         2     1028           1024
+173 2013     7   3      838            835         3     1046           1024
+174 2013     7   4      826            835        -9     1006           1024
+175 2013     7   5      830            835        -5     1027           1024
+176 2013     7   6      813            815        -2      952           1012
+177 2013     7   6     1203           1209        -6     1346           1359
+178 2013     7   7      824            830        -6     1017           1027
+179 2013     7   7     1032           1039        -7     1219           1235
+180 2013     7   8      827            835        -8     1030           1024
+181 2013     7   9      826            835        -9     1007           1024
+182 2013     7  10       NA            835        NA       NA           1024
+183 2013     7  11     1001            835        86     1159           1024
+184 2013     7  12      830            835        -5     1031           1024
+185 2013     7  13      850            815        35     1052           1012
+186 2013     7  13     1104           1100         4     1325           1312
+187 2013     7  13     1230           1209        21     1418           1359
+188 2013     7  14      822            830        -8     1027           1027
+189 2013     7  14     1103           1039        24     1249           1235
+190 2013     7  15      834            835        -1     1022           1024
+191 2013     7  16      930            835        55     1125           1024
+192 2013     7  17      830            835        -5     1023           1024
+193 2013     7  18      843            835         8     1058           1024
+194 2013     7  19      834            835        -1     1049           1024
+195 2013     7  20      838            815        23     1017           1012
+196 2013     7  20     1204           1209        -5     1350           1359
+197 2013     7  21      825            830        -5     1010           1027
+198 2013     7  21     1034           1039        -5     1218           1235
+199 2013     7  22      831            835        -4     1025           1024
+200 2013     7  23      843            835         8     1755           1024
+201 2013     7  24      830            835        -5     1027           1024
+202 2013     7  25      830            835        -5     1020           1024
+203 2013     7  26      829            835        -6     1030           1024
+204 2013     7  27      813            815        -2     1003           1012
+205 2013     7  27     1159           1209       -10     1349           1359
+206 2013     7  28      820            830       -10     1018           1027
+207 2013     7  28     1032           1039        -7     1221           1235
+208 2013     7  29      850            835        15     1037           1024
+209 2013     7  30      833            835        -2     1026           1024
+210 2013     7  31      832            835        -3     1038           1024
+211 2013     8   1      828            835        -7     1052           1024
+212 2013     8   2      829            835        -6     1024           1024
+213 2013     8   3      812            815        -3      953           1012
+214 2013     8   3     1201           1209        -8     1350           1359
+215 2013     8   4      824            830        -6     1017           1027
+216 2013     8   4     1033           1039        -6     1219           1235
+217 2013     8   5      831            835        -4     1023           1024
+218 2013     8   6      824            835       -11     1018           1024
+219 2013     8   7      832            835        -3     1042           1024
+220 2013     8   8      929            835        54     1119           1024
+221 2013     8   9       NA            835        NA       NA           1024
+222 2013     8  10      811            815        -4     1014           1012
+223 2013     8  10     1202           1209        -7     1407           1359
+224 2013     8  11      830            830         0     1037           1027
+225 2013     8  11     1034           1039        -5     1218           1235
+226 2013     8  12      826            835        -9     1011           1024
+227 2013     8  13     1156            832       204     1417           1029
+228 2013     8  14      952            832        80     1152           1029
+229 2013     8  15      932            832        60     1134           1029
+230 2013     8  16      836            832         4     1030           1029
+231 2013     8  17      830            836        -6     1028           1030
+232 2013     8  18      830            835        -5     1027           1026
+233 2013     8  19      824            832        -8     1019           1029
+234 2013     8  20      830            832        -2     1024           1029
+235 2013     8  21      822            832       -10     1010           1029
+236 2013     8  22      825            832        -7     1109           1029
+237 2013     8  23      830            832        -2     1026           1029
+238 2013     8  24      826            836       -10     1009           1030
+239 2013     8  25      830            835        -5     1015           1026
+240 2013     8  26      822            832       -10     1004           1029
+241 2013     8  27     1554           1559        -5     1748           1750
+242 2013     8  28       NA           1559        NA       NA           1750
+243 2013     8  29     1557           1559        -2     1744           1750
+244 2013     8  30     1553           1559        -6     1751           1750
+245 2013     8  31     1548           1600       -12     1744           1751
+246 2013     9   1     1550           1559        -9     1732           1750
+247 2013     9   2     1724           1559        85     1904           1750
+248 2013     9   3     1558           1559        -1     1751           1750
+249 2013     9   4     1554           1559        -5     1745           1750
+250 2013     9   5     1556           1559        -3     1742           1750
+251 2013     9   6     1552           1559        -7     1738           1750
+252 2013     9   7     1548           1559       -11     1726           1750
+253 2013     9   8     1556           1559        -3     1743           1750
+254 2013     9   9     1551           1559        -8     1730           1750
+255 2013     9  10     1720           1559        81     1900           1750
+256 2013     9  11     1634           1559        35     1834           1750
+257 2013     9  12       NA           1559        NA       NA           1750
+258 2013     9  13     1554           1559        -5     1742           1750
+259 2013     9  14     1623           1559        24     1757           1750
+260 2013     9  15     1554           1559        -5     1741           1750
+261 2013     9  16     1559           1559         0     1753           1750
+262 2013     9  17     1549           1559       -10     1730           1750
+263 2013     9  18     1552           1559        -7     1732           1750
+264 2013     9  19     1605           1559         6     1751           1750
+265 2013     9  20     1649           1559        50     1830           1750
+266 2013     9  21     1550           1559        -9     1749           1750
+267 2013     9  22     1618           1559        19     2228           1750
+268 2013     9  23     1807           1559       128     1957           1750
+269 2013     9  24     1552           1559        -7     1740           1750
+270 2013     9  25     1630           1638        -8     1831           1829
+271 2013     9  26     1834           1638       116     2039           1829
+272 2013     9  27     1632           1638        -6     1809           1829
+273 2013     9  28     1630           1638        -8     1806           1829
+274 2013     9  29     1725           1638        47     1907           1829
+275 2013     9  30     1641           1638         3     1833           1829
+    arr_delay carrier flight tailnum origin dest air_time distance hour minute
+1         -16      EV   4175  N15912    EWR  AVL      105      583    9     59
+2          63      EV   4175  N13914    EWR  AVL      100      583    9     29
+3         -23      EV   4175  N16954    EWR  AVL       78      583   16     38
+4          -7      EV   4175  N12569    EWR  AVL       84      583   16     38
+5          68      EV   4175  N13968    EWR  AVL       90      583   16     38
+6          10      EV   4175  N13913    EWR  AVL       81      583   16     38
+7          -8      EV   4175  N29917    EWR  AVL       84      583   16     38
+8          51      EV   4175  N10156    EWR  AVL       83      583   16     38
+9          NA      EV   4175  N14991    EWR  AVL       NA      583   16     38
+10         17      EV   4175  N14952    EWR  AVL       87      583   16     38
+11        -11      EV   4175  N13949    EWR  AVL       85      583   16     38
+12         NA      EV   4175  N27962    EWR  AVL       NA      583   16     38
+13         NA      EV   4175  N16546    EWR  AVL       NA      583   16     38
+14        -20      EV   4175  N12957    EWR  AVL       80      583   16     38
+15         19      EV   4175  N17159    EWR  AVL       80      583   16     38
+16         -4      EV   4175  N11539    EWR  AVL       87      583   16     38
+17         30      EV   4175  N11544    EWR  AVL       84      583   16     38
+18          7      EV   4175  N11536    EWR  AVL       94      583   16     38
+19         43      EV   4175  N12900    EWR  AVL      102      583   16     38
+20         45      EV   4175  N14977    EWR  AVL       98      583   16     38
+21          8      EV   4175  N12922    EWR  AVL      108      583   16     38
+22          7      EV   4175  N12145    EWR  AVL       96      583   16     38
+23          0      EV   4175  N13989    EWR  AVL      102      583   16     38
+24          7      EV   4175  N13975    EWR  AVL      106      583   16     38
+25         94      EV   4175  N17169    EWR  AVL       99      583   16     38
+26         14      EV   4175  N14950    EWR  AVL      102      583   16     38
+27         77      EV   4175  N16919    EWR  AVL       89      583   16     38
+28          0      EV   4175  N16976    EWR  AVL       92      583   16     38
+29         39      EV   4175  N12126    EWR  AVL       89      583   16     38
+30         -9      EV   4175  N15910    EWR  AVL       91      583   16     38
+31          5      EV   4175  N13914    EWR  AVL       88      583   16     38
+32          0      EV   4175  N13978    EWR  AVL       87      583   16     38
+33          2      EV   4175  N13955    EWR  AVL       96      583   16     38
+34         63      EV   4175  N14923    EWR  AVL      102      583   16     38
+35          7      EV   4175  N26549    EWR  AVL       98      583   16     38
+36         -5      EV   4175  N21130    EWR  AVL       88      583   16     38
+37          2      EV   4175  N13978    EWR  AVL       90      583   16     38
+38        -13      EV   4175  N26549    EWR  AVL       92      583   14     46
+39         -1      EV   4175  N19966    EWR  AVL       91      583   14     46
+40          6      EV   4175  N14959    EWR  AVL      105      583   14     46
+41         47      EV   4175  N14998    EWR  AVL       91      583   14     46
+42         36      EV   4175  N14568    EWR  AVL       94      583   14     46
+43          3      EV   4175  N14953    EWR  AVL       96      583   14     45
+44        -10      EV   4175  N15973    EWR  AVL       92      583   14     46
+45          7      EV   4175  N12540    EWR  AVL      110      583   14     46
+46        -26      EV   4175  N16919    EWR  AVL       77      583   14     46
+47        -11      EV   4175  N11539    EWR  AVL       90      583   14     46
+48          9      EV   4175  N11565    EWR  AVL       95      583   14     46
+49         -6      EV   4175  N12924    EWR  AVL       96      583   14     46
+50        -11      EV   4175  N13914    EWR  AVL       97      583   14     45
+51         -1      EV   4175  N16981    EWR  AVL       94      583   14     46
+52        -13      EV   4175  N15555    EWR  AVL       86      583   14     46
+53        -16      EV   4175  N13997    EWR  AVL       91      583   14     46
+54         23      EV   4175  N14907    EWR  AVL       91      583   14     46
+55         -5      EV   4175  N14950    EWR  AVL       98      583   14     46
+56          4      EV   4175  N11547    EWR  AVL      102      583   14     46
+57          7      EV   4175  N14542    EWR  AVL       92      583   14     45
+58         -3      EV   4175  N16954    EWR  AVL       97      583   14     46
+59         29      EV   4175  N16961    EWR  AVL      111      583   14     46
+60         70      EV   4175  N11544    EWR  AVL       99      583   14     46
+61         50      EV   4175  N27962    EWR  AVL       94      583   14     46
+62         -6      EV   4175  N11548    EWR  AVL       91      583   14     46
+63          8      EV   4175  N13914    EWR  AVL       88      583   14     46
+64         -3      EV   4175  N12540    EWR  AVL       96      583   14     45
+65         -5      EV   4175  N14977    EWR  AVL       87      583   14     46
+66        -12      EV   4175  N13979    EWR  AVL       94      583   14     46
+67        -21      EV   4175  N13550    EWR  AVL       87      583   13     49
+68         NA      EV   4175  N13538    EWR  AVL       NA      583   13     49
+69         NA      EV   4175  N11181    EWR  AVL       NA      583   13     49
+70          7      EV   4175  N16911    EWR  AVL      108      583   13     49
+71         NA      EV   4175  N15980    EWR  AVL       NA      583   13     49
+72         NA      EV   4175  N13958    EWR  AVL       NA      583   14      0
+73         65      EV   4175  N14920    EWR  AVL      100      583   13     49
+74         24      EV   4175  N14542    EWR  AVL       97      583   13     49
+75         -2      EV   4175  N14905    EWR  AVL       92      583   13     49
+76         -2      EV   4175  N13566    EWR  AVL      101      583   13     49
+77         25      EV   4175  N14977    EWR  AVL       96      583   13     49
+78         NA      EV   4175  N25134    EWR  AVL       NA      583   14      0
+79        -14      EV   4175  N13968    EWR  AVL       89      583   13     49
+80        -21      EV   4175  N24128    EWR  AVL       87      583   13     29
+81         39      EV   4175  N13161    EWR  AVL       94      583   13     29
+82         45      EV   4175  N13997    EWR  AVL       94      583   13     35
+83         -9      EV   4175  N12924    EWR  AVL       96      583   13     24
+84         19      EV   4175  N14186    EWR  AVL      114      583   13     29
+85         -8      EV   4175  N21197    EWR  AVL       97      583   13     29
+86         -8      EV   4175  N11106    EWR  AVL       98      583   13     29
+87        100      EV   4175  N13133    EWR  AVL       99      583   13     29
+88         -6      EV   4175  N11121    EWR  AVL       98      583   13     29
+89         29      EV   4175  N14543    EWR  AVL      100      583   13     29
+90         -6      EV   4175  N13123    EWR  AVL      101      583   13     24
+91         22      EV   4175  N13958    EWR  AVL      119      583   13     29
+92          9      EV   4175  N13118    EWR  AVL      105      583   13     29
+93        -29      9E   3632  N8936A    LGA  AVL       93      599    9     45
+94        -22      9E   3632  N8688C    LGA  AVL       91      599    9     45
+95         -6      9E   3632  N8938A    LGA  AVL       94      599    9     45
+96        -20      EV   4175  N11109    EWR  AVL       82      583    8     41
+97        -23      EV   4175  N11176    EWR  AVL       82      583    8     41
+98          2      EV   4175  N16170    EWR  AVL       87      583    8     41
+99        -21      EV   4175  N29906    EWR  AVL       87      583    8     32
+100       -25      EV   4175  N26545    EWR  AVL       88      583    8     37
+101         6      9E   3826  N841AY    LGA  AVL       87      599    9     35
+102        -8      EV   4175  N17115    EWR  AVL       90      583    8     41
+103        -3      EV   4175  N11137    EWR  AVL       81      583    8     36
+104       -15      EV   4175  N13118    EWR  AVL       79      583    8     41
+105         1      EV   4175  N18101    EWR  AVL       79      583    8     41
+106        -8      EV   4175  N16919    EWR  AVL       88      583    8     41
+107         0      EV   4175  N15985    EWR  AVL       93      583    8     32
+108       -18      EV   4175  N14950    EWR  AVL       96      583    8     37
+109       -24      9E   3826  N8733G    LGA  AVL      104      599    9     35
+110        -6      EV   4175  N13161    EWR  AVL       90      583    8     41
+111        -1      EV   4175  N18102    EWR  AVL       78      583    8     41
+112       -12      EV   4175  N12145    EWR  AVL       83      583    8     41
+113         0      EV   4175  N12175    EWR  AVL       84      583    8     41
+114       -17      EV   4175  N21130    EWR  AVL       81      583    8     41
+115       -16      EV   4175  N11565    EWR  AVL       88      583    8     32
+116       -20      EV   4175  N16918    EWR  AVL       87      583    8     37
+117       -29      9E   3826  N8903A    LGA  AVL       89      599    9     35
+118       -13      EV   4175  N17138    EWR  AVL       88      583    8     41
+119        26      EV   4175  N11548    EWR  AVL       86      583    8     41
+120       -10      EV   4175  N13132    EWR  AVL       80      583    8     41
+121        20      EV   4175  N17196    EWR  AVL       88      583    8     41
+122         6      EV   4175  N27190    EWR  AVL       86      583    8     41
+123       -24      EV   4175  N13975    EWR  AVL       82      583    8     29
+124       -24      EV   4175  N11140    EWR  AVL       85      583    8     32
+125        -8      9E   3826  N839AY    LGA  AVL       87      599   11     59
+126       -26      EV   4175  N14558    EWR  AVL       84      583    8     41
+127         3      EV   4175  N12122    EWR  AVL       90      583    8     41
+128         1      EV   4175  N11191    EWR  AVL       85      583    8     41
+129       -16      EV   4175  N21197    EWR  AVL       82      583    8     41
+130        27      EV   4175  N12136    EWR  AVL       79      583    8     41
+131         5      EV   4175  N13994    EWR  AVL       83      583    8     32
+132       -10      EV   4175  N14952    EWR  AVL       91      583    8     37
+133        -3      9E   3826  N8412F    LGA  AVL       92      599    9     35
+134        20      EV   4175  N12145    EWR  AVL       99      583    8     41
+135         2      EV   4175  N11194    EWR  AVL       89      583    8     41
+136        -1      EV   4175  N11194    EWR  AVL       89      583    8     41
+137        48      EV   4519  N14953    EWR  AVL       96      583    8     19
+138        97      EV   4519  N14904    EWR  AVL       93      583    8     18
+139        25      EV   5965  N12195    EWR  AVL       92      583    8     15
+140         4      EV   4519  N11194    EWR  AVL       97      583   12      0
+141       -11      EV   5965  N13989    EWR  AVL       85      583    8     14
+142       -19      9E   3826  N8412F    LGA  AVL       94      599    9     35
+143       -13      EV   4519  N14162    EWR  AVL       89      583   10     53
+144         3      EV   4519  N16178    EWR  AVL       92      583    8     16
+145       -12      EV   4519  N13975    EWR  AVL       83      583    8     16
+146        46      EV   4519  N15555    EWR  AVL       85      583    8     16
+147        90      EV   4519  N11191    EWR  AVL       95      583    8     16
+148       208      EV   4519  N13997    EWR  AVL       82      583    8     16
+149       -21      EV   5965  N17185    EWR  AVL       76      583    8     15
+150        -6      EV   4519  N10156    EWR  AVL       77      583   12      0
+151       -14      EV   5965  N14923    EWR  AVL       83      583    8     14
+152       -19      EV   4519  N34111    EWR  AVL       85      583   10     53
+153         3      EV   4519  N13538    EWR  AVL       89      583    8     16
+154        19      EV   4519  N13956    EWR  AVL       92      583    8     16
+155        55      EV   4519  N14204    EWR  AVL       96      583    8     16
+156        -4      EV   4519  N16961    EWR  AVL       84      583    8     16
+157        -2      EV   4519  N14953    EWR  AVL       85      583    8     16
+158        74      EV   5965  N14153    EWR  AVL       81      583    8     15
+159       -11      EV   4519  N12135    EWR  AVL       80      583   12      0
+160        -2      EV   5965  N14920    EWR  AVL       84      583    8     14
+161        -8      EV   4519  N11176    EWR  AVL       85      583   10     53
+162         0      EV   4519  N26545    EWR  AVL       90      583    8     16
+163        -7      EV   4519  N13997    EWR  AVL       85      583    8     16
+164         3      EV   4519  N12569    EWR  AVL       87      583    8     16
+165       -12      EV   4519  N12142    EWR  AVL       84      583    8     16
+166         8      EV   4519  N14977    EWR  AVL       86      583    8     16
+167        -7      EV   5965  N17185    EWR  AVL       91      583    8     15
+168        -7      EV   4519  N27190    EWR  AVL       91      583   12      0
+169        -5      EV   5965  N13969    EWR  AVL       97      583    8     14
+170       -11      EV   4519  N14203    EWR  AVL       91      583   10     53
+171        40      EV   4519  N36915    EWR  AVL      102      583    8     16
+172         4      EV   4519  N14960    EWR  AVL       93      583    8     35
+173        22      EV   4519  N17984    EWR  AVL      101      583    8     35
+174       -18      EV   4519  N13997    EWR  AVL       85      583    8     35
+175         3      EV   4519  N12900    EWR  AVL       90      583    8     35
+176       -20      EV   4295  N27152    EWR  AVL       84      583    8     15
+177       -13      EV   4519  N14116    EWR  AVL       83      583   12      9
+178       -10      EV   4519  N13913    EWR  AVL       94      583    8     30
+179       -16      EV   4434  N14904    EWR  AVL       90      583   10     39
+180         6      EV   4519  N15910    EWR  AVL       91      583    8     35
+181       -17      EV   4519  N16559    EWR  AVL       81      583    8     35
+182        NA      EV   4519  N16981    EWR  AVL       NA      583    8     35
+183        95      EV   4519  N13566    EWR  AVL       96      583    8     35
+184         7      EV   4519  N14905    EWR  AVL       94      583    8     35
+185        40      EV   4295  N11176    EWR  AVL       92      583    8     15
+186        13      9E   3678  N8969A    LGA  AVL       91      599   11      0
+187        19      EV   4519  N11109    EWR  AVL       89      583   12      9
+188         0      EV   4519  N13955    EWR  AVL       96      583    8     30
+189        14      EV   4434  N18114    EWR  AVL       85      583   10     39
+190        -2      EV   4519  N13970    EWR  AVL       80      583    8     35
+191        61      EV   4519  N12552    EWR  AVL       82      583    8     35
+192        -1      EV   4519  N14974    EWR  AVL       88      583    8     35
+193        34      EV   4519  N16559    EWR  AVL       84      583    8     35
+194        25      EV   4519  N14998    EWR  AVL       95      583    8     35
+195         5      EV   4295  N11155    EWR  AVL       80      583    8     15
+196        -9      EV   4519  N14117    EWR  AVL       86      583   12      9
+197       -17      EV   4519  N12900    EWR  AVL       89      583    8     30
+198       -17      EV   4434  N11547    EWR  AVL       86      583   10     39
+199         1      EV   4519  N11548    EWR  AVL       91      583    8     35
+200        NA      EV   4519  N15983    EWR  AVL       NA      583    8     35
+201         3      EV   4519  N13133    EWR  AVL       87      583    8     35
+202        -4      EV   4519  N12167    EWR  AVL       89      583    8     35
+203         6      EV   4519  N13965    EWR  AVL       85      583    8     35
+204        -9      EV   4295  N16149    EWR  AVL       91      583    8     15
+205       -10      EV   4519  N13202    EWR  AVL       88      583   12      9
+206        -9      EV   4519  N21537    EWR  AVL       96      583    8     30
+207       -14      EV   4434  N17146    EWR  AVL       92      583   10     39
+208        13      EV   4519  N15574    EWR  AVL       88      583    8     35
+209         2      EV   4519  N12540    EWR  AVL       85      583    8     35
+210        14      EV   4519  N12922    EWR  AVL       92      583    8     35
+211        28      EV   4519  N12567    EWR  AVL       91      583    8     35
+212         0      EV   4519  N14171    EWR  AVL       80      583    8     35
+213       -19      EV   4295  N41104    EWR  AVL       82      583    8     15
+214        -9      EV   4519  N17169    EWR  AVL       85      583   12      9
+215       -10      EV   4519  N16911    EWR  AVL       90      583    8     30
+216       -16      EV   4434  N14959    EWR  AVL       89      583   10     39
+217        -1      EV   4519  N14998    EWR  AVL       85      583    8     35
+218        -6      EV   4519  N15980    EWR  AVL       86      583    8     35
+219        18      EV   4519  N21537    EWR  AVL       90      583    8     35
+220        55      EV   4519  N13958    EWR  AVL       84      583    8     35
+221        NA      EV   4519  N14573    EWR  AVL       NA      583    8     35
+222         2      EV   4295  N14171    EWR  AVL       92      583    8     15
+223         8      EV   4519  N24128    EWR  AVL      109      583   12      9
+224        10      EV   4519  N13969    EWR  AVL       98      583    8     30
+225       -17      EV   4434  N11137    EWR  AVL       83      583   10     39
+226       -13      EV   4519  N36915    EWR  AVL       86      583    8     35
+227       228      EV   4175  N13538    EWR  AVL      108      583    8     32
+228        83      EV   4175  N13965    EWR  AVL       98      583    8     32
+229        65      EV   4175  N13964    EWR  AVL       99      583    8     32
+230         1      EV   4175  N11536    EWR  AVL       91      583    8     32
+231        -2      EV   4175  N15572    EWR  AVL       93      583    8     36
+232         1      EV   4175  N29906    EWR  AVL       97      583    8     35
+233       -10      EV   4175  N16559    EWR  AVL       97      583    8     32
+234        -5      EV   4175  N15910    EWR  AVL       88      583    8     32
+235       -19      EV   4175  N11565    EWR  AVL       91      583    8     32
+236        40      EV   4175  N12564    EWR  AVL       80      583    8     32
+237        -3      EV   4175  N11547    EWR  AVL       90      583    8     32
+238       -21      EV   4175  N13978    EWR  AVL       82      583    8     36
+239       -11      EV   4175  N14960    EWR  AVL       82      583    8     35
+240       -25      EV   4175  N23139    EWR  AVL       82      583    8     32
+241        -2      EV   3846  N14916    EWR  AVL       86      583   15     59
+242        NA      EV   3846  N16918    EWR  AVL       NA      583   15     59
+243        -6      EV   3846  N36915    EWR  AVL       83      583   15     59
+244         1      EV   3846  N14543    EWR  AVL       90      583   15     59
+245        -7      EV   3846  N18557    EWR  AVL       91      583   16      0
+246       -18      EV   3846  N14953    EWR  AVL       86      583   15     59
+247        74      EV   3846  N12900    EWR  AVL       86      583   15     59
+248         1      EV   3846  N18557    EWR  AVL       86      583   15     59
+249        -5      EV   3846  N12967    EWR  AVL       89      583   15     59
+250        -8      EV   3846  N26545    EWR  AVL       90      583   15     59
+251       -12      EV   3846  N16919    EWR  AVL       79      583   15     59
+252       -24      EV   3846  N13970    EWR  AVL       81      583   15     59
+253        -7      EV   3846  N11535    EWR  AVL       85      583   15     59
+254       -20      EV   3846  N29906    EWR  AVL       85      583   15     59
+255        70      EV   3846  N13553    EWR  AVL       80      583   15     59
+256        44      EV   3846  N13992    EWR  AVL       93      583   15     59
+257        NA      EV   3846  N11544    EWR  AVL       NA      583   15     59
+258        -8      EV   3846  N16559    EWR  AVL       93      583   15     59
+259         7      EV   3846  N19966    EWR  AVL       80      583   15     59
+260        -9      EV   3846  N18556    EWR  AVL       87      583   15     59
+261         3      EV   3846  N16541    EWR  AVL       90      583   15     59
+262       -20      EV   3846  N12921    EWR  AVL       82      583   15     59
+263       -18      EV   3846  N13538    EWR  AVL       83      583   15     59
+264         1      EV   3846  N16541    EWR  AVL       82      583   15     59
+265        40      EV   3846  N10575    EWR  AVL       82      583   15     59
+266        -1      EV   3846  N16976    EWR  AVL       92      583   15     59
+267        NA      EV   3846  N18556    EWR  AVL       NA      583   15     59
+268       127      EV   6093  N11192    EWR  AVL       85      583   15     59
+269       -10      EV   3846  N12552    EWR  AVL       86      583   15     59
+270         2      EV   4175  N14568    EWR  AVL       88      583   16     38
+271       130      EV   4175  N11121    EWR  AVL       80      583   16     38
+272       -20      EV   4175  N14570    EWR  AVL       78      583   16     38
+273       -23      EV   4175  N16561    EWR  AVL       80      583   16     38
+274        38      EV   4175  N14117    EWR  AVL       81      583   16     38
+275         4      EV   4175  N12957    EWR  AVL       81      583   16     38
+              time_hour
+1   2013-01-01 09:00:00
+2   2013-01-02 09:00:00
+3   2013-10-01 16:00:00
+4   2013-10-02 16:00:00
+5   2013-10-03 16:00:00
+6   2013-10-04 16:00:00
+7   2013-10-05 16:00:00
+8   2013-10-06 16:00:00
+9   2013-10-07 16:00:00
+10  2013-10-08 16:00:00
+11  2013-10-09 16:00:00
+12  2013-10-10 16:00:00
+13  2013-10-11 16:00:00
+14  2013-10-12 16:00:00
+15  2013-10-13 16:00:00
+16  2013-10-14 16:00:00
+17  2013-10-15 16:00:00
+18  2013-10-16 16:00:00
+19  2013-10-17 16:00:00
+20  2013-10-18 16:00:00
+21  2013-10-19 16:00:00
+22  2013-10-20 16:00:00
+23  2013-10-21 16:00:00
+24  2013-10-22 16:00:00
+25  2013-10-23 16:00:00
+26  2013-10-24 16:00:00
+27  2013-10-25 16:00:00
+28  2013-10-26 16:00:00
+29  2013-10-27 16:00:00
+30  2013-10-28 16:00:00
+31  2013-10-29 16:00:00
+32  2013-10-30 16:00:00
+33  2013-10-31 16:00:00
+34  2013-11-01 16:00:00
+35  2013-11-02 16:00:00
+36  2013-11-03 16:00:00
+37  2013-11-04 16:00:00
+38  2013-11-05 14:00:00
+39  2013-11-06 14:00:00
+40  2013-11-07 14:00:00
+41  2013-11-08 14:00:00
+42  2013-11-09 14:00:00
+43  2013-11-10 14:00:00
+44  2013-11-11 14:00:00
+45  2013-11-12 14:00:00
+46  2013-11-13 14:00:00
+47  2013-11-14 14:00:00
+48  2013-11-15 14:00:00
+49  2013-11-16 14:00:00
+50  2013-11-17 14:00:00
+51  2013-11-18 14:00:00
+52  2013-11-19 14:00:00
+53  2013-11-20 14:00:00
+54  2013-11-21 14:00:00
+55  2013-11-22 14:00:00
+56  2013-11-23 14:00:00
+57  2013-11-24 14:00:00
+58  2013-11-25 14:00:00
+59  2013-11-26 14:00:00
+60  2013-11-27 14:00:00
+61  2013-11-28 14:00:00
+62  2013-11-29 14:00:00
+63  2013-11-30 14:00:00
+64  2013-12-01 14:00:00
+65  2013-12-02 14:00:00
+66  2013-12-03 14:00:00
+67  2013-12-04 13:00:00
+68  2013-12-05 13:00:00
+69  2013-12-06 13:00:00
+70  2013-12-08 13:00:00
+71  2013-12-09 13:00:00
+72  2013-12-10 14:00:00
+73  2013-12-11 13:00:00
+74  2013-12-12 13:00:00
+75  2013-12-13 13:00:00
+76  2013-12-15 13:00:00
+77  2013-12-16 13:00:00
+78  2013-12-17 14:00:00
+79  2013-12-18 13:00:00
+80  2013-12-19 13:00:00
+81  2013-12-20 13:00:00
+82  2013-12-21 13:00:00
+83  2013-12-22 13:00:00
+84  2013-12-23 13:00:00
+85  2013-12-24 13:00:00
+86  2013-12-25 13:00:00
+87  2013-12-26 13:00:00
+88  2013-12-27 13:00:00
+89  2013-12-28 13:00:00
+90  2013-12-29 13:00:00
+91  2013-12-30 13:00:00
+92  2013-12-31 13:00:00
+93  2013-04-14 09:00:00
+94  2013-04-21 09:00:00
+95  2013-04-28 09:00:00
+96  2013-05-01 08:00:00
+97  2013-05-02 08:00:00
+98  2013-05-03 08:00:00
+99  2013-05-04 08:00:00
+100 2013-05-05 08:00:00
+101 2013-05-05 09:00:00
+102 2013-05-06 08:00:00
+103 2013-05-07 08:00:00
+104 2013-05-08 08:00:00
+105 2013-05-09 08:00:00
+106 2013-05-10 08:00:00
+107 2013-05-11 08:00:00
+108 2013-05-12 08:00:00
+109 2013-05-12 09:00:00
+110 2013-05-13 08:00:00
+111 2013-05-14 08:00:00
+112 2013-05-15 08:00:00
+113 2013-05-16 08:00:00
+114 2013-05-17 08:00:00
+115 2013-05-18 08:00:00
+116 2013-05-19 08:00:00
+117 2013-05-19 09:00:00
+118 2013-05-20 08:00:00
+119 2013-05-21 08:00:00
+120 2013-05-22 08:00:00
+121 2013-05-23 08:00:00
+122 2013-05-24 08:00:00
+123 2013-05-25 08:00:00
+124 2013-05-26 08:00:00
+125 2013-05-26 11:00:00
+126 2013-05-27 08:00:00
+127 2013-05-28 08:00:00
+128 2013-05-29 08:00:00
+129 2013-05-30 08:00:00
+130 2013-05-31 08:00:00
+131 2013-06-01 08:00:00
+132 2013-06-02 08:00:00
+133 2013-06-02 09:00:00
+134 2013-06-03 08:00:00
+135 2013-06-04 08:00:00
+136 2013-06-05 08:00:00
+137 2013-06-06 08:00:00
+138 2013-06-07 08:00:00
+139 2013-06-08 08:00:00
+140 2013-06-08 12:00:00
+141 2013-06-09 08:00:00
+142 2013-06-09 09:00:00
+143 2013-06-09 10:00:00
+144 2013-06-10 08:00:00
+145 2013-06-11 08:00:00
+146 2013-06-12 08:00:00
+147 2013-06-13 08:00:00
+148 2013-06-14 08:00:00
+149 2013-06-15 08:00:00
+150 2013-06-15 12:00:00
+151 2013-06-16 08:00:00
+152 2013-06-16 10:00:00
+153 2013-06-17 08:00:00
+154 2013-06-18 08:00:00
+155 2013-06-19 08:00:00
+156 2013-06-20 08:00:00
+157 2013-06-21 08:00:00
+158 2013-06-22 08:00:00
+159 2013-06-22 12:00:00
+160 2013-06-23 08:00:00
+161 2013-06-23 10:00:00
+162 2013-06-24 08:00:00
+163 2013-06-25 08:00:00
+164 2013-06-26 08:00:00
+165 2013-06-27 08:00:00
+166 2013-06-28 08:00:00
+167 2013-06-29 08:00:00
+168 2013-06-29 12:00:00
+169 2013-06-30 08:00:00
+170 2013-06-30 10:00:00
+171 2013-07-01 08:00:00
+172 2013-07-02 08:00:00
+173 2013-07-03 08:00:00
+174 2013-07-04 08:00:00
+175 2013-07-05 08:00:00
+176 2013-07-06 08:00:00
+177 2013-07-06 12:00:00
+178 2013-07-07 08:00:00
+179 2013-07-07 10:00:00
+180 2013-07-08 08:00:00
+181 2013-07-09 08:00:00
+182 2013-07-10 08:00:00
+183 2013-07-11 08:00:00
+184 2013-07-12 08:00:00
+185 2013-07-13 08:00:00
+186 2013-07-13 11:00:00
+187 2013-07-13 12:00:00
+188 2013-07-14 08:00:00
+189 2013-07-14 10:00:00
+190 2013-07-15 08:00:00
+191 2013-07-16 08:00:00
+192 2013-07-17 08:00:00
+193 2013-07-18 08:00:00
+194 2013-07-19 08:00:00
+195 2013-07-20 08:00:00
+196 2013-07-20 12:00:00
+197 2013-07-21 08:00:00
+198 2013-07-21 10:00:00
+199 2013-07-22 08:00:00
+200 2013-07-23 08:00:00
+201 2013-07-24 08:00:00
+202 2013-07-25 08:00:00
+203 2013-07-26 08:00:00
+204 2013-07-27 08:00:00
+205 2013-07-27 12:00:00
+206 2013-07-28 08:00:00
+207 2013-07-28 10:00:00
+208 2013-07-29 08:00:00
+209 2013-07-30 08:00:00
+210 2013-07-31 08:00:00
+211 2013-08-01 08:00:00
+212 2013-08-02 08:00:00
+213 2013-08-03 08:00:00
+214 2013-08-03 12:00:00
+215 2013-08-04 08:00:00
+216 2013-08-04 10:00:00
+217 2013-08-05 08:00:00
+218 2013-08-06 08:00:00
+219 2013-08-07 08:00:00
+220 2013-08-08 08:00:00
+221 2013-08-09 08:00:00
+222 2013-08-10 08:00:00
+223 2013-08-10 12:00:00
+224 2013-08-11 08:00:00
+225 2013-08-11 10:00:00
+226 2013-08-12 08:00:00
+227 2013-08-13 08:00:00
+228 2013-08-14 08:00:00
+229 2013-08-15 08:00:00
+230 2013-08-16 08:00:00
+231 2013-08-17 08:00:00
+232 2013-08-18 08:00:00
+233 2013-08-19 08:00:00
+234 2013-08-20 08:00:00
+235 2013-08-21 08:00:00
+236 2013-08-22 08:00:00
+237 2013-08-23 08:00:00
+238 2013-08-24 08:00:00
+239 2013-08-25 08:00:00
+240 2013-08-26 08:00:00
+241 2013-08-27 15:00:00
+242 2013-08-28 15:00:00
+243 2013-08-29 15:00:00
+244 2013-08-30 15:00:00
+245 2013-08-31 16:00:00
+246 2013-09-01 15:00:00
+247 2013-09-02 15:00:00
+248 2013-09-03 15:00:00
+249 2013-09-04 15:00:00
+250 2013-09-05 15:00:00
+251 2013-09-06 15:00:00
+252 2013-09-07 15:00:00
+253 2013-09-08 15:00:00
+254 2013-09-09 15:00:00
+255 2013-09-10 15:00:00
+256 2013-09-11 15:00:00
+257 2013-09-12 15:00:00
+258 2013-09-13 15:00:00
+259 2013-09-14 15:00:00
+260 2013-09-15 15:00:00
+261 2013-09-16 15:00:00
+262 2013-09-17 15:00:00
+263 2013-09-18 15:00:00
+264 2013-09-19 15:00:00
+265 2013-09-20 15:00:00
+266 2013-09-21 15:00:00
+267 2013-09-22 15:00:00
+268 2013-09-23 15:00:00
+269 2013-09-24 15:00:00
+270 2013-09-25 16:00:00
+271 2013-09-26 16:00:00
+272 2013-09-27 16:00:00
+273 2013-09-28 16:00:00
+274 2013-09-29 16:00:00
+275 2013-09-30 16:00:00</code></pre>
+</div>
+</div>
+<p>Use stratafied bootstrapping by dests to estimate the average air_time for flights within each origin and produce a table including the estimates and confidence intervals for each origin.</p>
+<p>Carry this out two ways. Generate at least 1,000 bootstrapped samples. Report the performance difference between the versions.</p>
+<section id="without-any-parallel-processing" class="level2">
+<h2 class="anchored" data-anchor-id="without-any-parallel-processing">1. Without any parallel processing</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bootstrap function without any parallel processing</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">##' @param dat the splitted input data frame</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="do">##' </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="do">##' @return</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>stratified_boot <span class="ot">&lt;-</span> <span class="cf">function</span>(dat) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  sampled_dat <span class="ot">&lt;-</span> <span class="fu">lapply</span>(dat, <span class="cf">function</span>(each_dat) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    each_dat[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(each_dat), <span class="at">replace =</span> <span class="cn">TRUE</span>), ]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  combined_dat <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, sampled_dat)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  combined_dat <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(origin) <span class="sc">%&gt;%</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">mean_airtime =</span> <span class="fu">mean</span>(air_time, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">complete</span>(<span class="at">origin =</span> <span class="fu">c</span>(<span class="st">"JFK"</span>, <span class="st">"EWR"</span>, <span class="st">"LGA"</span>), <span class="at">fill =</span> <span class="fu">list</span>(<span class="at">mean_airtime =</span> <span class="dv">0</span>)) <span class="ot">-&gt;</span> result</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(result)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of bootstrap replications</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the time to perform the bootstrap</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(res1 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(x) <span class="fu">stratified_boot</span>(splitted_dat_list)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+515.029  23.933 539.513 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 3 vectors to store the results</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>result_list_1 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">EWR =</span> <span class="fu">numeric</span>(<span class="dv">1000</span>), <span class="at">JFK =</span> <span class="fu">numeric</span>(<span class="dv">1000</span>), <span class="at">LGA =</span> <span class="fu">numeric</span>(<span class="dv">1000</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(res1)) {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> res1[[i]]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  result_list_1<span class="sc">$</span>EWR[i] <span class="ot">&lt;-</span> data<span class="sc">$</span>mean_airtime[data<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"EWR"</span>]</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  result_list_1<span class="sc">$</span>JFK[i] <span class="ot">&lt;-</span> data<span class="sc">$</span>mean_airtime[data<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"JFK"</span>]</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  result_list_1<span class="sc">$</span>LGA[i] <span class="ot">&lt;-</span> data<span class="sc">$</span>mean_airtime[data<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"LGA"</span>]</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>EWR_vec_1 <span class="ot">&lt;-</span> result_list_1<span class="sc">$</span>EWR</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>JFK_vec_1 <span class="ot">&lt;-</span> result_list_1<span class="sc">$</span>JFK</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>LGA_vec_1 <span class="ot">&lt;-</span> result_list_1<span class="sc">$</span>LGA</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean for each origin</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>mean_EWR_1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(EWR_vec_1)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>mean_JFK_1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(JFK_vec_1)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>mean_LGA_1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(LGA_vec_1)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the standard error for each origin</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>sd_EWR_1 <span class="ot">&lt;-</span> <span class="fu">sd</span>(EWR_vec_1)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>sd_JFK_1 <span class="ot">&lt;-</span> <span class="fu">sd</span>(JFK_vec_1)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>sd_LGA_1 <span class="ot">&lt;-</span> <span class="fu">sd</span>(LGA_vec_1)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Produce the table containing the confidence intervals for each origin</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>result_table_1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(mean_EWR_1, mean_EWR_1<span class="fl">+1.96</span><span class="sc">*</span>sd_EWR_1, mean_EWR_1<span class="fl">-1.96</span><span class="sc">*</span>sd_EWR_1),</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(mean_JFK_1, mean_JFK_1<span class="fl">+1.96</span><span class="sc">*</span>sd_JFK_1, mean_JFK_1<span class="fl">-1.96</span><span class="sc">*</span>sd_JFK_1), </span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(mean_LGA_1, mean_LGA_1<span class="fl">+1.96</span><span class="sc">*</span>sd_LGA_1, mean_LGA_1<span class="fl">-1.96</span><span class="sc">*</span>sd_LGA_1))</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_table_1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Mean"</span>, <span class="st">"CI_upper"</span>, <span class="st">"CI_lower"</span>)</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_table_1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"EWR"</span>, <span class="st">"JFK"</span>, <span class="st">"LGA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="with-some-form-of-parallel-processing" class="level2">
+<h2 class="anchored" data-anchor-id="with-some-form-of-parallel-processing">2. With some form of parallel processing</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the time to perform the bootstrap</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">system.time</span>(res2 <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(<span class="fu">seq_len</span>(reps), <span class="cf">function</span>(x) <span class="fu">stratified_boot</span>(splitted_dat_list)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   user  system elapsed 
+313.466  16.042 332.401 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 3 vectors to store the results</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>result_list_2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">EWR =</span> <span class="fu">numeric</span>(<span class="dv">1000</span>), <span class="at">JFK =</span> <span class="fu">numeric</span>(<span class="dv">1000</span>), <span class="at">LGA =</span> <span class="fu">numeric</span>(<span class="dv">1000</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(res2)) {</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> res2[[i]]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  result_list_2<span class="sc">$</span>EWR[i] <span class="ot">&lt;-</span> data<span class="sc">$</span>mean_airtime[data<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"EWR"</span>]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  result_list_2<span class="sc">$</span>JFK[i] <span class="ot">&lt;-</span> data<span class="sc">$</span>mean_airtime[data<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"JFK"</span>]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  result_list_2<span class="sc">$</span>LGA[i] <span class="ot">&lt;-</span> data<span class="sc">$</span>mean_airtime[data<span class="sc">$</span>origin <span class="sc">==</span> <span class="st">"LGA"</span>]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>EWR_vec_2 <span class="ot">&lt;-</span> result_list_2<span class="sc">$</span>EWR</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>JFK_vec_2 <span class="ot">&lt;-</span> result_list_2<span class="sc">$</span>JFK</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>LGA_vec_2 <span class="ot">&lt;-</span> result_list_2<span class="sc">$</span>LGA</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean for each origin</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>mean_EWR_2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(EWR_vec_2)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>mean_JFK_2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(JFK_vec_2)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>mean_LGA_2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(LGA_vec_2)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the standard error for each origin</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>sd_EWR_2 <span class="ot">&lt;-</span> <span class="fu">sd</span>(EWR_vec_2)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>sd_JFK_2 <span class="ot">&lt;-</span> <span class="fu">sd</span>(JFK_vec_2)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>sd_LGA_2 <span class="ot">&lt;-</span> <span class="fu">sd</span>(LGA_vec_2)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Produce the table containing the confidence intervals for each origin</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>result_table_2 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(mean_EWR_2, mean_EWR_2<span class="fl">+1.96</span><span class="sc">*</span>sd_EWR_2, mean_EWR_2<span class="fl">-1.96</span><span class="sc">*</span>sd_EWR_2),</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(mean_JFK_2, mean_JFK_2<span class="fl">+1.96</span><span class="sc">*</span>sd_JFK_2, mean_JFK_2<span class="fl">-1.96</span><span class="sc">*</span>sd_JFK_2), </span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(mean_LGA_2, mean_LGA_2<span class="fl">+1.96</span><span class="sc">*</span>sd_LGA_2, mean_LGA_2<span class="fl">-1.96</span><span class="sc">*</span>sd_LGA_2))</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(result_table_2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Mean"</span>, <span class="st">"CI_upper"</span>, <span class="st">"CI_lower"</span>)</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(result_table_2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"EWR"</span>, <span class="st">"JFK"</span>, <span class="st">"LGA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As we can see, there is not much difference between the final results of either method, but the runtime is almost half as long with parallel as it is without it.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,141 @@
+---
+title: "Problem Set 6"
+author: "Yipeng Liu"
+format: html
+editor: visual
+---
+
+# Stratified Bootstrapping
+
+If a sample has a categorical variable with small groups, bootstrapping can be tricky. Consider a situation where n = 100, but there is some categorical variable g where category g = 1 has only 2 observations. If we resample with replacement 100 times from those observations, there is a
+
+$$(\frac{98}{100})^{100}\approx13\%$$
+
+chance that the bootstrap sample does not include either observation from g = 1. This implies that if we are attempting to obtain a bootstrap estimate in group g = 1, 13% of the bootstrapped samples will have no observations from that group and thus unable to produce an estimate.
+
+A way around this is to carry out stratified bootstrap: Instead of taking a sample with replacement of the whole sample, take separate samples with replacement within each strata of the same size of the strata, then combine those resamples to generate the bootstrap sample.
+
+Use the flights data from the nycflights13 package. 
+
+```{r}
+# Load the data
+library(nycflights13)
+data(flights)
+
+# Stratify the data by ‘dests' 
+splitted_dat <- split(flights, flights$dest)
+splitted_dat_list <- lapply(splitted_dat, as.data.frame)
+
+# Check an example
+splitted_dat_list$AVL
+```
+
+Use stratafied bootstrapping by dests to estimate the average air_time for flights within each origin and produce a table including the estimates and confidence intervals for each origin.
+
+Carry this out two ways. Generate at least 1,000 bootstrapped samples. Report the performance difference between the versions.
+
+## 1. Without any parallel processing
+
+```{r}
+# Bootstrap function without any parallel processing
+##' @param dat the splitted input data frame
+##' 
+##' @return
+library(dplyr)
+library(tidyr)
+stratified_boot <- function(dat) {
+  sampled_dat <- lapply(dat, function(each_dat) {
+    each_dat[sample(1:nrow(each_dat), replace = TRUE), ]
+})
+  combined_dat <- do.call(rbind, sampled_dat)
+  
+  combined_dat %>%
+    group_by(origin) %>%
+    summarize(mean_airtime = mean(air_time, na.rm = TRUE)) %>%
+    complete(origin = c("JFK", "EWR", "LGA"), fill = list(mean_airtime = 0)) -> result
+  
+  return(result)
+}
+
+# Number of bootstrap replications
+reps <- 1000
+
+# Calculate the time to perform the bootstrap
+system.time(res1 <- lapply(seq_len(reps), function(x) stratified_boot(splitted_dat_list)))
+
+# Create 3 vectors to store the results
+result_list_1 <- list(EWR = numeric(1000), JFK = numeric(1000), LGA = numeric(1000))
+
+for (i in seq_along(res1)) {
+  data <- res1[[i]]
+  
+  result_list_1$EWR[i] <- data$mean_airtime[data$origin == "EWR"]
+  result_list_1$JFK[i] <- data$mean_airtime[data$origin == "JFK"]
+  result_list_1$LGA[i] <- data$mean_airtime[data$origin == "LGA"]
+}
+
+EWR_vec_1 <- result_list_1$EWR
+JFK_vec_1 <- result_list_1$JFK
+LGA_vec_1 <- result_list_1$LGA
+
+# Calculate the mean for each origin
+mean_EWR_1 <- mean(EWR_vec_1)
+mean_JFK_1 <- mean(JFK_vec_1)
+mean_LGA_1 <- mean(LGA_vec_1)
+
+# Calculate the standard error for each origin
+sd_EWR_1 <- sd(EWR_vec_1)
+sd_JFK_1 <- sd(JFK_vec_1)
+sd_LGA_1 <- sd(LGA_vec_1)
+
+# Produce the table containing the confidence intervals for each origin
+result_table_1 <- rbind(c(mean_EWR_1, mean_EWR_1+1.96*sd_EWR_1, mean_EWR_1-1.96*sd_EWR_1),
+      c(mean_JFK_1, mean_JFK_1+1.96*sd_JFK_1, mean_JFK_1-1.96*sd_JFK_1), 
+      c(mean_LGA_1, mean_LGA_1+1.96*sd_LGA_1, mean_LGA_1-1.96*sd_LGA_1))
+
+rownames(result_table_1) <- c("Mean", "CI_upper", "CI_lower")
+colnames(result_table_1) <- c("EWR", "JFK", "LGA")
+```
+
+## 2. With some form of parallel processing
+
+```{r}
+library(parallel)
+# Calculate the time to perform the bootstrap
+system.time(res2 <- mclapply(seq_len(reps), function(x) stratified_boot(splitted_dat_list)))
+
+# Create 3 vectors to store the results
+result_list_2 <- list(EWR = numeric(1000), JFK = numeric(1000), LGA = numeric(1000))
+
+for (i in seq_along(res2)) {
+  data <- res2[[i]]
+  
+  result_list_2$EWR[i] <- data$mean_airtime[data$origin == "EWR"]
+  result_list_2$JFK[i] <- data$mean_airtime[data$origin == "JFK"]
+  result_list_2$LGA[i] <- data$mean_airtime[data$origin == "LGA"]
+}
+
+EWR_vec_2 <- result_list_2$EWR
+JFK_vec_2 <- result_list_2$JFK
+LGA_vec_2 <- result_list_2$LGA
+
+# Calculate the mean for each origin
+mean_EWR_2 <- mean(EWR_vec_2)
+mean_JFK_2 <- mean(JFK_vec_2)
+mean_LGA_2 <- mean(LGA_vec_2)
+
+# Calculate the standard error for each origin
+sd_EWR_2 <- sd(EWR_vec_2)
+sd_JFK_2 <- sd(JFK_vec_2)
+sd_LGA_2 <- sd(LGA_vec_2)
+
+# Produce the table containing the confidence intervals for each origin
+result_table_2 <- rbind(c(mean_EWR_2, mean_EWR_2+1.96*sd_EWR_2, mean_EWR_2-1.96*sd_EWR_2),
+      c(mean_JFK_2, mean_JFK_2+1.96*sd_JFK_2, mean_JFK_2-1.96*sd_JFK_2), 
+      c(mean_LGA_2, mean_LGA_2+1.96*sd_LGA_2, mean_LGA_2-1.96*sd_LGA_2))
+
+rownames(result_table_2) <- c("Mean", "CI_upper", "CI_lower")
+colnames(result_table_2) <- c("EWR", "JFK", "LGA")
+```
+
+As we can see, there is not much difference between the final results of either method, but the runtime is almost half as long with parallel as it is without it.
